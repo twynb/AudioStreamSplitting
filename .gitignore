@@ -130,3 +130,7 @@ dmypy.json
 
 # vscode
 .vscode/settings.json
+
+# audio files
+*.wav
+*.mp3
