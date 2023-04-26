@@ -1,9 +1,10 @@
-from PyQt6.QtCore import (QUrl, QTranslator, QLocale, QRect, QSize)
-from PyQt6.QtGui import (QStandardItem, QStandardItemModel, QAction, QIcon)
-from PyQt6.QtMultimedia import (QMediaPlayer, QAudioOutput)
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QApplication, QFileDialog,
-                             QPushButton, QVBoxLayout, QHBoxLayout, QListView, QMenuBar, QMenu, QStatusBar)
 import sys
+from modules.app import app
+from PyQt6.QtCore import QUrl, QTranslator, QLocale, QSize
+from PyQt6.QtGui import QStandardItem, QStandardItemModel
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QFileDialog,
+                             QPushButton, QVBoxLayout, QHBoxLayout, QListView)
 from modules.status_bar import setup_status_bar
 
 
@@ -91,7 +92,6 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    app = QApplication([])
     window = MainWindow()
     window.show()
     sys.exit(app.exec())

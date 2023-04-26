@@ -15,4 +15,4 @@ To run this project, you'll need to have Python 3.x installed on your computer. 
 
 To run the project, run the following command in your terminal:
 
-`python3 main.py`
+`python3 src/main.py`
