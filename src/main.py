@@ -1,19 +1,22 @@
 import sys
-from modules.app import app
-from PyQt6.QtCore import QUrl, QTranslator, QLocale, QSize
+from PyQt6.QtCore import QUrl, QModelIndex
 from PyQt6.QtGui import QStandardItem, QStandardItemModel
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QFileDialog,
-                             QPushButton, QVBoxLayout, QHBoxLayout, QListView)
+from PyQt6.QtWidgets import (QMainWindow, QFileDialog,
+                             QPushButton, QListView)
+
+from modules.app import app
 from modules.status_bar import setup_status_bar
+from modules.main_window import setup_main_window
 
 
 class MainWindow(QMainWindow):
     def __init__(self: QMainWindow):
         super().__init__()
 
-        self.setWindowTitle("Audio Splitting")
-        self.setFixedSize(QSize(860, 640))
+        # setup ui
+        setup_status_bar(self)
+        setup_main_window(self)
 
         # setup media player
         self.audio_output = QAudioOutput()
@@ -22,42 +25,20 @@ class MainWindow(QMainWindow):
         self.media_player.setAudioOutput(self.audio_output)
         self.media_content_list = []
 
-        # setup translator
-        self.translator = QTranslator()
-        self.load_translator(QLocale.system())
+        upload_button: QPushButton = self.findChild(
+            QPushButton, "uploadButton")
+        upload_button.clicked.connect(self.get_audio_files)
 
-        # setup menubar
-        setup_status_bar(self)
+        self.play_button: QPushButton = self.findChild(
+            QPushButton, "playButton")
+        self.play_button.clicked.connect(self.toggle_play_pause)
 
-        # create buttons
-        self.button_upload = QPushButton(self.tr('Upload audio files'))
-        self.button_upload.clicked.connect(self.get_audio_files)
-
-        self.button_play_pause = QPushButton(self.tr("Play"))
-        self.button_play_pause.setEnabled(False)
-        self.button_play_pause.clicked.connect(self.toggle_play_pause)
-
-        # create list
-        self.list_view = QListView()
         self.list_model = QStandardItemModel()
-        self.list_view.setModel(self.list_model)
-        self.list_view.doubleClicked.connect(self.play_selected_file)
-
-        # setup layouts
-        layout_buttons = QHBoxLayout()
-        layout_buttons.addWidget(self.button_upload)
-        layout_buttons.addWidget(self.button_play_pause)
-
-        layout_main = QVBoxLayout()
-        layout_main.addWidget(self.list_view)
-        layout_main.addLayout(layout_buttons)
-
-        central_widget = QWidget()
-        central_widget.setLayout(layout_main)
-        self.setCentralWidget(central_widget)
+        audio_list: QListView = self.findChild(QListView, "audioList")
+        audio_list.setModel(self.list_model)
+        audio_list.doubleClicked.connect(self.play_selected_file)
 
     def get_audio_files(self):
-        # Open file dialog to select multiple audio files
         file_names, _ = QFileDialog.getOpenFileNames(
             self, caption='Select one or more audio files', directory='./', filter='*.wav *.mp3')
 
@@ -67,28 +48,22 @@ class MainWindow(QMainWindow):
             media_content = QUrl.fromLocalFile(file_name)
             self.media_content_list.append(media_content)
 
-        self.button_play_pause.setEnabled(True)
+        self.play_button.setEnabled(True)
 
-    def play_selected_file(self, file):
+    def play_selected_file(self, file: QModelIndex):
         self.media_player.stop()
         source = self.media_content_list[file.row()]
         self.media_player.setSource(source)
         self.media_player.play()
-        self.button_play_pause.setText(self.tr("Pause"))
+        self.play_button.setText(self.tr("Pause"))
 
     def toggle_play_pause(self):
         if self.media_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
             self.media_player.pause()
-            self.button_play_pause.setText(self.tr("Play"))
+            self.play_button.setText(self.tr("Play"))
         else:
             self.media_player.play()
-            self.button_play_pause.setText(self.tr("Pause"))
-
-    def load_translator(self, locale: QLocale):
-        # "en_US" -> "en"
-        code = locale.name().split("_")[0]
-        # self.translator.load(f'i18n/app{locale}.qm')
-        # QApplication.installTranslator(self.translator)
+            self.play_button.setText(self.tr("Pause"))
 
 
 if __name__ == '__main__':
