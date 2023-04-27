@@ -134,3 +134,4 @@ dmypy.json
 # audio files
 *.wav
 *.mp3
+!build.spec
