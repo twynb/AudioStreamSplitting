@@ -6,3 +6,4 @@ PyQt6-sip==13.5.0
 tomli==2.0.1
 ffmpegio==0.8.3
 music-tag==0.4.3
+librosa>=0.10.0

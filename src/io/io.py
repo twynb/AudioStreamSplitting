@@ -1,27 +1,24 @@
-import ffmpegio
 import music_tag
+import soundfile
+import librosa
+import numpy
+from typing import Tuple
 
-def readAudiofileToNumPy(audiofile):
-    return ffmpegio.audio.read(audiofile)
+def readAudiofileToNumPy(audiofile)-> Tuple[numpy.ndarray, float]:
+    return librosa.load(audiofile)
 
 def readAudiofileToStream(audiofile,mode="",block=100):
-    """ 
-    ====  ===================================================
-    Mode  Description
-    ====  ===================================================
-    'r'   read from url (default)
-    'w'   write to url
-    'f'   filter data defined by fg
-    'v'   operate on video stream, 'vv' if multi-video reader
-    'a'   operate on audio stream, 'aa' if multi-audio reader
-    ====  ===================================================
-    """
-    with ffmpegio.open(audiofile,mode,blocksize=block) as fin:
-        return fin
+    sr = librosa.get_samplerate('/path/to/file.wav')
 
-def saveNumPyAsAudioFile(song, songname:str, tags:dict={}, rate=100,extention = ".mp3"):
+    frame_length = int(2048 * sr) // 22050
+    hop_length = int(512 * sr) // 22050
+
+    librosa.stream(audiofile,block_length=128,frame_length=frame_length,hop_length=hop_length)
+
+def saveNumPyAsAudioFile(song:numpy.ndarray, songname:str, rate=100 ,tags:dict={},extention = ".mp3"):
+    """Tags -> tagAudiofile()"""
     savename = songname+extention
-    ffmpegio.audio.write(savename,rate,song)
+    soundfile.write(savename,song,rate)
     tagAudiofile(savename,songname,tags)
 
 def tagAudiofile(savename:str,songname:str,tags:dict):
