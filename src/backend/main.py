@@ -1,34 +1,31 @@
+import argparse
 import threading
 import webview
 
 from werkzeug.serving import make_server
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from server import server
 
-from server import server, gui_dir
+parser = argparse.ArgumentParser(description='Script description')
 
+parser.add_argument('--debug', help='Enable debug mode', action='store_true')
+parser.add_argument('--alone', help='Run server alone', action='store_true')
 
-class ViteFileChangeHandler(FileSystemEventHandler):
-    # TODO implement HMR here
-    def on_any_event(self, event):
-        if event.src_path.endswith(('.js', '.css')):
-            print("something changed")
+args = parser.parse_args()
 
+debug_mode = args.debug
+alone_mode = args.alone
 
 if __name__ == '__main__':
-    flask_thread = threading.Thread(target=make_server(
-        'localhost', 5000, server).serve_forever)
-    flask_thread.start()
+    if alone_mode:
+        server.run(debug=True if debug_mode else False)
+    else:
+        flask_thread = threading.Thread(target=make_server(
+            'localhost', 5000, server).serve_forever)
+        flask_thread.start()
 
-    event_handler = ViteFileChangeHandler()
-    observer = Observer()
-    observer.schedule(event_handler, gui_dir)
-    observer.start()
+        # TODO implement HMR for backend
 
-    webview.create_window('AUDIO', server)
-    webview.start(debug=True)
+        webview.create_window('AUDIO', server)
+        webview.start(debug=True if debug_mode else False)
 
-    observer.stop()
-    observer.join()
-
-    flask_thread.join()
+        flask_thread.join()

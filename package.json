@@ -1,19 +1,27 @@
 {
-  "name": "vite-project",
+  "name": "audio_streaming_splitting",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "vite": "vite -c src/frontend/vite.config.ts",
-    "dev": "npm run vite",
-    "build": "vue-tsc -p src/frontend && npm run vite build",
-    "webview": "npm run build && python3 src/backend/main.py"
+    "fe": "npm run vite",
+    "be": "python3 src/backend/main.py --alone",
+    "be:debug": "python3 src/backend/main.py --alone --debug",
+    "view:app": "npm run build:fe && python3 src/backend/main.py",
+    "view:app:debug": "npm run build:fe && python3 src/backend/main.py --debug",
+    "build:fe": "vue-tsc -p src/frontend && npm run vite build",
+    "build:app": "npm run build:fe && pyinstaller build.spec",
+    "preview": "dist/app ",
+    "vite": "vite -c src/frontend/vite.config.ts"
   },
   "dependencies": {
     "vue": "^3.2.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vue-tsc": "^1.4.2"

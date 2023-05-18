@@ -1,3 +1,4 @@
+altgraph==0.17.3
 autopep8==2.0.2
 blinker==1.6.2
 bottle==0.12.25
@@ -10,7 +11,8 @@ proxy-tools==0.1.0
 pycairo==1.23.0
 pycodestyle==2.10.0
 PyGObject==3.44.1
+pyinstaller==5.11.0
+pyinstaller-hooks-contrib==2023.3
 pywebview==4.1
 tomli==2.0.1
-watchdog==3.0.0
 Werkzeug==2.3.4
