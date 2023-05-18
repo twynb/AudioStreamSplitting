@@ -128,14 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# vscode
-.vscode/settings.json
-
-# audio files
-*.wav
-*.mp3
-!build.spec
-
 # Logs
 logs
 *.log
@@ -160,3 +152,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# vscode
+.vscode/settings.json
+
+gui
+
+# audio files
+*.wav
+*.mp3
+!build.spec
