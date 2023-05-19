@@ -15,7 +15,7 @@
     "vite": "vite -c src/frontend/vite.config.ts"
   },
   "dependencies": {
-    "@vueuse/core": "^10.1.2",
+    "axios": "^1.4.0",
     "vue": "^3.2.47"
   },
   "devDependencies": {
