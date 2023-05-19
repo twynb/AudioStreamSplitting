@@ -8,6 +8,7 @@
       - [Without extension:](#without-extension)
       - [With extension:](#with-extension)
   - [Usage](#usage)
+    - [Availables commands](#availables-commands)
 
 ---
 
@@ -56,7 +57,17 @@ docker run -v ${pwd}/workspaces/AudioStreamSplitting ass -it bash
 
 ## Usage
 
-The following commands are available:
+For normal development, use the following commands in 2 different terminals:
+
+```bash
+npm run fe
+```
+
+```bash
+npm run be:debug
+```
+
+### Availables commands
 
 | Command                  | Description                      |
 | ------------------------ | -------------------------------- |
