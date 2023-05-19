@@ -1,36 +1,70 @@
 # Audio Stream Splitting
 
-## How it Works
+- [Audio Stream Splitting](#audio-stream-splitting)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+    - [Manual setup](#manual-setup)
+    - [Docker](#docker)
+      - [Without extension:](#without-extension)
+      - [With extension:](#with-extension)
+  - [Usage](#usage)
+
+---
+
 ## Requirements
 
-- `python >= 3.10` [here](https://www.python.org/downloads/).
-- `pip` [here](https://pip.pypa.io/en/stable/cli/pip_download/).
-- `pyinstaller` [here](https://pypi.org/project/pyinstaller/).
+- Python 3.10 or later: [Download here](https://www.python.org/downloads/)
+- pip: [Download here](https://pip.pypa.io/en/stable/cli/pip_download/)
+- pyinstaller: [Download here](https://pypi.org/project/pyinstaller/)
+- Node.js 18.6.0 or later: [Download here](https://nodejs.org/en/download)
 
 ## Installation
 
-1. Clone this repository to your local machine.
+You can choose between manual setup or using Docker for simplicity.
 
-2. Install the required Python packages using `pip install -r requirements.txt`.
+### Manual setup
+
+1. Clone the repository to your local machine.
+
+2. Install the required Python packages using the command `pip install -r requirements.txt`.
+
+3. Install Node.js modules using the command `npm install`.
+
+### Docker
+
+If you are using VSCode as your code editor, it is recommended to set up a container with the appropriate extension.
+
+#### Without extension:
+
+1. Build the Docker image using the command:
+
+```bash
+docker build -t ass .
+```
+
+2. Run the container using the command:
+
+```bash
+docker run -v ${pwd}/workspaces/AudioStreamSplitting -it bash
+```
+
+#### With extension:
+
+1. Download the VSCode Remote - Containers extension from [here](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
+2. Press `Ctrl + Shift + P` to open the command palette, then select `Dev Container: Reopen in container`.
 
 ## Usage
 
-To run the project, run the following command in your terminal:
+The following commands are available:
 
-```bash
-python3 src/main.py
-```
-
-## Build
-To build the project, run the following command in your terminal:
-
-
-```bash
-pyinstaller build.spec
-```
-
-To preview built app
-
-```bash
-./dist/app
-```
+| Command                  | Description                      |
+| ------------------------ | -------------------------------- |
+| npm run `fe`             | Run frontend server              |
+| npm run `be`             | Run backend server               |
+| npm run `be:debug`       | Run backend server in debug mode |
+| npm run `view:app`       | Run desktop app                  |
+| npm run `view:app:debug` | Run desktop app in debug mode    |
+| npm run `build:fe`       | Build frontend (html, js, css)   |
+| npm run `build:app`      | Build desktop app                |
+| npm run `preview`        | Preview built desktop app        |
