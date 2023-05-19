@@ -45,7 +45,7 @@ docker build -t ass .
 2. Run the container using the command:
 
 ```bash
-docker run -v ${pwd}/workspaces/AudioStreamSplitting -it bash
+docker run -v ${pwd}/workspaces/AudioStreamSplitting ass -it bash
 ```
 
 #### With extension:

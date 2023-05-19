@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useFetch } from './composables/useFetch'
+import TestComp from './components/TestComp.vue'
 
 const handleClick = async () => {
-  console.log('click')
-  const res = await fetch('/api/foo')
-  json.value = await res.json()
+  const { data, onFetchResponse } = useFetch('/foo').json()
+  onFetchResponse(() => {
+    console.log(data.value)
+  })
 }
 
 const text = ref('Something')
@@ -13,7 +16,8 @@ const json = ref({})
 </script>
 
 <template>
-  <div class="bg-slate-500 h-screen flex items-center justify-center">
+  <TestComp />
+  <!-- <div class="bg-slate-500 h-screen flex items-center justify-center">
     <div class="space-y-2">
       <div class="space-y-2">
         <input type="text" v-model="text" class="py-2 pl-3 rounded-lg outline-none" />
@@ -26,5 +30,5 @@ const json = ref({})
         {{ json }}
       </pre>
     </div>
-  </div>
+  </div> -->
 </template>
