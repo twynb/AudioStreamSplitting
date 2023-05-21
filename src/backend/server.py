@@ -46,18 +46,13 @@ def audio():
             'message': 'Only accept .wav or .mp3 file!'
         })
 
-    temp_path = 'src/backend/tmp/temp.wav'
-    file.save(temp_path)
-
-    audio_data, sample_rate = librosa.load(temp_path)
+    audio_data, sample_rate = librosa.load(file, sr=None)
     duration = librosa.get_duration(y=audio_data, sr=sample_rate)
     num_channels = audio_data.shape[0]
     num_samples = len(audio_data)
-    sample_rate = sample_rate
-    file_format = temp_path.split('.')[-1]
-    file_size = os.path.getsize(temp_path)
+    file_format = file.filename.split('.')[-1]
+    file_size = len(file.read())
     audio_info = {
-        'file_path': temp_path,
         'duration': duration,
         'num_channels': num_channels,
         'num_samples': num_samples,

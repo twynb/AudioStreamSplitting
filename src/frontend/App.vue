@@ -12,6 +12,8 @@ const handleSubmitName = async () => {
 }
 
 const handleFileUpload = async (event: Event) => {
+  audioData.value = undefined
+
   const formData = new FormData()
   formData.append('file', (event.target as HTMLInputElement).files[0])
 
@@ -42,7 +44,7 @@ const handleFileUpload = async (event: Event) => {
       <div class="space-y-2 border-2 border-red-500 p-5 text-yellow-500">
         <input type="file" name="audio" class="py-2" @change="handleFileUpload" />
 
-        <pre>
+        <pre v-if="audioData">
           {{ audioData }}
         </pre>
       </div>
