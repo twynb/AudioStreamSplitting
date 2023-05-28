@@ -1,26 +1,25 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-block_cipher = None
-
+# PyInstaller options
 a = Analysis(
-    ['src/main.py'],
-    pathex=['src'],
-    binaries=[],
-    datas=[('src/ui/*.ui', 'ui')],
-    hiddenimports=[],
+    ['src/backend/main.py'],  # Entry point script(s)
+    pathex=['src/backend'],  # Additional module search path
+    binaries=[],  # Additional binaries or DLLs (if any)
+    datas=[('gui/*', './gui')],  # Additional non-Python files (if any)
+    hiddenimports=[],  # Additional imports (if any)
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['PyQt6.QtSql', 'PyQt6.QtXml', 'PyQt6.QtDesigner', 'PyQt6.QtPrintSupport',
-              'PyQt6.QtTest', 'PyQt6.QtWebKit', 'PyQt6.QtWebKitWidgets'],
+    excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
-    cipher=block_cipher,
+    cipher=None,
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
+# Create a .exe or executable (modify as needed)
 exe = EXE(
     pyz,
     a.scripts,
