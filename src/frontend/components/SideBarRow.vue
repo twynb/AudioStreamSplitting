@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import type { Component } from 'vue'
-import { useGlobalStyle } from '../store/useGloalStyle'
 
 defineProps<{
   icon: Component

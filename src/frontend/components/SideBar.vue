@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
-import { storeToRefs } from 'pinia'
-import { useGlobalStyle } from '../store/useGloalStyle'
 
 const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
 const IconBell = defineAsyncComponent(() => import('./icons/IconBell.vue'))

@@ -9,3 +9,5 @@ documents
 .vscode
 package-lock.json
 package.json
+auto-imports.d.ts
+components.d.ts
