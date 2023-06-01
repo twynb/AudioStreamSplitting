@@ -1,0 +1,21 @@
+{
+	"name": "AudioStreamSplitting",
+	"build": {
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-docker",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				"GitHub.vscode-pull-request-github",
+				"eamodio.gitlens",
+				"ms-python.python",
+				"ms-python.vscode-pylance"
+			]
+		}
+	},
+	"remoteUser": "root"
+}
