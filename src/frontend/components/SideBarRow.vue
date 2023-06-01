@@ -12,8 +12,12 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
 </script>
 
 <template>
-  <li class="p-4 flex items-center space-x-4 cursor-pointer border-white transition-colors hover:-ml-[3px] hover:border-l-[3px] hover:border-primary">
-    <component class="dark:text-primary" :is="icon" />
-    <span :class="[isSidebarMinimized ? 'hidden' : 'inline']"> {{ text }} </span>
+  <li
+    class="flex cursor-pointer items-center space-x-4 border-white p-4 transition-colors hover:-ml-[3px] hover:border-l-[3px] hover:border-primary"
+  >
+    <component :is="icon" class="dark:text-primary" />
+    <span :class="[isSidebarMinimized ? 'hidden' : 'inline']">
+      {{ text }}
+    </span>
   </li>
 </template>

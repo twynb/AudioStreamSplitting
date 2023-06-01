@@ -12,7 +12,10 @@
     "build:fe": "vue-tsc -p src/frontend && npm run vite build",
     "build:app": "npm run build:fe && pyinstaller build.spec",
     "preview": "dist/app ",
-    "vite": "vite -c src/frontend/vite.config.ts"
+    "vite": "vite -c src/frontend/vite.config.ts",
+    "fe:lint": "eslint src/frontend --fix ",
+    "fe:prettier": "prettier src/frontend  --write",
+    "fe:format": "npm run fe:prettier && npm run fe:lint"
   },
   "dependencies": {
     "@vueuse/core": "^10.1.2",
@@ -21,11 +24,16 @@
     "vue": "^3.3.2"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.39.4",
     "@types/node": "^18.16.8",
     "@vitejs/plugin-vue": "^4.2.3",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-vue": "^9.14.1",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "tailwindcss": "^3.3.2",
     "typescript": "~5.0.4",
     "vite": "^4.3.5",

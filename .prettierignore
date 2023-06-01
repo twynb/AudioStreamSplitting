@@ -1,0 +1,11 @@
+.venv
+gui
+node_modules
+src/backend
+build.spec
+*.py
+assets
+documents
+.vscode
+package-lock.json
+package.json

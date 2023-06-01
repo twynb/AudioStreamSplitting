@@ -1,5 +1,5 @@
 import axios from 'axios'
 
-export const setupAxios = () => {
+export function setupAxios() {
   axios.defaults.baseURL = 'http://localhost:5000/api'
 }
