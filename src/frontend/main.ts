@@ -4,4 +4,7 @@ import './main.css'
 import { setupAxios } from './includes/setup_axios'
 
 setupAxios()
-createApp(App).mount('#app')
+
+const app = createApp(App)
+
+app.mount('#app')

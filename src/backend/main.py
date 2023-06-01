@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
         # TODO implement HMR for backend
 
-        webview.create_window('AUDIO', server)
+        webview.create_window(title='AUDIO', url=server, min_size=(800, 600))
         webview.start(debug=True if debug_mode else False)
 
         flask_thread.join()
