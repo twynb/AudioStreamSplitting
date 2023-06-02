@@ -1,18 +1,11 @@
-import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import './main.css'
 import { setupAxios } from './includes/setup_axios'
+import { installI18n } from '@/modules/i18n'
+import { installPinia } from '@/modules/pinia'
 
 setupAxios()
-
 const app = createApp(App)
-
-app.use(createPinia())
-app.use(
-  createI18n({
-    legacy: false,
-    locale: '',
-    messages: {}
-  })
-)
+installI18n(app)
+installPinia(app)
 app.mount('#app')

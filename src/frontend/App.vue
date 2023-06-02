@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-
 const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
 const MainComp = defineAsyncComponent(() => import('./components/MainComp.vue'))
 </script>

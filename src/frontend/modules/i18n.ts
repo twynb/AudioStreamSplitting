@@ -39,7 +39,7 @@ export async function loadLanguageAsync(lang: string): Promise<Locale> {
   return setI18nLanguage(lang)
 }
 
-export function installI18n(app: App) {
+export const installI18n = (app: App) => {
   app.use(i18n)
   loadLanguageAsync('en')
 }
