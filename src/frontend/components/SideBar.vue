@@ -5,28 +5,24 @@ const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
 const IconBell = defineAsyncComponent(() => import('./icons/IconBell.vue'))
 const IconFile = defineAsyncComponent(() => import('./icons/IconFile.vue'))
 const IconHouse = defineAsyncComponent(() => import('./icons/IconHouse.vue'))
-const IconLanguage = defineAsyncComponent(
-  () => import('./icons/IconLanguage.vue'),
-)
+const IconLanguage = defineAsyncComponent(() => import('./icons/IconLanguage.vue'))
 const IconSun = defineAsyncComponent(() => import('./icons/IconSun.vue'))
 const IconMoon = defineAsyncComponent(() => import('./icons/IconMoon.vue'))
-const IconMusicNote = defineAsyncComponent(
-  () => import('./icons/IconMusicNote.vue'),
-)
+const IconMusicNote = defineAsyncComponent(() => import('./icons/IconMusicNote.vue'))
 
 const tree = [
   {
     text: 'Dashboard',
-    icon: IconHouse,
+    icon: IconHouse
   },
   {
     text: 'Current Project',
-    icon: IconFile,
+    icon: IconFile
   },
   {
     text: 'Notifications',
-    icon: IconBell,
-  },
+    icon: IconBell
+  }
 ]
 
 const isDark = useDark()
@@ -47,27 +43,15 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
       <div
         class="logo flex h-11 w-11 items-center justify-center rounded-xl bg-black dark:bg-primary"
       >
-        <IconMusicNote
-          height="28"
-          width="28"
-          class="text-primary dark:text-black"
-        />
+        <IconMusicNote height="28" width="28" class="text-primary dark:text-black" />
       </div>
-      <div
-        class="text-lg font-medium"
-        :class="[isSidebarMinimized ? 'hidden' : 'block']"
-      >
+      <div class="text-lg font-medium" :class="[isSidebarMinimized ? 'hidden' : 'block']">
         Lorem Ipsum
       </div>
     </div>
 
     <ul class="menus space-y-6">
-      <SideBarRow
-        v-for="({ icon, text }, index) in tree"
-        :key="index"
-        :icon="icon"
-        :text="text"
-      />
+      <SideBarRow v-for="({ icon, text }, index) in tree" :key="index" :icon="icon" :text="text" />
     </ul>
 
     <ul class="settings mt-auto space-y-2">
@@ -75,11 +59,7 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
 
       <li
         class="py-3"
-        :class="[
-          isSidebarMinimized
-            ? ''
-            : 'flex cursor-pointer items-center pl-4 pr-0',
-        ]"
+        :class="[isSidebarMinimized ? '' : 'flex cursor-pointer items-center pl-4 pr-0']"
         @click="toggleDark()"
       >
         <component
@@ -87,12 +67,8 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
           class="dark:text-primary"
           :class="[isSidebarMinimized ? 'hidden' : 'inline']"
         />
-        <span class="ml-4" :class="[isSidebarMinimized ? 'hidden' : 'inline']">
-          Light mode
-        </span>
-        <div
-          class="relative ml-auto h-8 w-14 rounded-2xl bg-primary dark:bg-dark-shade"
-        >
+        <span class="ml-4" :class="[isSidebarMinimized ? 'hidden' : 'inline']"> Light mode </span>
+        <div class="relative ml-auto h-8 w-14 rounded-2xl bg-primary dark:bg-dark-shade">
           <div
             class="absolute left-1 top-0.5 h-7 w-7 rounded-full bg-dark-gray dark:left-[calc(100%-33px)] dark:bg-primary"
           >

@@ -12,8 +12,8 @@ export default defineConfig({
       imports: ['vue', 'pinia', 'vue-i18n', 'vue-router'],
       dts: true,
       vueTemplate: true,
-      dirs: ['./composables', './store'],
-    }),
+      dirs: ['./composables', './store']
+    })
   ],
   root: 'src/frontend',
   build: {
@@ -24,8 +24,8 @@ export default defineConfig({
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
-      },
-    },
-  },
+        assetFileNames: '[name].[ext]'
+      }
+    }
+  }
 })
