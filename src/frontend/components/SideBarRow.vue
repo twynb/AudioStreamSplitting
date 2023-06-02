@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useGlobalStyle } from '../stores/useGloalStyle';
 import type { Component } from 'vue'
 
 defineProps<{

@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 
-export const installPinia = (app: App) => {
+export function install(app: App) {
   const pinia = createPinia()
   app.use(pinia)
 }

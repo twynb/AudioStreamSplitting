@@ -16,8 +16,10 @@ declare module '@vue/runtime-core' {
     IconMoon: typeof import('./components/icons/IconMoon.vue')['default']
     IconMusicNote: typeof import('./components/icons/IconMusicNote.vue')['default']
     IconSun: typeof import('./components/icons/IconSun.vue')['default']
-    MainComp: typeof import('./components/MainComp.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']
+    TheFooter: typeof import('./components/TheFooter.vue')['default']
   }
 }

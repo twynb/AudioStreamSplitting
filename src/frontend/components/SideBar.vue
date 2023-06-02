@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
-import { loadLanguageAsync, availableLocales as locales } from '@/modules/i18n'
+import { loadLanguageAsync, availableLocales as locales } from '../modules/i18n'
+import { useI18n } from 'vue-i18n'
+import { useGlobalStyle } from '../stores/useGloalStyle';
 
 const { t, locale } = useI18n()
 
@@ -27,7 +29,7 @@ const toggleLocales = async () => {
 
 <template>
   <div
-    class="flex h-full flex-col gap-y-10 bg-white p-6 pb-8 transition-[width] dark:bg-black"
+    class="flex h-full flex-col gap-y-10 bg-white p-6 pb-8 transition-width dark:bg-black"
     :class="[isSidebarMinimized ? 'w-[105px] items-center' : 'w-[280px]']"
   >
     <div

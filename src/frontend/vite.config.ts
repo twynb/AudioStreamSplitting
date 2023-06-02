@@ -1,36 +1,48 @@
-import { fileURLToPath, URL } from 'node:url'
+/// <reference types="vitest" />
+import path from 'node:path'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import Vue from '@vitejs/plugin-vue'
+import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import UnoCSS from 'unocss/vite'
 import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  root: 'src/frontend',
+
   plugins: [
-    vue(),
+    Vue(),
+
+    Pages({ dirs: 'pages' }),
+
+    AutoImport({
+      imports: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'vue-i18n',
+      ],
+      dts: 'auto-imports.d.ts',
+      dirs: ['composables'],
+      vueTemplate: true,
+    }),
+
+    Components({
+      dts: 'components.d.ts',
+      dirs: ['components', 'stores'],
+    }),
+
+    UnoCSS({ configFile: 'uno.config.ts' }),
+
     VueI18n({
       runtimeOnly: true,
       compositionOnly: true,
       fullInstall: true,
-      include: [fileURLToPath(new URL('./locales/**', import.meta.url))]
+      include: [path.resolve(__dirname, 'locales/**')],
     }),
-    Components({ dts: true, dirs: ['./components'], version: 3 }),
-    AutoImport({
-      imports: [
-        'vue',
-        'pinia',
-        'vue-router',
-        {
-          '../../../node_modules/vue-i18n/dist/vue-i18n': ['useI18n']
-        }
-      ],
-      dts: true,
-      vueTemplate: true,
-      dirs: ['./composables', './store']
-    })
   ],
-  root: 'src/frontend',
+
   build: {
     outDir: '../../gui',
     emptyOutDir: true,
@@ -39,14 +51,12 @@ export default defineConfig({
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]'
-      }
-    }
+        assetFileNames: '[name].[ext]',
+      },
+    },
   },
-  assetsInclude: ['./locales/*'],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./', import.meta.url))
-    }
-  }
+
+  test: {
+    environment: 'jsdom',
+  },
 })
