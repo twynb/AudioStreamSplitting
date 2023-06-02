@@ -66,7 +66,7 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useGlobalStyle: typeof import('./store/useGloalStyle')['useGlobalStyle']
-  const useI18n: typeof import('vue-i18n')['useI18n']
+  const useI18n: typeof import('../../node_modules/vue-i18n/dist/vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
@@ -147,7 +147,7 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useGlobalStyle: UnwrapRef<typeof import('./store/useGloalStyle')['useGlobalStyle']>
-    readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
+    readonly useI18n: UnwrapRef<typeof import('../../../../../node_modules/vue-i18n/dist/vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
@@ -222,7 +222,7 @@ declare module '@vue/runtime-core' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useGlobalStyle: UnwrapRef<typeof import('./store/useGloalStyle')['useGlobalStyle']>
-    readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
+    readonly useI18n: UnwrapRef<typeof import('../../../../../node_modules/vue-i18n/dist/vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>

@@ -17,7 +17,14 @@ export default defineConfig({
     }),
     Components({ dts: true, dirs: ['./components'], version: 3 }),
     AutoImport({
-      imports: ['vue', 'pinia', 'vue-i18n', 'vue-router'],
+      imports: [
+        'vue',
+        'pinia',
+        'vue-router',
+        {
+          '../../../node_modules/vue-i18n/dist/vue-i18n': ['useI18n']
+        }
+      ],
       dts: true,
       vueTemplate: true,
       dirs: ['./composables', './store']
