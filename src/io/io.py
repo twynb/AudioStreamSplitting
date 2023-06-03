@@ -14,8 +14,8 @@ def readAudiofileToNumPy(audiofile)-> Tuple[np.ndarray, float]:
 def readAudiofileToStream(audiofile,rate=128) -> Generator[np.ndarray, None, None]:
     """
     :param audiofile: Path to audiofile
-    :param rate: block lenth of stream
-    :returns: Audostream
+    :param rate: block length of stream
+    :returns: Audiostream
     """
     #get rates
     sr = librosa.get_samplerate(audiofile)
