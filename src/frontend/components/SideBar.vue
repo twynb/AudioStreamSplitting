@@ -1,45 +1,35 @@
 <script setup lang="ts">
-import { useDark, useToggle } from '@vueuse/core'
-import { loadLanguageAsync, availableLocales as locales } from '../modules/i18n'
-import { useI18n } from 'vue-i18n'
-import { useGlobalStyle } from '../stores/useGloalStyle';
+import { useDark, useToggle } from "@vueuse/core";
+import {
+  loadLanguageAsync,
+  availableLocales as locales,
+} from "../modules/i18n";
+import { useI18n } from "vue-i18n";
+import { useGlobalStyle } from "../stores/useGloalStyle";
 
-const { t, locale } = useI18n()
+const { t, locale } = useI18n();
 
-const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
-const IconBell = defineAsyncComponent(() => import('./icons/IconBell.vue'))
-const IconFile = defineAsyncComponent(() => import('./icons/IconFile.vue'))
-const IconHouse = defineAsyncComponent(() => import('./icons/IconHouse.vue'))
-const IconLanguage = defineAsyncComponent(() => import('./icons/IconLanguage.vue'))
-const IconSun = defineAsyncComponent(() => import('./icons/IconSun.vue'))
-const IconMoon = defineAsyncComponent(() => import('./icons/IconMoon.vue'))
-const IconMusicNote = defineAsyncComponent(() => import('./icons/IconMusicNote.vue'))
+const SideBarRow = defineAsyncComponent(() => import("./SideBarRow.vue"));
 
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
-const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
+const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
 
 const toggleLocales = async () => {
-  const newLocale = locales[(locales.indexOf(locale.value) + 1) % locales.length]
-  await loadLanguageAsync(newLocale)
-  locale.value = newLocale
-}
+  const newLocale =
+    locales[(locales.indexOf(locale.value) + 1) % locales.length];
+  await loadLanguageAsync(newLocale);
+  locale.value = newLocale;
+};
 </script>
 
 <template>
-  <div
-    class="flex h-full flex-col gap-y-10 bg-white p-6 pb-8 transition-width dark:bg-black"
-    :class="[isSidebarMinimized ? 'w-[105px] items-center' : 'w-[280px]']"
-  >
-    <div
-      class="brand flex cursor-pointer items-center gap-x-3"
-      @click="isSidebarMinimized = !isSidebarMinimized"
-    >
-      <div
-        class="logo flex h-11 w-11 items-center justify-center rounded-xl bg-black dark:bg-primary"
-      >
-        <IconMusicNote height="28" width="28" class="text-primary dark:text-black" />
+  <div class="flex h-full flex-col gap-y-10 bg-white p-6 pb-8 transition-width dark:bg-black"
+    :class="[isSidebarMinimized ? 'w-[105px] items-center' : 'w-[280px]']">
+    <div class="brand flex cursor-pointer items-center gap-x-3" @click="isSidebarMinimized = !isSidebarMinimized">
+      <div class="logo flex h-11 w-11 items-center justify-center rounded-xl bg-black dark:bg-primary">
+        <span class="i-carbon-flash-filled text-primary dark:text-black text-xl" />
       </div>
       <div class="text-lg font-medium" :class="[isSidebarMinimized ? 'hidden' : 'block']">
         Lorem Ipsum
@@ -47,37 +37,33 @@ const toggleLocales = async () => {
     </div>
 
     <ul class="menus space-y-6">
-      <SideBarRow :icon="IconHouse" :text="t('sidebar.dashboard')" />
-      <SideBarRow :icon="IconFile" :text="t('sidebar.current_project')" />
-      <SideBarRow :icon="IconBell" :text="t('sidebar.notifications')" />
+      <SideBarRow icon="i-carbon-dashboard" :text="t('sidebar.dashboard')" link="/" />
+
+      <SideBarRow icon="i-carbon-document" :text="t('sidebar.current_project')" link="/current" />
     </ul>
 
     <ul class="settings mt-auto space-y-2">
-      <SideBarRow @click="toggleLocales()" :icon="IconLanguage" :text="t('sidebar.languages')" />
+      <SideBarRow icon="i-carbon-settings" :text="t('sidebar.settings')" link="/settings" />
 
-      <li
-        class="py-3"
-        :class="[isSidebarMinimized ? '' : 'flex cursor-pointer items-center pl-4 pr-0']"
-        @click="toggleDark()"
-      >
-        <component
-          :is="IconSun"
-          class="dark:text-primary"
-          :class="[isSidebarMinimized ? 'hidden' : 'inline']"
-        />
+      <SideBarRow @click="toggleLocales()" icon="i-carbon-ibm-watson-language-translator"
+        :text="t('sidebar.languages')" />
+
+      <li class="py-3" :class="[
+        isSidebarMinimized
+          ? ''
+          : 'flex cursor-pointer items-center pl-4 pr-0',
+      ]" @click="toggleDark()">
+        <span class=" dark:text-primary"
+          :class="[isSidebarMinimized ? 'hidden' : 'inline', isDark ? 'i-carbon-moon' : 'i-carbon-sun']" />
         <span class="ml-4" :class="[isSidebarMinimized ? 'hidden' : 'inline']">
-          {{ t('sidebar.light_mode') }}
+          {{ t("sidebar.light_mode") }}
         </span>
+
         <div class="relative ml-auto h-8 w-14 rounded-2xl bg-primary dark:bg-dark-shade">
           <div
-            class="absolute left-1 top-0.5 h-7 w-7 rounded-full bg-dark-gray dark:left-[calc(100%-33px)] dark:bg-primary"
-          >
-            <component
-              :is="isDark ? IconSun : IconMoon"
-              width="22"
-              height="22"
-              class="ml-[3px] mt-[3px] text-primary dark:text-dark-shade"
-            />
+            class="absolute left-1 top-0.5 h-7 w-7 rounded-full bg-dark-gray dark:left-[calc(100%-33px)] dark:bg-primary flex items-center justify-center">
+            <span v-if="isSidebarMinimized"
+              :class="[isDark ? 'i-carbon-moon text-light-gray-2' : 'i-carbon-sun text-primary']" />
           </div>
         </div>
       </li>
