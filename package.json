@@ -1,4 +1,5 @@
 {
+  "name": "audio_streaming_splitting",
   "private": true,
   "scripts": {
     "fe": "npm run vite",
