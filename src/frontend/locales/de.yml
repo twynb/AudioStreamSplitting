@@ -1,8 +1,7 @@
 sidebar:
   dashboard: Dashboard
-  current_project: Aktuelles Projekt
   notifications: Benachrichtigungen
   languages: Sprachen
-  light_mode: Heller Modus
   settings: Einstellungen
-
+  dark_mode: Dunkler Modus
+  statistics: Statistiken

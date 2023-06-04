@@ -14,7 +14,7 @@ const { push } = useRouter()
 
 <template>
   <li
-    class="flex cursor-pointer items-center space-x-4 border-white p-4 transition-colors hover:-ml-[3px] hover:border-l-[3px] hover:border-primary"
+    class="flex cursor-pointer items-center space-x-4 border-white p-4 transition-colors hover:(-ml-[3px] border-l-[3px] border-primary)"
     @click="link && push({ path: link })">
     <span :class="icon" class="dark:text-primary" />
     <span :class="[isSidebarMinimized ? 'hidden' : 'inline']">
