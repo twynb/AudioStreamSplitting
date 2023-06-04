@@ -9,17 +9,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    IconBell: typeof import('./components/icons/IconBell.vue')['default']
-    IconFile: typeof import('./components/icons/IconFile.vue')['default']
-    IconHouse: typeof import('./components/icons/IconHouse.vue')['default']
-    IconLanguage: typeof import('./components/icons/IconLanguage.vue')['default']
-    IconMoon: typeof import('./components/icons/IconMoon.vue')['default']
-    IconMusicNote: typeof import('./components/icons/IconMusicNote.vue')['default']
-    IconSun: typeof import('./components/icons/IconSun.vue')['default']
+    ContentLayout: typeof import('./components/ContentLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']
-    TheFooter: typeof import('./components/TheFooter.vue')['default']
   }
 }

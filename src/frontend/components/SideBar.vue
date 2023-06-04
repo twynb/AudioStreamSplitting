@@ -1,27 +1,9 @@
 <script setup lang="ts">
-import { useDark, useToggle } from "@vueuse/core";
-import {
-  loadLanguageAsync,
-  availableLocales as locales,
-} from "../modules/i18n";
-import { useI18n } from "vue-i18n";
-import { useGlobalStyle } from "../stores/useGloalStyle";
-
-const { t, locale } = useI18n();
-
 const SideBarRow = defineAsyncComponent(() => import("./SideBarRow.vue"));
 
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
-
+const { t } = useI18n();
+const {isDark,toggle} = useDarkToggle()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
-
-const toggleLocales = async () => {
-  const newLocale =
-    locales[(locales.indexOf(locale.value) + 1) % locales.length];
-  await loadLanguageAsync(newLocale);
-  locale.value = newLocale;
-};
 </script>
 
 <template>
@@ -45,14 +27,11 @@ const toggleLocales = async () => {
     <ul class="settings mt-auto space-y-2">
       <SideBarRow icon="i-carbon-settings" :text="t('sidebar.settings')" link="/settings" />
 
-      <SideBarRow @click="toggleLocales()" icon="i-carbon-ibm-watson-language-translator"
-        :text="t('sidebar.languages')" />
-
       <li class="py-3" :class="[
         isSidebarMinimized
           ? ''
           : 'flex cursor-pointer items-center pl-4 pr-0',
-      ]" @click="toggleDark()">
+      ]" @click="toggle()">
         <span class=" dark:text-primary"
           :class="[isSidebarMinimized ? 'hidden' : 'inline', isDark ? 'i-carbon-moon' : 'i-carbon-sun']" />
         <span class="ml-4" :class="[isSidebarMinimized ? 'hidden' : 'inline']">

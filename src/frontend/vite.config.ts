@@ -24,13 +24,13 @@ export default defineConfig({
         'vue-i18n',
       ],
       dts: 'auto-imports.d.ts',
-      dirs: ['composables'],
+      dirs: ['composables', 'stores'],
       vueTemplate: true,
     }),
 
     Components({
       dts: 'components.d.ts',
-      dirs: ['components', 'stores'],
+      dirs: ['components'],
     }),
 
     UnoCSS({ configFile: 'uno.config.ts' }),

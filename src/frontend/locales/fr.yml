@@ -1,0 +1,7 @@
+sidebar :
+  dashboard : Tableau de bord
+  current_project : Projet actuel
+  notifications : Notifications
+  languages : Langues
+  light_mode : Mode lumière
+  settings : Paramètres
