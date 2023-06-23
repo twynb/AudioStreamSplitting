@@ -3,12 +3,13 @@ const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
 </script>
 
 <template>
-  <div class="relative h-full w-full overflow-hidden">
-    <div class="absolute inset-0 flex h-full w-full">
+  <div class="relative wh-full overflow-hidden">
+    <div class="absolute flex wh-full inset-0 divide-x-1 divide-border">
       <SideBar class="shrink-0" />
 
       <Suspense>
-        <div class="h-full w-full bg-light-gray-2 dark:bg-dark-shade p-6 pb-8">
+        <div class="wh-full bg-background p-6 pb-8"
+        >
           <RouterView />
         </div>
       </Suspense>
@@ -34,8 +35,9 @@ body,
 
 body{
   overflow: hidden;
+  user-select: none;
   font-family: 'Open Sans', sans-serif;
-  @apply text-dark-gray dark:text-light-gray-2;
+  @apply text-primary;
 }
 
 </style>

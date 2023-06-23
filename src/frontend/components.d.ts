@@ -9,10 +9,12 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseSwitch: typeof import('./components/BaseSwitch.vue')['default']
     ContentLayout: typeof import('./components/ContentLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']
+    Test: typeof import('./components/Test.vue')['default']
   }
 }

@@ -28,7 +28,7 @@ const localOpts = Object.entries(LangMap).map(([key, value]) => {
   >
     <div>
       <label class="block" for="lang">Language</label>
-      <select class="dark:text-dark-gray" id="lang" v-model="currentLocal" name="lang">
+      <select class="" id="lang" v-model="currentLocal" name="lang">
         <option v-for="opt in localOpts" :key="opt?.value" :value="opt?.value">
           {{ opt?.label }}
         </option>

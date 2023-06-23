@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useGlobalStyle } from "../stores/useGloalStyle";
 
-defineProps<{
+const props = defineProps<{
   icon: string;
   text: string;
   link?: string
@@ -10,14 +10,29 @@ defineProps<{
 const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
 
 const { push } = useRouter()
+const route = useRoute()
+
 </script>
 
 <template>
   <li
-    class="flex cursor-pointer items-center space-x-4 border-white p-4 transition-colors hover:(-ml-[3px] border-l-[3px] border-primary)"
-    @click="link && push({ path: link })">
-    <span :class="icon" class="dark:text-primary" />
-    <span :class="[isSidebarMinimized ? 'hidden' : 'inline']">
+    class="
+    flex
+    cursor-pointer
+    items-center
+    space-x-4
+    text-primary
+    border-primary
+    p-4
+    transition-colors
+    rounded-md
+    hover:(bg-accent)
+    "
+    :class="route.path === props.link ? 'bg-accent' : 'bg-background'"
+    @click="link && push({ path: link })"
+    >
+    <span class="shrink-0" :class="icon" />
+    <span class="shrink-0" :class="[isSidebarMinimized ? 'hidden' : 'inline']">
       {{ text }}
     </span>
   </li>
