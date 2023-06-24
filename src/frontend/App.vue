@@ -4,19 +4,17 @@ const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
 
 <template>
   <div class="relative wh-full overflow-hidden">
-    <div class="absolute flex wh-full inset-0 divide-x-1 divide-border">
+    <div class="absolute inset-0 wh-full flex divide-x-1 divide-border">
       <SideBar class="shrink-0" />
 
       <Suspense>
-        <div class="wh-full bg-background p-6 pb-8"
-        >
+        <div class="wh-full bg-background p-6 pb-8">
           <RouterView />
         </div>
       </Suspense>
     </div>
   </div>
 </template>
-
 
 <style>
 html,
@@ -32,12 +30,10 @@ body,
   src: local('Open Sans'), url(./assets/fonts/OpenSans.ttf) format('truetype');
 }
 
-
 body{
   overflow: hidden;
   user-select: none;
   font-family: 'Open Sans', sans-serif;
   @apply text-primary;
 }
-
 </style>

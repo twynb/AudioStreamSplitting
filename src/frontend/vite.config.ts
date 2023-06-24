@@ -12,7 +12,12 @@ export default defineConfig({
   root: 'src/frontend',
 
   plugins: [
-    Vue(),
+    Vue({
+      script: {
+        defineModel: true,
+        propsDestructure: true,
+      },
+    }),
 
     Pages({ dirs: 'pages' }),
 
@@ -33,7 +38,7 @@ export default defineConfig({
       dirs: ['components'],
     }),
 
-    UnoCSS({ configFile: 'uno.config.ts' }),
+    UnoCSS({ configFile: '../../uno.config.ts' }),
 
     VueI18n({
       runtimeOnly: true,

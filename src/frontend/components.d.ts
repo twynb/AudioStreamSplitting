@@ -9,12 +9,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseButton: typeof import('./components/BaseButton.vue')['default']
+    BaseInput: typeof import('./components/BaseInput.vue')['default']
+    BaseLabel: typeof import('./components/BaseLabel.vue')['default']
+    BaseSelect: typeof import('./components/BaseSelect.vue')['default']
     BaseSwitch: typeof import('./components/BaseSwitch.vue')['default']
     ContentLayout: typeof import('./components/ContentLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']
-    Test: typeof import('./components/Test.vue')['default']
   }
 }

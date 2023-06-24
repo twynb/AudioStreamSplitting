@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const SideBarRow = defineAsyncComponent(() => import("./SideBarRow.vue"));
+const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
 
-const { t } = useI18n();
-const { isDark, toggle } = useDarkToggle();
-const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
+const { t } = useI18n()
+const { isDark, toggle } = useDarkToggle()
+const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
 </script>
 
 <template>
   <div
-    class="flex h-full flex-col gap-y-10 bg-background p-6 pb-8 transition-width"
+    class="h-full flex flex-col gap-y-10 bg-background p-6 pb-8 transition-width"
     :class="[isSidebarMinimized ? 'w-[105px] items-center' : 'w-[280px]']"
   >
     <div
@@ -16,14 +16,14 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
       @click="isSidebarMinimized = !isSidebarMinimized"
     >
       <div
-        class="logo flex h-11 w-11 items-center justify-center rounded-xl bg-primary shrink-0"
+        class="logo h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
       >
         <span
-          class="i-carbon-play-filled-alt text-primary-foreground ml-0.5 text-xl"
+          class="i-carbon-play-filled-alt ml-0.5 text-xl text-primary-foreground"
         />
       </div>
       <div
-        class="text-lg font-medium shrink-0"
+        class="shrink-0 text-lg font-medium"
         :class="[isSidebarMinimized ? 'hidden' : 'block']"
       >
         LoremIpsum
@@ -42,10 +42,9 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
         :text="t('sidebar.statistics')"
         link="/statistics"
       />
-
     </ul>
 
-    <ul class="space-y-2 mt-auto">
+    <ul class="mt-auto space-y-2">
       <SideBarRow
         icon="i-carbon-settings"
         :text="t('sidebar.settings')"
@@ -72,14 +71,14 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle());
         </span>
 
         <div
-          class="relative ml-auto h-8 w-14 rounded-2xl bg-primary cursor-pointer"
+          class="relative ml-auto h-8 w-14 cursor-pointer rounded-2xl bg-primary"
         >
           <div
-            class="absolute left-1 top-1 h-6 w-6 rounded-full bg-primary-foreground dark:(translate-x-25px) flex-center transition-transform"
+            class="absolute left-1 top-1 h-6 w-6 flex-center rounded-full bg-primary-foreground transition-transform dark:(translate-x-25px)"
           >
             <span
               v-if="isSidebarMinimized"
-              class="text-primary text-sm"
+              class="text-sm text-primary"
               :class="[isDark ? 'i-carbon-moon' : 'i-carbon-sun']"
             />
           </div>
