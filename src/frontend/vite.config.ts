@@ -27,6 +27,7 @@ export default defineConfig({
         'vue-router',
         'pinia',
         'vue-i18n',
+        { 'vue-final-modal': ['useModal'] },
       ],
       dts: 'auto-imports.d.ts',
       dirs: ['composables', 'stores'],
@@ -58,6 +59,12 @@ export default defineConfig({
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
       },
+    },
+  },
+  resolve: {
+    alias: {
+      '@components': 'src/frontend/components',
+      '@dialogs': 'src/frontend/components/dialogs',
     },
   },
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ModalsContainer } from 'vue-final-modal'
+
 const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
 
 const { toggleLocales, currentLocal } = useLocale()
@@ -16,6 +18,8 @@ toggleLocales(currentLocal.value)
         </div>
       </Suspense>
     </div>
+
+    <ModalsContainer />
   </div>
 </template>
 

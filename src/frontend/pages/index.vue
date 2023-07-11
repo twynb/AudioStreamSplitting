@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
+import NewProjectModal from '@components/dialogs/NewProjectModal.vue'
 
 const { t } = useI18n()
 
 const foo = ref(false)
 const button = ref<HTMLButtonElement>()
 onClickOutside(button, () => foo.value = false)
+
+const { open, close } = useModal({
+  component: NewProjectModal,
+})
 </script>
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
     <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3">
+      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3" @click="open">
         <div class="flex flex-col items-center gap-y-1 font-bold">
           {{ t('dashboard.project.new') }}
           <span class="i-carbon-add text-lg" />

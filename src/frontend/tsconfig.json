@@ -17,6 +17,10 @@
     "types": [
       "vite/client",
       "vite-plugin-pages/client"
-    ]
+    ],
+    "paths": {
+      "@components/*": ["components/*"],
+      "@dialogs/*": ["components/dialogs/*"]
+    }
   }
 }
