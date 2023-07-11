@@ -8,7 +8,7 @@ const foo = ref(false)
 const button = ref<HTMLButtonElement>()
 onClickOutside(button, () => foo.value = false)
 
-const { open, close } = useModal({
+const { open } = useModal({
   component: NewProjectModal,
 })
 </script>
@@ -17,7 +17,7 @@ const { open, close } = useModal({
   <ContentLayout :header="t('sidebar.dashboard')">
     <div class="grid grid-cols-2 gap-4">
       <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3" @click="open">
-        <div class="flex flex-col items-center gap-y-1 font-bold">
+        <div class="flex flex-col items-center gap-y-1 font-medium">
           {{ t('dashboard.project.new') }}
           <span class="i-carbon-add text-lg" />
         </div>
@@ -26,7 +26,7 @@ const { open, close } = useModal({
       <div v-for="i in 5" :key="i" class="relative border border-border rounded-sm p-3 space-y-1">
         <header class="space-y-1">
           <div class="flex items-center justify-between">
-            <p class="font-bold">
+            <p class="font-medium">
               Some Name
             </p>
             <BaseButton ref="button" variant="ghost" class="aspect-square !p-0" @click="foo = true">
