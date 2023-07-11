@@ -2,9 +2,7 @@
 import { LangMap } from '../constants'
 
 const { t } = useI18n()
-const { toggleLocales } = useLocale()
-
-const currentLocal = ref('en')
+const { toggleLocales, currentLocal } = useLocale()
 
 watch(currentLocal, async () => {
   await toggleLocales(currentLocal.value)

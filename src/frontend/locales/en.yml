@@ -8,3 +8,10 @@ sidebar:
 settings:
   languagues:
     placeholder: Select a language
+dashboard:
+  project:
+    new: New Project
+    delete: Delete
+    edit: Edit
+dasboard:
+  project: {}

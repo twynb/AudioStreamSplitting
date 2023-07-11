@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@vueuse/core'
 import {
   availableLocales,
   loadLanguageAsync,
@@ -6,10 +7,13 @@ import {
 export function useLocale() {
   const { locale } = useI18n()
 
+  const currentLocal = useLocalStorage('locale', locale.value)
+
   const toggleLocales = async (l: string) => {
     await loadLanguageAsync(l)
     locale.value = l
+    currentLocal.value = l
   }
 
-  return { toggleLocales, availableLocales }
+  return { toggleLocales, availableLocales, currentLocal }
 }

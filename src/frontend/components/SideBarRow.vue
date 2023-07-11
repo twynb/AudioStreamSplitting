@@ -20,7 +20,7 @@ const route = useRoute()
     @click="link && push({ path: link })"
   >
     <span class="shrink-0" :class="icon" />
-    <span class="shrink-0" :class="[isSidebarMinimized ? 'hidden' : 'inline']">
+    <span v-if="!isSidebarMinimized" class="shrink-0">
       {{ text }}
     </span>
   </li>

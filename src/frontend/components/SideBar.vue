@@ -2,14 +2,14 @@
 const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
 
 const { t } = useI18n()
-const { isDark, toggle } = useDarkToggle()
+const { isDark } = useDarkToggle()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
 </script>
 
 <template>
   <div
     class="h-full flex flex-col gap-y-10 bg-background p-6 pb-8 transition-width"
-    :class="[isSidebarMinimized ? 'w-[105px] items-center' : 'w-[280px]']"
+    :class="[isSidebarMinimized ? 'w-8% items-center' : 'w-[280px]']"
   >
     <div
       class="brand flex cursor-pointer items-center gap-x-3"
@@ -23,8 +23,8 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
         />
       </div>
       <div
+        v-if="!isSidebarMinimized"
         class="shrink-0 text-lg font-medium"
-        :class="[isSidebarMinimized ? 'hidden' : 'block']"
       >
         LoremIpsum
       </div>
@@ -54,35 +54,26 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
       <li
         class="py-3"
         :class="[
-          isSidebarMinimized
-            ? ''
-            : 'flex cursor-pointer items-center pl-4 pr-0',
+          isSidebarMinimized ? 'items-center px-0' : 'flex px-4 justify-between',
         ]"
-        @click="toggle()"
       >
-        <span
-          :class="[
-            isSidebarMinimized ? 'hidden' : 'inline',
-            isDark ? 'i-carbon-moon' : 'i-carbon-sun',
-          ]"
-        />
-        <span class="ml-4" :class="[isSidebarMinimized ? 'hidden' : 'inline']">
-          {{ t("sidebar.dark_mode") }}
-        </span>
+        <div class="flex gap-4">
+          <span v-if="!isSidebarMinimized" :class="[isDark ? 'i-carbon-moon' : 'i-carbon-sun']" />
 
-        <div
-          class="relative ml-auto h-8 w-14 cursor-pointer rounded-2xl bg-primary"
-        >
-          <div
-            class="absolute left-1 top-1 h-6 w-6 flex-center rounded-full bg-primary-foreground transition-transform dark:(translate-x-25px)"
-          >
-            <span
+          <p v-if="!isSidebarMinimized">
+            {{ t("sidebar.dark_mode") }}
+          </p>
+        </div>
+
+        <BaseSwitch v-model="isDark" :class="[isSidebarMinimized ? 'ml-1' : '']">
+          <template #knob>
+            <div
               v-if="isSidebarMinimized"
-              class="text-sm text-primary"
+              class="mt-0.5 text-sm text-sm text-xs"
               :class="[isDark ? 'i-carbon-moon' : 'i-carbon-sun']"
             />
-          </div>
-        </div>
+          </template>
+        </BaseSwitch>
       </li>
     </ul>
   </div>

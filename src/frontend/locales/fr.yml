@@ -5,3 +5,13 @@ sidebar:
   settings: Paramètres
   dark_mode: Mode sombre
   statistics: Statistiques
+dasboard:
+  project: {}
+dashboard:
+  project:
+    delete: Supprimer
+    new: Nouveau projet
+    edit: Modifier
+settings:
+  languagues:
+    placeholder: Sélectionnez une langue

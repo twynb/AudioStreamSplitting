@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
+
+const { toggleLocales, currentLocal } = useLocale()
+toggleLocales(currentLocal.value)
 </script>
 
 <template>

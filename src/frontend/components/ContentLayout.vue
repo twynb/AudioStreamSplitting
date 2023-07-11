@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="space-y-14">
+  <div class="space-y-11">
     <header class="text-4xl">
       {{ header }}
     </header>
