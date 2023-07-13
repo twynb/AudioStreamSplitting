@@ -13,7 +13,7 @@ toggleLocales(currentLocal.value)
       <SideBar class="shrink-0" />
 
       <Suspense>
-        <div class="wh-full bg-background p-6 pb-8">
+        <div class="wh-full overflow-x-hidden overflow-y-scroll bg-background p-6 pb-8">
           <RouterView />
         </div>
       </Suspense>
@@ -22,25 +22,3 @@ toggleLocales(currentLocal.value)
     <ModalsContainer />
   </div>
 </template>
-
-<style>
-html,
-body,
-#app {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: local('Open Sans'), url(./assets/fonts/OpenSans.ttf) format('truetype');
-}
-
-body{
-  overflow: hidden;
-  user-select: none;
-  font-family: 'Open Sans', sans-serif;
-  @apply text-primary;
-}
-</style>

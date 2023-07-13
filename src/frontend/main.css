@@ -1,0 +1,33 @@
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: local('Open Sans'), url(./assets/fonts/OpenSans.ttf) format('truetype');
+}
+
+body{
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Open Sans', sans-serif;
+  @apply text-primary;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+::-webkit-scrollbar-track {
+  display:none
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-sm bg-border hover:bg-accent-foreground/60
+}
+

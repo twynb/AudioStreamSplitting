@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import type { App as AppType } from 'vue'
 import App from './App.vue'
 
+import './main.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
 

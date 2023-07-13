@@ -23,5 +23,7 @@ const route = useRoute()
     <span v-if="!isSidebarMinimized" class="shrink-0">
       {{ text }}
     </span>
+
+    <BaseBadge v-if="link === '/statistics'" class="mt-0.5" content="1" />
   </li>
 </template>

@@ -23,6 +23,7 @@ export default defineConfig({
     presetIcons({
       scale: 1.3,
       warn: true,
+      extraProperties: { display: 'inline-block' },
     }),
   ],
   transformers: [

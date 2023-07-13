@@ -1,67 +1,68 @@
 <script setup lang="ts">
-import { onClickOutside } from '@vueuse/core'
 import NewProjectModal from '@components/dialogs/NewProjectModal.vue'
 
 const { t } = useI18n()
 
-const foo = ref(false)
-const button = ref<HTMLButtonElement>()
-onClickOutside(button, () => foo.value = false)
-
 const { open } = useModal({
   component: NewProjectModal,
 })
+
+const items = [
+  {
+    name: 'Possibly',
+    description: 'porch express enter silk packon walk specific',
+    duration: 1024,
+    expectedCount: 8,
+    foundCount: 6,
+    createAt: '08/19/2109',
+  },
+  {
+    name: 'Meet',
+    description: 'element perhaps sheep imagine image birth',
+    duration: 896,
+    expectedCount: 6,
+    foundCount: 6,
+    createAt: '11/12/2098',
+  },
+  {
+    name: 'Gently',
+    description: 'guide bark specific touch mistake element',
+    duration: 512,
+    expectedCount: 3,
+    foundCount: 2,
+    createAt: '06/27/2091',
+  },
+  {
+    name: 'Mental',
+    description: 'whistle bit plan safety lonely acres policeman',
+    duration: 1280,
+    expectedCount: 8,
+    foundCount: 2,
+    createAt: '01/16/2032',
+  },
+  {
+    name: 'Tonguemental',
+    description: 'belt policeman with downach picture hope',
+    duration: 1440,
+    expectedCount: 10,
+    foundCount: 5,
+    createAt: '02/18/2092',
+  },
+]
+export type Item = typeof items[0]
 </script>
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3" @click="open">
+    <div class="scroll grid grid-cols-2 gap-4">
+      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground" @click="open">
         <div class="flex flex-col items-center gap-y-1 font-medium">
           {{ t('dashboard.project.new') }}
           <span class="i-carbon-add text-lg" />
         </div>
       </div>
 
-      <div v-for="i in 5" :key="i" class="relative border border-border rounded-sm p-3 space-y-1">
-        <header class="space-y-1">
-          <div class="flex items-center justify-between">
-            <p class="font-medium">
-              Some Name
-            </p>
-            <BaseButton ref="button" variant="ghost" class="aspect-square !p-0" @click="foo = true">
-              <span class="i-carbon-overflow-menu-vertical" />
-            </BaseButton>
-
-            <Transition
-              enter-active-class="transition-all origin-top-right"
-              leave-active-class="transition-all origin-top-right"
-              enter-from-class="opacity-100 scale-100"
-              leave-to-class="opacity-0 scale-90"
-            >
-              <div v-if="foo" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
-                <ul>
-                  <li class="px-1">
-                    <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start">
-                      <span class="i-carbon-edit" />
-                      {{ t('dashboard.project.edit') }}
-                    </BaseButton>
-                  </li>
-                  <li class="px-1">
-                    <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start">
-                      <span class="i-carbon-trash-can" />
-                      {{ t('dashboard.project.delete') }}
-                    </BaseButton>
-                  </li>
-                </ul>
-              </div>
-            </Transition>
-          </div>
-          <p class="text-muted-foreground">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </p>
-        </header>
-      </div>
+      <DashboardItem v-for="(item, index) in items" :key="index" :item="item" />
     </div>
   </ContentLayout>
 </template>
