@@ -9,9 +9,14 @@ dasboard:
   project: {}
 dashboard:
   project:
-    delete: Löschen
-    new: Neues Projekt
-    edit: Bearbeiten
+    create_at: Erstellen Sie unter
+    create_new_project: Neues Projekt erstellen
 settings:
   languagues:
     placeholder: Wähle eine Sprache
+global:
+  delete: Löschen
+  edit: Bearbeiten
+  new: Neues Projekt
+  cancel: Stornieren
+  create: Erstellen

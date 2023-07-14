@@ -10,9 +10,13 @@ settings:
     placeholder: Select a language
 dashboard:
   project:
-    new: New Project
-    delete: Delete
-    edit: Edit
     create_at: Create at
+    create_new_project: Create new project
 dasboard:
   project: {}
+global:
+  cancel: Cancel
+  create: Create
+  delete: Delete
+  edit: Edit
+  new: New Project

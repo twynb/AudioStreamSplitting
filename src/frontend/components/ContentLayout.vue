@@ -6,9 +6,9 @@ defineProps<{
 
 <template>
   <div class="space-y-11">
-    <header class="text-4xl">
+    <h1 class="text-4xl">
       {{ header }}
-    </header>
+    </h1>
 
     <div>
       <slot />

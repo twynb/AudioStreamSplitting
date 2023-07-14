@@ -24,6 +24,6 @@ const route = useRoute()
       {{ text }}
     </span>
 
-    <BaseBadge v-if="link === '/statistics'" class="mt-0.5" content="1" />
+    <BaseBadge v-if="link === '/playground' && !isSidebarMinimized" class="mt-0.5" content="1" />
   </li>
 </template>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const SideBarRow = defineAsyncComponent(() => import('./SideBarRow.vue'))
-
 const { t } = useI18n()
 const { isDark } = useDarkToggle()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
@@ -41,6 +39,12 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
         icon="i-carbon-chart-line-data"
         :text="t('sidebar.statistics')"
         link="/statistics"
+      />
+
+      <SideBarRow
+        icon="i-carbon-3d-mpr-toggle"
+        text="Playground"
+        link="/playground"
       />
     </ul>
 

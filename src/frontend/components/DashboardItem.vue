@@ -6,6 +6,11 @@ defineProps<{
   item: Item
 }>()
 
+const emits = defineEmits<{
+  (e: 'edit', id: string): void
+  (e: 'delete', id: string): void
+}>()
+
 const { t } = useI18n()
 
 const isMoreMenuOpen = ref(false)
@@ -20,7 +25,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
         <p class="font-medium">
           {{ item.name }}
         </p>
-        <BaseButton ref="moreBtn" variant="ghost" class="aspect-square !p-0" @click="isMoreMenuOpen = true">
+        <BaseButton ref="moreBtn" variant="ghost" icon-only @click="isMoreMenuOpen = true">
           <span class="i-carbon-overflow-menu-vertical" />
         </BaseButton>
 
@@ -33,15 +38,15 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           <div v-if="isMoreMenuOpen" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
             <ul>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', item.id)">
                   <span class="i-carbon-edit" />
-                  {{ t('dashboard.project.edit') }}
+                  {{ t('global.edit') }}
                 </BaseButton>
               </li>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', item.id)">
                   <span class="i-carbon-trash-can" />
-                  {{ t('dashboard.project.delete') }}
+                  {{ t('global.delete') }}
                 </BaseButton>
               </li>
             </ul>

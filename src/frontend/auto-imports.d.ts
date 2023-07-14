@@ -67,6 +67,7 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
+  const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
   const useGlobalStyle: typeof import('./stores/useGloalStyle')['useGlobalStyle']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
@@ -75,6 +76,7 @@ declare global {
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useUUID: typeof import('./composables/useUUID')['useUUID']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -151,6 +153,7 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
+    readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useGlobalStyle: UnwrapRef<typeof import('./stores/useGloalStyle')['useGlobalStyle']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
@@ -159,6 +162,7 @@ declare module 'vue' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
@@ -229,6 +233,7 @@ declare module '@vue/runtime-core' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
+    readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useGlobalStyle: UnwrapRef<typeof import('./stores/useGloalStyle')['useGlobalStyle']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
@@ -237,6 +242,7 @@ declare module '@vue/runtime-core' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

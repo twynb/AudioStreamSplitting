@@ -2,7 +2,7 @@
   "name": "audio_streaming_splitting",
   "private": true,
   "scripts": {
-    "fe": "npm run vite",
+    "fe": "npm run vite -- --open",
     "fe:test": "vitest",
     "be": "python3 src/backend/main.py --alone",
     "be:debug": "python3 src/backend/main.py --alone --debug",
@@ -51,6 +51,9 @@
     "extends": [
       "@antfu",
       "@unocss"
-    ]
+    ],
+    "rules": {
+      "no-console": "off"
+    }
   }
 }

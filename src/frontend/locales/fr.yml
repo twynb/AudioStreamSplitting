@@ -9,9 +9,14 @@ dasboard:
   project: {}
 dashboard:
   project:
-    delete: Supprimer
-    new: Nouveau projet
-    edit: Modifier
+    create_at: Créer à
+    create_new_project: Créer un nouveau projet
 settings:
   languagues:
     placeholder: Sélectionnez une langue
+global:
+  delete: Supprimer
+  edit: Modifier
+  new: Nouveau projet
+  create: Créer
+  cancel: Annuler
