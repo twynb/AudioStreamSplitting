@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const { isDark } = useDarkToggle()
-const { isSidebarMinimized } = storeToRefs(useGlobalStyle())
+const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
 </script>
 
 <template>

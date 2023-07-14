@@ -20,3 +20,5 @@ global:
   delete: Delete
   edit: Edit
   new: New Project
+notfound:
+  back_to_dashboard: Back to Dashboard

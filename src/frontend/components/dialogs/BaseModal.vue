@@ -31,11 +31,11 @@ const emits = defineEmits<{
       </header>
     </slot>
 
-    <div class="mt-5">
+    <div class="mt-8">
       <slot name="body" />
     </div>
 
-    <div class="mt-5">
+    <div class="mt-8">
       <slot name="footer" />
     </div>
   </VueFinalModal>

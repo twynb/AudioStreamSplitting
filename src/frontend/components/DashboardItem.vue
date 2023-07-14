@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
-import type { Item } from 'pages/index.vue'
 
 defineProps<{
   item: Item
@@ -19,13 +18,15 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
 </script>
 
 <template>
-  <div class="relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground">
+  <div
+    class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground"
+  >
     <header class="space-y-1">
       <div class="flex items-center justify-between">
         <p class="font-medium">
           {{ item.name }}
         </p>
-        <BaseButton ref="moreBtn" variant="ghost" icon-only @click="isMoreMenuOpen = true">
+        <BaseButton ref="moreBtn" variant="ghost" icon-only @click.stop="isMoreMenuOpen = true">
           <span class="i-carbon-overflow-menu-vertical" />
         </BaseButton>
 

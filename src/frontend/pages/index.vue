@@ -1,38 +1,8 @@
 <script setup lang="ts">
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 
+const { items } = storeToRefs(useDBStore())
 const { t } = useI18n()
-
-const items = ref([
-  {
-    id: '03c482a8-bad0-4e94-b5a2-070580d1fd93',
-    name: 'Possibly',
-    description: 'porch express enter silk packon walk specific',
-    duration: 1024,
-    expectedCount: 8,
-    foundCount: 6,
-    createAt: '08/19/2109',
-  },
-  {
-    id: '60023849-8d18-418e-9eca-1fb66678ccd8',
-    name: 'Meet',
-    description: 'element perhaps sheep imagine image birth',
-    duration: 896,
-    expectedCount: 6,
-    foundCount: 6,
-    createAt: '11/12/2098',
-  },
-  {
-    id: '0fefa8bb-69c4-419b-8a2f-d3ddb8baa59a',
-    name: 'Gently',
-    description: 'guide bark specific touch mistake element',
-    duration: 512,
-    expectedCount: 3,
-    foundCount: 2,
-    createAt: '06/27/2091',
-  },
-])
-export type Item = typeof items.value[0]
 
 const { open, close } = useModal({
   component: CreateProjectModal,
@@ -53,8 +23,9 @@ const { open, close } = useModal({
   },
 })
 
+const router = useRouter()
 function handleEditItem(itemId: string) {
-  console.log('EDIT: ', itemId)
+  router.push(`/project/${itemId}`)
 }
 
 function handleDeleteItem(itemId: string) {
@@ -73,8 +44,9 @@ function handleDeleteItem(itemId: string) {
       </div>
 
       <DashboardItem
-        v-for="(item, index) in items"
-        :key="index" :item="item"
+        v-for="item in items"
+        :key="item.id" :item="item"
+        @click="handleEditItem(item.id)"
         @edit="handleEditItem"
         @delete="handleDeleteItem"
       />
