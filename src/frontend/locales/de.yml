@@ -1,0 +1,32 @@
+sidebar:
+  dashboard: Dashboard
+  notifications: Benachrichtigungen
+  languages: Sprachen
+  settings: Einstellungen
+  dark_mode: Dunkler Modus
+  statistics: Statistiken
+dasboard:
+  project: {}
+dashboard:
+  project:
+    create_at: Erstellen Sie unter
+    create_new_project: Neues Projekt erstellen
+    a_list_of_your_uploaded_files: Eine Liste Ihrer hochgeladenen Dateien.
+    drag_and_drop_or_browse: Ziehen und ablegen oder Durchsuchen
+    support_mp3_and_wav_files: Unterstützt MP3- und WAV-Dateien
+settings:
+  languagues:
+    placeholder: Wähle eine Sprache
+global:
+  delete: Löschen
+  edit: Bearbeiten
+  new: Neues Projekt
+  cancel: Stornieren
+  create: Erstellen
+  description: Beschreibung
+  last_modified: Zuletzt bearbeitet
+  name: Name
+  size: Größe
+  upload: Hochladen
+notfound:
+  back_to_dashboard: Zurück zum Dashboard
