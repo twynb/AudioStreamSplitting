@@ -1,18 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{ id: string }>()
 const router = useRouter()
-const { getItemById } = useDBStore()
+const { getProjectById } = useDBStore()
 
-const item = getItemById(props.id)
+const project = getProjectById(props.id)
 
-if (!item)
+if (!project)
   router.push('/')
 </script>
 
 <template>
-  <ContentLayout v-if="item" :header="item.name">
+  <ContentLayout v-if="project" :header="project.name">
     <pre>
-      {{ item }}
+      {{ project }}
     </pre>
   </ContentLayout>
 </template>

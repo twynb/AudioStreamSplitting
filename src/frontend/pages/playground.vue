@@ -21,13 +21,27 @@ onChange(() => {
   const result: File[] = []
   for (let i = 0; i < files.value.length; i++) {
     const file = files.value.item(i)
-    file && result.push(file)
+    file && isFileValid(file.type) && result.push(file)
   }
 
   data.value.files = result
 })
 
 const isDragOver = ref(false)
+
+function isFileValid(type: string) {
+  const splittedType = type.split('/').length > 1 ? type.split('/') : ['', '']
+
+  const fileType = splittedType[0]
+  if (fileType !== 'audio')
+    return false
+
+  const fileExt = splittedType[1]
+  if (!['mpeg', 'wav'].includes(fileExt))
+    return false
+
+  return true
+}
 
 function handleDeleteUploadedFile(name: string) {
   data.value.files = data.value.files.filter(file => file.name !== name)
@@ -41,14 +55,7 @@ function handleDrop(event: DragEvent) {
   if (!file)
     return
 
-  const splittedType = file.type.split('/').length > 1 ? file.type.split('/') : ['', '']
-
-  const fileType = splittedType[0]
-  if (fileType !== 'audio')
-    return
-
-  const fileExt = splittedType[1]
-  if (!['mpeg', 'wav'].includes(fileExt))
+  if (!isFileValid(file.type))
     return
 
   if (data.value.files.find(f => f.name === file.name))

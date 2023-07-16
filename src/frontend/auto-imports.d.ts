@@ -7,6 +7,7 @@ export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
+  const axios: typeof import('axios')['default']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const createPinia: typeof import('pinia')['createPinia']
@@ -69,11 +70,13 @@ declare global {
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
+  const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
+  const usePost: typeof import('./composables/usePost')['usePost']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -94,6 +97,7 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly axios: UnwrapRef<typeof import('axios')['default']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
@@ -156,11 +160,13 @@ declare module 'vue' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
+    readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -175,6 +181,7 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly axios: UnwrapRef<typeof import('axios')['default']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
@@ -237,11 +244,13 @@ declare module '@vue/runtime-core' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
+    readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

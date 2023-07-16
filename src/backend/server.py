@@ -22,43 +22,36 @@ def serve_static(filename):
     return send_from_directory(gui_dir, filename)
 
 
-@server.route('/api/name', methods=['POST'])
-def name():
-    name = request.get_json()['name']
-    return f"Hello {name}."
-
-
-def allowed_file(filename: str):
-    if '.' not in filename:
-        return False
-
-    file_parts = filename.rsplit('.', 1)
-    file_extension = file_parts[1].lower()
-
-    return file_extension in {'wav', 'mp3'}
-
-
-@server.route('/api/audio', methods=['POST'])
+@server.route('/api/info', methods=['POST'])
 def audio():
-    file = request.files['file']
-    if not allowed_file(file.filename):
-        return jsonify({
-            'message': 'Only accept .wav or .mp3 file!'
-        })
+    name = request.form.get('name')
+    description = request.form.get('description')
+    files = request.files.getlist('file')
 
-    audio_data, sample_rate = librosa.load(file, sr=None)
-    duration = librosa.get_duration(y=audio_data, sr=sample_rate)
-    num_channels = audio_data.shape[0]
-    num_samples = len(audio_data)
-    file_format = file.filename.split('.')[-1]
-    file_size = len(file.read())
-    audio_info = {
-        'duration': duration,
-        'num_channels': num_channels,
-        'num_samples': num_samples,
-        'sample_rate': sample_rate,
-        'file_format': file_format,
-        'file_size': file_size
+    project = {
+        'name': name,
+        'description': description,
+        'files': []
     }
 
-    return jsonify(audio_info)
+    for file in files:
+      audio_data, sample_rate = librosa.load(file, sr=None)
+      duration = librosa.get_duration(y=audio_data, sr=sample_rate)
+      num_channels = audio_data.shape[0]
+      num_samples = len(audio_data)
+      file_format = file.filename.split('.')[-1]
+      file.seek(0)
+      file_size = len(file.read())
+      info = {
+          'name': file.filename,
+          'duration': duration,
+          'numChannels': num_channels,
+          'numSamples': num_samples,
+          'sampleRate': sample_rate,
+          'format': file_format,
+          'size': file_size
+      }
+      project['files'].append(info)
+
+    return jsonify(project)
+

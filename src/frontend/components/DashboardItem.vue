@@ -2,7 +2,7 @@
 import { onClickOutside } from '@vueuse/core'
 
 defineProps<{
-  item: Item
+  project: Project
 }>()
 
 const emits = defineEmits<{
@@ -24,7 +24,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
     <header class="space-y-1">
       <div class="flex items-center justify-between">
         <p class="font-medium">
-          {{ item.name }}
+          {{ project.name }}
         </p>
         <BaseButton ref="moreBtn" variant="ghost" icon-only @click.stop="isMoreMenuOpen = true">
           <span class="i-carbon-overflow-menu-vertical" />
@@ -39,13 +39,13 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           <div v-if="isMoreMenuOpen" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
             <ul>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', item.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', project.id)">
                   <span class="i-carbon-edit" />
                   {{ t('global.edit') }}
                 </BaseButton>
               </li>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', item.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', project.id)">
                   <span class="i-carbon-trash-can" />
                   {{ t('global.delete') }}
                 </BaseButton>
@@ -55,13 +55,13 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
         </Transition>
       </div>
       <p class="text-balance text-muted-foreground">
-        {{ item.description }}
+        {{ project.description }}
       </p>
     </header>
 
     <div class="my-5">
       <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-4 w-full overflow-hidden rounded-full bg-secondary">
-        <div data-state="indeterminate" data-max="100" class="h-full w-full bg-primary transition-all" :style="{ transform: `translateX(${(item.foundCount * 100 / item.expectedCount) - 100}%)` }" />
+        <div data-state="indeterminate" data-max="100" class="h-full w-full bg-primary transition-all" :style="{ transform: `translateX(${(project.foundCount * 100 / project.expectedCount) - 100}%)` }" />
       </div>
     </div>
 
@@ -71,7 +71,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
       </span>
 
       <span>
-        {{ item.createAt }}
+        {{ project.createAt }}
       </span>
     </div>
   </div>

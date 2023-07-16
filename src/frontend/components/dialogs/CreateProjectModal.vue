@@ -27,13 +27,27 @@ onChange(() => {
   const result: File[] = []
   for (let i = 0; i < files.value.length; i++) {
     const file = files.value.item(i)
-    file && result.push(file)
+    file && isFileValid(file.type) && result.push(file)
   }
 
   data.value.files = result
 })
 
 const isDragOver = ref(false)
+
+function isFileValid(type: string) {
+  const splittedType = type.split('/').length > 1 ? type.split('/') : ['', '']
+
+  const fileType = splittedType[0]
+  if (fileType !== 'audio')
+    return false
+
+  const fileExt = splittedType[1]
+  if (!['mpeg', 'wav'].includes(fileExt))
+    return false
+
+  return true
+}
 
 function handleDeleteUploadedFile(name: string) {
   data.value.files = data.value.files.filter(file => file.name !== name)
@@ -47,14 +61,7 @@ function handleDrop(event: DragEvent) {
   if (!file)
     return
 
-  const splittedType = file.type.split('/').length > 1 ? file.type.split('/') : ['', '']
-
-  const fileType = splittedType[0]
-  if (fileType !== 'audio')
-    return
-
-  const fileExt = splittedType[1]
-  if (!['mpeg', 'wav'].includes(fileExt))
+  if (!isFileValid(file.type))
     return
 
   if (data.value.files.find(f => f.name === file.name))
@@ -122,7 +129,7 @@ function handleDrop(event: DragEvent) {
               {{ t('dashboard.project.a_list_of_your_uploaded_files') }}
             </caption>
             <thead>
-              <tr class="border-b">
+              <tr class="border-b border-b-border">
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                   {{ t('global.name') }}
                 </th>
@@ -139,7 +146,7 @@ function handleDrop(event: DragEvent) {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="{ name, size, lastModified } in data.files" :key="name" class="border-b">
+              <tr v-for="{ name, size, lastModified } in data.files" :key="name" class="border-b border-b-border">
                 <td class="p-4 align-middle font-medium">
                   {{ name }}
                 </td>

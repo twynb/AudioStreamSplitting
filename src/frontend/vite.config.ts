@@ -27,7 +27,10 @@ export default defineConfig({
         'vue-router',
         'pinia',
         'vue-i18n',
-        { 'vue-final-modal': ['useModal'] },
+        {
+          'vue-final-modal': ['useModal'],
+          'axios': [['default', 'axios']],
+        },
       ],
       dts: 'auto-imports.d.ts',
       dirs: ['composables', 'stores'],
