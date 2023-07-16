@@ -4,7 +4,7 @@
   "packageManager": "npm@9.5.1",
   "scripts": {
     "fe": "npm run vite -- --open",
-    "fe:test": "vitest -c src/frontend/vite.config.ts",
+    "fe:test:unit": "vitest -c src/frontend/vite.config.ts",
     "be": "python3 src/backend/main.py --alone",
     "be:debug": "python3 src/backend/main.py --alone --debug",
     "view:app": "npm run build:fe && python3 src/backend/main.py",
