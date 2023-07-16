@@ -12,6 +12,9 @@ dashboard:
   project:
     create_at: Create at
     create_new_project: Create new project
+    drag_and_drop_or_browse: Drag and drop, or Browse
+    support_mp3_and_wav_files: Support mp3 and wav files
+    a_list_of_your_uploaded_files: A list of your uploaded files.
 dasboard:
   project: {}
 global:
@@ -20,5 +23,10 @@ global:
   delete: Delete
   edit: Edit
   new: New Project
+  name: Name
+  description: Description
+  upload: Upload
+  last_modified: Last modified
+  size: Size
 notfound:
   back_to_dashboard: Back to Dashboard

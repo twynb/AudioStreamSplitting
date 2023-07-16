@@ -24,7 +24,7 @@ const route = useRoute()
 
     <BaseBadge
       v-if="link === '/playground'" class="absolute" :class="[
-        isSidebarMinimized ? '!w-4 !h-4 !text-xs right-1 top-1' : 'top-1/2 right-0 -translate-y-1/2',
+        isSidebarMinimized ? '!w-4 !h-4 !text-xs right-1 top-1' : 'top-1/2 right-4 -translate-y-1/2',
       ]" content="1"
     />
   </li>

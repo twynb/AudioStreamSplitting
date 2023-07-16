@@ -7,7 +7,7 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
 <template>
   <div
     class="h-full flex flex-col gap-y-10 bg-background p-6 pb-8 transition-width"
-    :class="[isSidebarMinimized ? 'w-8% items-center' : 'w-[280px]']"
+    :class="[isSidebarMinimized ? 'w-105px items-center' : 'w-[280px]']"
   >
     <div
       class="brand flex cursor-pointer items-center gap-x-3"
