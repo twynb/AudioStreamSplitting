@@ -5,6 +5,8 @@ const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
 
 const { toggleLocales, currentLocal } = useLocale()
 toggleLocales(currentLocal.value)
+
+useDarkToggle()
 </script>
 
 <template>
