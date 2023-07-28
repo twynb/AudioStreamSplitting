@@ -70,6 +70,7 @@ declare global {
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
+  const useDrawWave: typeof import('./composables/useDrawWave')['useDrawWave']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
   const useI18n: typeof import('vue-i18n')['useI18n']
@@ -160,6 +161,7 @@ declare module 'vue' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDrawWave: UnwrapRef<typeof import('./composables/useDrawWave')['useDrawWave']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -244,6 +246,7 @@ declare module '@vue/runtime-core' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDrawWave: UnwrapRef<typeof import('./composables/useDrawWave')['useDrawWave']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>

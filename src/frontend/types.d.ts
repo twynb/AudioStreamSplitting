@@ -20,3 +20,4 @@ interface Project extends ProjectResponse{
   createAt: string
 }
 
+type TemplateRef = Element | ComponentPublicInstance | null
