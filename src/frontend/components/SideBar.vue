@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { t } = useI18n()
-const { isDark } = useDarkToggle()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
 </script>
 
@@ -48,37 +47,11 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
       />
     </ul>
 
-    <ul class="mt-auto space-y-2">
-      <SideBarRow
-        icon="i-carbon-settings"
-        :text="t('sidebar.settings')"
-        link="/settings"
-      />
-
-      <li
-        class="py-3"
-        :class="[
-          isSidebarMinimized ? 'items-center px-0' : 'flex px-4 justify-between',
-        ]"
-      >
-        <div class="flex gap-4">
-          <span v-if="!isSidebarMinimized" :class="[isDark ? 'i-carbon-moon' : 'i-carbon-sun']" />
-
-          <p v-if="!isSidebarMinimized">
-            {{ t("sidebar.dark_mode") }}
-          </p>
-        </div>
-
-        <BaseSwitch v-model="isDark" :class="[isSidebarMinimized ? 'ml-1' : '']">
-          <template #knob>
-            <div
-              v-if="isSidebarMinimized"
-              class="mt-0.5 text-sm text-sm text-xs"
-              :class="[isDark ? 'i-carbon-moon' : 'i-carbon-sun']"
-            />
-          </template>
-        </BaseSwitch>
-      </li>
-    </ul>
+    <SideBarRow
+      icon="i-carbon-settings"
+      :text="t('sidebar.settings')"
+      link="/settings"
+      class="mt-auto"
+    />
   </div>
 </template>

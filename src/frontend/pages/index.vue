@@ -52,7 +52,7 @@ function handleDeleteItem(itemId: string) {
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
     <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground" @click="open">
+      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
         <div class="flex flex-col items-center gap-y-1 font-medium">
           {{ t('global.new') }}
           <span class="i-carbon-add text-lg" />

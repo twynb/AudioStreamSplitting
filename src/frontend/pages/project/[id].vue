@@ -10,7 +10,19 @@ if (!project)
 </script>
 
 <template>
-  <ContentLayout v-if="project" :header="project.name">
+  <ContentLayout v-if="project">
+    <template #header>
+      <div class="flex items-center justify-between gap-x-3">
+        <h1 class="text-4xl">
+          {{ project.name }}
+        </h1>
+
+        <BaseButton icon-only variant="ghost" @click="router.push('/')">
+          <span class="i-carbon-close" />
+        </BaseButton>
+      </div>
+    </template>
+
     <pre>
       {{ project }}
     </pre>

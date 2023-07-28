@@ -19,7 +19,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
 
 <template>
   <div
-    class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground"
+    class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground"
   >
     <header class="space-y-1">
       <div class="flex items-center justify-between">

@@ -14,21 +14,57 @@ const localOpts = Object.entries(LangMap).map(([key, value]) => {
     value: key,
   }
 })
+
+const { isDark } = useDarkToggle()
 </script>
 
 <template>
   <ContentLayout :header="t('sidebar.settings')">
-    <div>
-      <BaseSelect
-        v-model="currentLocal"
-        :placeholder="t('settings.languagues.placeholder')"
-        :options="localOpts"
-        class="w-180px"
-      >
-        <template #label>
-          {{ localOpts.filter(({ value }) => value === currentLocal)[0].label }}
-        </template>
-      </BaseSelect>
+    <div class="max-w-80% space-y-10">
+      <div>
+        <h2 class="text-3xl">
+          General
+        </h2>
+
+        <BaseSeparator orientation="horizontal" />
+
+        <div class="space-y-5">
+          <div class="flex items-center justify-between">
+            <h3>
+              Languague
+            </h3>
+
+            <BaseSelect
+              v-model="currentLocal"
+              :placeholder="t('settings.languagues.placeholder')"
+              :options="localOpts"
+              class="w-200px"
+            >
+              <template #label>
+                {{ localOpts.filter(({ value }) => value === currentLocal)[0].label }}
+              </template>
+            </BaseSelect>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-3xl">
+          Appearance
+        </h2>
+
+        <BaseSeparator orientation="horizontal" />
+
+        <div class="space-y-5">
+          <div class="flex items-center justify-between">
+            <h3>
+              Dark Mode
+            </h3>
+
+            <BaseSwitch v-model="isDark" />
+          </div>
+        </div>
+      </div>
     </div>
   </ContentLayout>
 </template>

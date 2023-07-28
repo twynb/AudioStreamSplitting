@@ -22,7 +22,7 @@ onClickOutside(button, () => isExpanded.value = false)
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <button
       ref="button"
       type="button"
@@ -47,12 +47,12 @@ onClickOutside(button, () => isExpanded.value = false)
     >
       <ul
         v-if="isExpanded"
-        class="mt-1 border border-input rounded-md bg-transparent p-1 text-sm ring-offset-background disabled:cursor-not-allowed divide-y-1 divide-border disabled:opacity-50"
+        class="absolute right-0 top-full mt-1 w-full border border-input rounded-md bg-background p-1 text-sm ring-offset-background disabled:cursor-not-allowed divide-y-1 divide-border disabled:opacity-50"
       >
         <li
           v-for="{ label, value } in options" :key="label"
           class="flex items-center gap-x-2 rounded-md px-3 py-2 hover:(bg-secondary text-secondary-foreground)"
-          :class="{ 'bg-secondary text-secondary-foreground': modelValue === value }"
+          :class="[modelValue === value ? 'bg-secondary text-secondary-foreground' : 'bg-background']"
           role="button"
           @click="handleItemClick(value)"
         >
