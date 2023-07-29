@@ -1,13 +1,20 @@
 export function useDrawWave() {
-  const canvas = ref<HTMLCanvasElement>()
+  const canvasRef = ref<HTMLCanvasElement>()
 
   const { isDark } = useDarkToggle()
+
+  const WaveCanvas = defineComponent({
+    render() {
+      return h('canvas', { ref: canvasRef })
+    },
+  })
+
   const drawWave = (stream: MediaStream) => {
-    if (!canvas.value)
+    if (!canvasRef.value)
       return
 
     const audioContext = new window.AudioContext()
-    const canvasContext = canvas.value?.getContext('2d')
+    const canvasContext = canvasRef.value?.getContext('2d')
     if (!canvasContext)
       return
     const analyser = audioContext.createAnalyser()
@@ -19,21 +26,21 @@ export function useDrawWave() {
     const dataArray = new Uint8Array(bufferLength)
 
     const draw = () => {
-      if (!canvas.value)
+      if (!canvasRef.value)
         return
       analyser.getByteTimeDomainData(dataArray)
-      canvasContext.clearRect(0, 0, canvas.value.width, canvas.value.height)
+      canvasContext.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
 
       canvasContext.lineWidth = 2
       canvasContext.strokeStyle = isDark.value ? 'hsl(210,40%,98%)' : 'hsl(222.2,47.4%,11.2%)'
       canvasContext.beginPath()
 
-      const sliceWidth = canvas.value.width / bufferLength
+      const sliceWidth = canvasRef.value.width / bufferLength
       let x = 0
 
       for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128.0
-        const y = v * canvas.value.height / 2
+        const y = v * canvasRef.value.height / 2
 
         if (i === 0)
           canvasContext.moveTo(x, y)
@@ -44,7 +51,7 @@ export function useDrawWave() {
         x += sliceWidth
       }
 
-      canvasContext.lineTo(canvas.value.width, canvas.value.height / 2)
+      canvasContext.lineTo(canvasRef.value.width, canvasRef.value.height / 2)
       canvasContext.stroke()
 
       requestAnimationFrame(draw)
@@ -53,5 +60,5 @@ export function useDrawWave() {
     draw()
   }
 
-  return { canvas, drawWave }
+  return { canvasRef, drawWave, WaveCanvas }
 }

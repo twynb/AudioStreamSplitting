@@ -1,56 +1,63 @@
 <script setup lang="ts">
-const audioSrc = ref('')
-const recorder = shallowRef<MediaRecorder>()
-const { canvas, drawWave } = useDrawWave()
+const audioRef = ref<HTMLAudioElement>()
+const { drawWave, WaveCanvas } = useDrawWave()
 const isRecording = ref(false)
+const recorder = shallowRef<MediaRecorder>()
 
-function handleRecord() {
+async function handleRecord() {
   if (!navigator.mediaDevices.getUserMedia)
     return
 
   isRecording.value = true
 
-  const handleStream = (stream: MediaStream) => {
-    drawWave(stream)
-
-    const chunks: Blob[] = []
-    recorder.value = new MediaRecorder(stream)
-    recorder.value.start()
-
-    recorder.value.ondataavailable = (e: BlobEvent) => {
-      if (e.data.size === 0)
-        return
-
-      chunks.push(e.data)
-    }
-
-    recorder.value.onstop = () => {
-      const blob = new Blob(chunks, { type: 'audio/wav' })
-      recorder.value = undefined
-
-      const url = URL.createObjectURL(blob)
-      audioSrc.value = url
-    }
+  let stream: MediaStream
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  }
+  catch (err) {
+    throw new Error(`Error accessing the microphone: ${(err as Error).message}`)
   }
 
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(handleStream)
-    .catch((e) => { console.log(e) })
+  drawWave(stream)
+
+  const chunks: Blob[] = []
+  recorder.value = new MediaRecorder(stream)
+
+  recorder.value.ondataavailable = (e) => {
+    e.data.size > 0 && chunks.push(e.data)
+  }
+
+  recorder.value.onstop = () => {
+    const blob = new Blob(chunks, { type: 'audio/wav' })
+    const url = URL.createObjectURL(blob)
+    if (!audioRef.value)
+      return
+    audioRef.value.src = url
+    audioRef.value.load()
+
+    // URL.revokeObjectURL(url)
+  }
+  recorder.value.start()
 }
 
 function handleStop() {
   recorder.value?.stop()
-  canvas.value = undefined
   isRecording.value = false
+}
+
+async function handlePlay() {
+  if (!audioRef.value)
+    return
+
+  console.log(audioRef.value.duration)
 }
 </script>
 
 <template>
   <ContentLayout header="Playground (dev only)">
     <div class="border border-border rounded-sm bg-background p-6 focus:outline-none">
-      <audio v-if="audioSrc" controls>
-        <source :src="audioSrc" type="audio/wav">
-      </audio>
+      <!-- <audio ref="audioRef" class="invisible h-0" controls> -->
+      <audio ref="audioRef" src="" class="" controls />
 
       <div class="space-x-10">
         <BaseButton @click="handleRecord">
@@ -62,10 +69,16 @@ function handleStop() {
         </BaseButton>
       </div>
 
-      <canvas v-if="isRecording" ref="canvas" class="h-100px w-full" />
+      <br><br>
+
+      <BaseButton @click="handlePlay">
+        Play
+      </BaseButton>
+
+      <BaseSlider />
 
       <br><br>
-      <BaseSlider />
+      <WaveCanvas v-if="isRecording" class="h-100px w-full" />
     </div>
   </ContentLayout>
 </template>
