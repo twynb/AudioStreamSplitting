@@ -34,7 +34,7 @@ browser_command=[ browser_path,
 
 if __name__ == '__main__':
     if alone_mode:
-        app.run(debug=debug_mode)
+        app.run(debug=debug_mode,port=port)
     else:
         FlaskUI(
             server='flask',

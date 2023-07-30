@@ -35,6 +35,12 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
       />
 
       <SideBarRow
+        icon="i-carbon-activity"
+        :text="t('sidebar.record')"
+        link="/record"
+      />
+
+      <SideBarRow
         icon="i-carbon-chart-line-data"
         :text="t('sidebar.statistics')"
         link="/statistics"

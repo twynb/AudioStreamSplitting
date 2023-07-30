@@ -5,6 +5,7 @@ sidebar:
   settings: Settings
   statistics: Statistics
   dark_mode: Dark Mode
+  record: Record
 settings:
   languagues:
     placeholder: Select a language

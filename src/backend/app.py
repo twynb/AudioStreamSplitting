@@ -33,6 +33,8 @@ def audio():
     description = request.form.get('description')
     files = request.files.getlist('file')
 
+    print('===================',files)
+
     project = {
         'name': name,
         'description': description,

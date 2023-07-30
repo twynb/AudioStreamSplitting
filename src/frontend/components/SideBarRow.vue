@@ -15,6 +15,7 @@ const route = useRoute()
   <li
     class="relative flex cursor-pointer items-center border-primary rounded-md p-4 text-primary transition-colors space-x-4 hover:bg-accent"
     :class="route.path === props.link ? 'bg-accent' : 'bg-background'"
+    :title="text"
     @click="link && push({ path: link })"
   >
     <span class="shrink-0" :class="icon" />
