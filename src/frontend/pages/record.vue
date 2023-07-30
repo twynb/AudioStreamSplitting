@@ -154,9 +154,14 @@ onUnmounted(() => {
         </template>
       </div>
 
-      <BaseButton @click="handleSubmit">
-        Submit
-      </BaseButton>
+      <template v-if="state === 'play'">
+        <p class="text-red">
+          Currently audio is record with type .webm, which cannot be proceeded with librosa
+        </p>
+        <BaseButton @click="handleSubmit">
+          Submit
+        </BaseButton>
+      </template>
     </div>
   </ContentLayout>
 </template>
