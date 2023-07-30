@@ -119,44 +119,44 @@ onUnmounted(() => {
       <div class="flex items-center justify-center gap-x-8">
         <template v-if="state === 'record'">
           <BaseButton v-if="isRecording" icon-only variant="ghost" @click="handleStop">
-            <span class="i-carbon-stop-filled-alt text-2xl" />
+            <span class="i-carbon-stop-filled-alt text-xl" />
           </BaseButton>
 
           <BaseButton v-else icon-only variant="ghost" @click="handleRecord">
-            <span class="i-carbon-circle-filled text-2xl" />
+            <span class="i-carbon-circle-filled text-xl" />
           </BaseButton>
         </template>
 
         <template v-else-if="state === 'play'">
           <BaseButton :disabled="!downloadConfig.url" icon-only variant="ghost" class="mr-auto" :to="downloadConfig.url" :download="downloadConfig.name">
-            <span class="i-carbon-download text-lg" />
+            <span class="i-carbon-download" />
           </BaseButton>
 
           <BaseButton icon-only variant="ghost" @click="handleRewind">
-            <span class="i-carbon-rewind-5 text-xl" />
+            <span class="i-carbon-rewind-5 text-lg" />
           </BaseButton>
 
           <BaseButton v-if="isPlaying" icon-only variant="ghost" @click="handlePause">
-            <span class="i-carbon-pause-filled text-2xl" />
+            <span class="i-carbon-pause-filled text-xl" />
           </BaseButton>
 
           <BaseButton v-else icon-only variant="ghost" @click="handlePlay">
-            <span class="i-carbon-play-filled-alt text-2xl" />
+            <span class="i-carbon-play-filled-alt text-xl" />
           </BaseButton>
 
           <BaseButton icon-only variant="ghost" @click="handleForward">
-            <span class="i-carbon-forward-5 text-xl" />
+            <span class="i-carbon-forward-5 text-lg" />
           </BaseButton>
 
           <BaseButton icon-only variant="ghost" class="ml-auto" @click="handleDelete">
-            <span class="i-carbon-trash-can text-lg" />
+            <span class="i-carbon-trash-can" />
           </BaseButton>
         </template>
       </div>
 
       <template v-if="state === 'play'">
         <p class="text-red">
-          Currently audio is record with type .webm, which cannot be proceeded with librosa
+          Currently audio is recorded with type .webm, which cannot be proceeded with librosa
         </p>
         <BaseButton @click="handleSubmit">
           Submit
