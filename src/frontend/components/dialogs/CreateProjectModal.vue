@@ -95,7 +95,7 @@ function handleDrop(event: DragEvent) {
           </BaseLabel>
 
           <div
-            class="group h-200px flex flex-center flex-col cursor-pointer border-2 rounded-md border-dashed transition-border-color"
+            class="group h-150px flex flex-center flex-col cursor-pointer border-2 rounded-md border-dashed transition-border-color"
             :class="[isDragOver ? 'border-accent-foreground/70' : 'border-border hover:border-accent-foreground/70']"
             @click="open()"
             @dragenter="isDragOver = true"

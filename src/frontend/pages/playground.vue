@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div />
+  <ContentLayout header="Playground" />
 </template>

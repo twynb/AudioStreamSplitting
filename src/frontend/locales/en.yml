@@ -16,6 +16,7 @@ dashboard:
     drag_and_drop_or_browse: Drag and drop, or Browse
     support_mp3_and_wav_files: Support mp3 and wav files
     a_list_of_your_uploaded_files: A list of your uploaded files.
+  no_project: No projects yet
 dasboard:
   project: {}
 global:

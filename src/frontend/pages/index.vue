@@ -51,23 +51,44 @@ function handleDeleteItem(itemId: string) {
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
-        <div class="flex flex-col items-center gap-y-1 font-medium">
-          {{ t('global.new') }}
-          <span class="i-carbon-add text-lg" />
+    <template v-if="projects.length">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
+          <div class="flex flex-col items-center gap-y-1 font-medium">
+            {{ t('global.new') }}
+            <span class="i-carbon-add text-lg" />
+          </div>
         </div>
+
+        <DashboardItemSkeleton v-if="isFetching" />
+
+        <DashboardItem
+          v-for="project in projects"
+          :key="project.id" :project="project"
+          @click="handleEditItem(project.id)"
+          @edit="handleEditItem"
+          @delete="handleDeleteItem"
+        />
       </div>
+    </template>
 
-      <DashboardItemSkeleton v-if="isFetching" />
+    <template v-else>
+      <div class="flex-center flex-col">
+        <span class="i-carbon-3d-mpr-toggle text-lg" />
 
-      <DashboardItem
-        v-for="project in projects"
-        :key="project.id" :project="project"
-        @click="handleEditItem(project.id)"
-        @edit="handleEditItem"
-        @delete="handleDeleteItem"
-      />
-    </div>
+        <p class="mt-4 font-medium">
+          {{ t('dashboard.no_project') }}
+        </p>
+
+        <p class="mt-2 text-center text-sm text-muted-foreground">
+          Add a new project and let our app automatically detect and <br> split songs in audio files.
+        </p>
+
+        <BaseButton class="mt-4 gap-1" @click="open">
+          <span class="i-carbon-add" />
+          {{ t('global.new') }}
+        </BaseButton>
+      </div>
+    </template>
   </ContentLayout>
 </template>

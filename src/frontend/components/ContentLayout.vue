@@ -1,7 +1,9 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   header?: string
 }>()
+
+useDocTitle(props.header ?? '')
 </script>
 
 <template>

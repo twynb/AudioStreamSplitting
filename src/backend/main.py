@@ -28,7 +28,7 @@ browser_command=[ browser_path,
                   '--disable-background-timer-throttling',
                   '--disable-notifications',
                   '--no-first-run',
-                  '--window-size=1024,768',
+                  '--window-size=1280,768',
                   f'--app=http://127.0.0.1:{port}'
                   ]
 

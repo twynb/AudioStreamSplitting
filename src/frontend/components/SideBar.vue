@@ -4,19 +4,18 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
 </script>
 
 <template>
-  <div
-    class="h-full flex flex-col gap-y-10 bg-background p-6 pb-8 transition-width"
-    :class="[isSidebarMinimized ? 'w-105px items-center' : 'w-[280px]']"
+  <nav
+    class="h-full flex flex-col gap-y-10 bg-background p-6 transition-width duration-150 ease-in"
+    :class="[isSidebarMinimized ? 'w-105px' : 'w-[280px]']"
   >
     <div
       class="brand flex cursor-pointer items-center gap-x-3"
-      @click="isSidebarMinimized = !isSidebarMinimized"
     >
       <div
-        class="logo h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
+        class="logo ml-2 h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
       >
         <span
-          class="i-carbon-play-filled-alt ml-0.5 text-xl text-primary-foreground"
+          class="i-carbon-cut ml-0.5 text-xl text-primary-foreground"
         />
       </div>
       <div
@@ -53,11 +52,26 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
       />
     </ul>
 
-    <SideBarRow
-      icon="i-carbon-settings"
-      :text="t('sidebar.settings')"
-      link="/settings"
-      class="mt-auto"
-    />
-  </div>
+    <ul class="mt-auto">
+      <li class="flex justify-center">
+        <BaseButton
+          variant="ghost" icon-only
+          @click="isSidebarMinimized = !isSidebarMinimized"
+        >
+          <span
+            class="text-sm"
+            :class="isSidebarMinimized ? 'i-carbon:side-panel-open-filled' : 'i-carbon:side-panel-close-filled'"
+          />
+        </BaseButton>
+      </li>
+
+      <BaseSeparator orientation="horizontal" />
+
+      <SideBarRow
+        icon="i-carbon-settings"
+        :text="t('sidebar.settings')"
+        link="/settings"
+      />
+    </ul>
+  </nav>
 </template>

@@ -70,9 +70,11 @@ declare global {
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
+  const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useDrawWave: typeof import('./composables/useDrawWave')['useDrawWave']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
+  const useHead: typeof import('./composables/useHead')['useHead']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
@@ -161,6 +163,7 @@ declare module 'vue' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -245,6 +248,7 @@ declare module '@vue/runtime-core' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
