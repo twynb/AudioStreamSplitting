@@ -2,8 +2,6 @@
 import { ModalsContainer } from 'vue-final-modal'
 import { handleAppInit } from './utils'
 
-const SideBar = defineAsyncComponent(() => import('./components/SideBar.vue'))
-
 handleAppInit()
 </script>
 
@@ -20,5 +18,7 @@ handleAppInit()
     </div>
 
     <ModalsContainer />
+
+    <NotificationContainer />
   </div>
 </template>

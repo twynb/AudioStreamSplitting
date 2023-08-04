@@ -71,14 +71,13 @@ declare global {
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
-  const useDrawWave: typeof import('./composables/useDrawWave')['useDrawWave']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
-  const useHead: typeof import('./composables/useHead')['useHead']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
+  const useNotificationStore: typeof import('./stores/useNotificationStore')['useNotificationStore']
   const usePost: typeof import('./composables/usePost')['usePost']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
@@ -170,6 +169,7 @@ declare module 'vue' {
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
+    readonly useNotificationStore: UnwrapRef<typeof import('./stores/useNotificationStore')['useNotificationStore']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
@@ -255,6 +255,7 @@ declare module '@vue/runtime-core' {
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
+    readonly useNotificationStore: UnwrapRef<typeof import('./stores/useNotificationStore')['useNotificationStore']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>

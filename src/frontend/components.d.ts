@@ -22,6 +22,8 @@ declare module 'vue' {
     DashboardItem: typeof import('./components/DashboardItem.vue')['default']
     DashboardItemSkeleton: typeof import('./components/DashboardItemSkeleton.vue')['default']
     NotFound: typeof import('./components/NotFound.vue')['default']
+    Notification: typeof import('./components/Notification.vue')['default']
+    NotificationContainer: typeof import('./components/NotificationContainer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']

@@ -3,6 +3,7 @@ import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 
 const { projects } = storeToRefs(useDBStore())
 const { t } = useI18n()
+const { createNotification } = useNotificationStore()
 
 const { execute, isFetching } = usePost<ProjectResponse>({
   url: '/info',
@@ -16,6 +17,11 @@ const { execute, isFetching } = usePost<ProjectResponse>({
       foundCount: 0,
       expectedCount: files.length,
       createAt: useDateFormat(new Date(), 'DD/MM/YYYY'),
+    })
+
+    createNotification({
+      title: 'Project created',
+      content: `${name} with ${files.length} files is added to dashboard`,
     })
   },
 })

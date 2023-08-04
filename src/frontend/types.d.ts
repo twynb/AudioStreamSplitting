@@ -21,3 +21,9 @@ interface Project extends ProjectResponse{
 }
 
 type TemplateRef = Element | ComponentPublicInstance | null
+
+interface AppNotification{
+  id: string
+  title: string
+  content: string
+}
