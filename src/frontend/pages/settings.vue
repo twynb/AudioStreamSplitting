@@ -2,11 +2,7 @@
 import { LangMap } from '../constants'
 
 const { t } = useI18n()
-const { toggleLocales, currentLocal } = useLocale()
-
-watch(currentLocal, async () => {
-  await toggleLocales(currentLocal.value)
-})
+const { currentLocal } = useLocale()
 
 const localOpts = Object.entries(LangMap).map(([key, value]) => {
   return {
@@ -41,7 +37,7 @@ const { isDark } = useDarkToggle()
               class="w-200px"
             >
               <template #label>
-                {{ localOpts.filter(({ value }) => value === currentLocal)[0].label }}
+                {{ LangMap[currentLocal] ?? '' }}
               </template>
             </BaseSelect>
           </div>

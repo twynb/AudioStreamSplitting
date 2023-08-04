@@ -6,6 +6,8 @@ import {
 
 export function useLocale() {
   const { locale } = useI18n()
+  if (!locale.value)
+    locale.value = 'en'
 
   const currentLocal = useLocalStorage('locale', locale.value)
 
@@ -14,6 +16,10 @@ export function useLocale() {
     locale.value = l
     currentLocal.value = l
   }
+
+  watch(currentLocal, async () => {
+    await toggleLocales(currentLocal.value)
+  })
 
   return { toggleLocales, availableLocales, currentLocal }
 }
