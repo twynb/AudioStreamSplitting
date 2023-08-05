@@ -41,13 +41,13 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
               <li class="px-1">
                 <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', project.id)">
                   <span class="i-carbon-edit" />
-                  {{ t('global.edit') }}
+                  {{ t('button.edit') }}
                 </BaseButton>
               </li>
               <li class="px-1">
                 <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', project.id)">
                   <span class="i-carbon-trash-can" />
-                  {{ t('global.delete') }}
+                  {{ t('button.delete') }}
                 </BaseButton>
               </li>
             </ul>

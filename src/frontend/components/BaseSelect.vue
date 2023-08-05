@@ -2,7 +2,7 @@
 import { onClickOutside } from '@vueuse/core'
 
 defineProps<{
-  placeholder: string
+  placeholder?: string
   options: {
     label: string
     value: string

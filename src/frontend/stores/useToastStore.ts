@@ -1,4 +1,4 @@
-import { TOAST_DURATION } from '../constants'
+import { DEFAULT_TOAST_DURATION } from '../constants'
 
 export const useToastStore = defineStore('toast', () => {
   const toasts = ref<Toast[]>([])
@@ -11,7 +11,7 @@ export const useToastStore = defineStore('toast', () => {
   function toast(t: Omit<Toast, 'id'>) {
     const newToast: Toast = {
       id: id.value,
-      duration: TOAST_DURATION,
+      duration: DEFAULT_TOAST_DURATION,
       variant: 'default',
       ...t,
     }

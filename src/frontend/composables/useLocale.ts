@@ -1,7 +1,7 @@
 import { useLocalStorage } from '@vueuse/core'
 import {
   availableLocales,
-  loadLanguageAsync,
+  setI18nLanguage,
 } from '../modules/i18n'
 
 export function useLocale() {
@@ -11,15 +11,13 @@ export function useLocale() {
 
   const currentLocal = useLocalStorage('locale', locale.value)
 
-  const toggleLocales = async (l: string) => {
-    await loadLanguageAsync(l)
-    locale.value = l
-    currentLocal.value = l
-  }
+  if (currentLocal.value !== locale.value)
+    currentLocal.value = locale.value
 
-  watch(currentLocal, async () => {
-    await toggleLocales(currentLocal.value)
+  watch(currentLocal, () => {
+    setI18nLanguage(currentLocal.value)
+    locale.value = currentLocal.value
   })
 
-  return { toggleLocales, availableLocales, currentLocal }
+  return { availableLocales, currentLocal }
 }

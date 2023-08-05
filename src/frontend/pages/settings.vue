@@ -19,7 +19,7 @@ const { isDark } = useDarkToggle()
     <div class="max-w-80% space-y-10">
       <div>
         <h2 class="text-3xl">
-          General
+          {{ t('settings.general.index') }}
         </h2>
 
         <BaseSeparator orientation="horizontal" />
@@ -27,12 +27,11 @@ const { isDark } = useDarkToggle()
         <div class="space-y-5">
           <div class="flex items-center justify-between">
             <h3>
-              Languague
+              {{ t('settings.general.language') }}
             </h3>
 
             <BaseSelect
               v-model="currentLocal"
-              :placeholder="t('settings.languagues.placeholder')"
               :options="localOpts"
               class="w-200px"
             >
@@ -46,7 +45,7 @@ const { isDark } = useDarkToggle()
 
       <div>
         <h2 class="text-3xl">
-          Appearance
+          {{ t('settings.appearance.index') }}
         </h2>
 
         <BaseSeparator orientation="horizontal" />
@@ -54,7 +53,7 @@ const { isDark } = useDarkToggle()
         <div class="space-y-5">
           <div class="flex items-center justify-between">
             <h3>
-              Dark Mode
+              {{ t('settings.appearance.darkmode') }}
             </h3>
 
             <BaseSwitch v-model="isDark" />

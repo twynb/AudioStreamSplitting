@@ -1,7 +1,4 @@
 export function handleAppInit() {
-  const { toggleLocales, currentLocal } = useLocale()
-  toggleLocales(currentLocal.value)
-
   useDarkToggle()
 
   if (import.meta.env.MODE === 'production') {

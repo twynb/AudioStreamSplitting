@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TOAST_DURATION } from '../constants'
+import { DEFAULT_TOAST_DURATION } from '../constants'
 
 const props = defineProps<{
   toast: Toast
@@ -12,7 +12,7 @@ const interval = setInterval(() => {
   width.value += 1
   if (width.value >= 100)
     clearInterval(interval)
-}, (props.toast.duration ?? TOAST_DURATION) / 100)
+}, (props.toast.duration ?? DEFAULT_TOAST_DURATION) / 100)
 </script>
 
 <template>

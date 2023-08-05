@@ -61,7 +61,7 @@ function handleDeleteItem(itemId: string) {
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
           <div class="flex flex-col items-center gap-y-1 font-medium">
-            {{ t('global.new') }}
+            {{ t('button.new_project') }}
             <span class="i-carbon-add text-lg" />
           </div>
         </div>
@@ -92,7 +92,7 @@ function handleDeleteItem(itemId: string) {
 
         <BaseButton class="mt-4 gap-1" @click="open">
           <span class="i-carbon-add" />
-          {{ t('global.new') }}
+          {{ t('button.new') }}
         </BaseButton>
       </div>
     </template>

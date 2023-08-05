@@ -91,12 +91,12 @@ function handleCancle() {
 </script>
 
 <template>
-  <BaseModal :title="t('dashboard.project.create_new_project')" content-class="w-full max-w-65vw 2xl:max-w-50vw" @close-with-x="emits('close')">
+  <BaseModal :title="t('dialog.create_project.create_new_project')" content-class="w-full max-w-65vw 2xl:max-w-50vw" @close-with-x="emits('close')">
     <template #body>
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">
           <BaseLabel for="name" :class="{ 'text-destructive': errors.name }">
-            {{ t('global.name') }}
+            {{ t('dialog.create_project.project_name') }}
           </BaseLabel>
           <BaseInput id="name" v-model="data.name" name="name" />
           <p v-if="errors.name" class="text-sm text-destructive">
@@ -106,14 +106,14 @@ function handleCancle() {
 
         <div class="space-y-1">
           <BaseLabel for="description">
-            {{ t('global.description') }}
+            {{ t('dialog.create_project.project_description') }}
           </BaseLabel>
           <BaseInput id="description" v-model="data.description" name="description" />
         </div>
 
         <div class="col-span-2 space-y-1">
           <BaseLabel :class="{ 'text-destructive': errors.file }" @click="open()">
-            {{ t('global.upload') }}
+            {{ t('dialog.create_project.project_upload') }}
           </BaseLabel>
 
           <div
@@ -136,11 +136,11 @@ function handleCancle() {
               class="mt-2 transition-color"
               :class="[isDragOver ? 'text-primary' : 'text-primary/80 group-hover:text-primary']"
             >
-              {{ t('dashboard.project.drag_and_drop_or_browse') }}
+              {{ t('dialog.create_project.drop_message') }}
             </p>
 
             <p class="mt-2 text-xs text-primary/40">
-              {{ t('dashboard.project.support_mp3_and_wav_files') }}
+              {{ t('dialog.create_project.support_files') }}
             </p>
           </div>
 
@@ -152,20 +152,20 @@ function handleCancle() {
         <div class="overflow col-span-2 space-y-1">
           <table class="w-full caption-bottom text-sm">
             <caption class="mt-4 text-sm text-muted-foreground">
-              {{ t('dashboard.project.a_list_of_your_uploaded_files') }}
+              {{ t('dialog.create_project.list_uploaded_file') }}
             </caption>
             <thead>
               <tr class="border-b border-b-border">
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('global.name') }}
+                  {{ t('dialog.create_project.project_description') }}
                 </th>
 
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('global.size') }}
+                  {{ t('dialog.create_project.file_size') }}
                 </th>
 
                 <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('global.last_modified') }}
+                  {{ t('dialog.create_project.file_last_modified') }}
                 </th>
 
                 <th />
@@ -198,11 +198,11 @@ function handleCancle() {
     <template #footer>
       <div class="flex justify-end gap-x-2">
         <BaseButton variant="secondary" @click="handleCancle">
-          {{ t('global.cancel') }}
+          {{ t('button.cancel') }}
         </BaseButton>
 
         <BaseButton @click="handleSubmit">
-          {{ t('global.create') }}
+          {{ t('button.create') }}
         </BaseButton>
       </div>
     </template>
