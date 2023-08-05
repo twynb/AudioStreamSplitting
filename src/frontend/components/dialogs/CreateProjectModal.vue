@@ -15,6 +15,13 @@ const data = ref({
 })
 export type Data = typeof data.value
 
+const errors = ref({
+  name: '',
+  file: '',
+})
+
+const isDragOver = ref(false)
+
 const { files, open, onChange } = useFileDialog({
   accept: '.mp3, .wav',
   multiple: true,
@@ -32,8 +39,6 @@ onChange(() => {
 
   data.value.files = result
 })
-
-const isDragOver = ref(false)
 
 function isFileValid(type: string) {
   const splittedType = type.split('/').length > 1 ? type.split('/') : ['', '']
@@ -69,6 +74,20 @@ function handleDrop(event: DragEvent) {
 
   data.value.files.push(file)
 }
+
+function handleSubmit() {
+  if (data.value.name && data.value.files.length) {
+    errors.value = { file: '', name: '' }
+    emits('ok', data.value)
+  }
+
+  errors.value.name = data.value.name ? '' : 'No name is given'
+  errors.value.file = data.value.files.length ? '' : 'No file is uploaded. Please upload at least one file to create project.'
+}
+
+function handleCancle() {
+  emits('close')
+}
 </script>
 
 <template>
@@ -76,10 +95,13 @@ function handleDrop(event: DragEvent) {
     <template #body>
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">
-          <BaseLabel for="name">
+          <BaseLabel for="name" :class="{ 'text-destructive': errors.name }">
             {{ t('global.name') }}
           </BaseLabel>
           <BaseInput id="name" v-model="data.name" name="name" />
+          <p v-if="errors.name" class="text-sm text-destructive">
+            {{ errors.name }}
+          </p>
         </div>
 
         <div class="space-y-1">
@@ -90,7 +112,7 @@ function handleDrop(event: DragEvent) {
         </div>
 
         <div class="col-span-2 space-y-1">
-          <BaseLabel @click="open()">
+          <BaseLabel :class="{ 'text-destructive': errors.file }" @click="open()">
             {{ t('global.upload') }}
           </BaseLabel>
 
@@ -121,6 +143,10 @@ function handleDrop(event: DragEvent) {
               {{ t('dashboard.project.support_mp3_and_wav_files') }}
             </p>
           </div>
+
+          <p v-if="errors.file" class="text-sm text-destructive">
+            {{ errors.file }}
+          </p>
         </div>
 
         <div class="overflow col-span-2 space-y-1">
@@ -171,11 +197,11 @@ function handleDrop(event: DragEvent) {
 
     <template #footer>
       <div class="flex justify-end gap-x-2">
-        <BaseButton variant="secondary" @click="emits('close')">
+        <BaseButton variant="secondary" @click="handleCancle">
           {{ t('global.cancel') }}
         </BaseButton>
 
-        <BaseButton @click="emits('ok', data)">
+        <BaseButton @click="handleSubmit">
           {{ t('global.create') }}
         </BaseButton>
       </div>

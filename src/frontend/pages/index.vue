@@ -79,14 +79,14 @@ function handleDeleteItem(itemId: string) {
     </template>
 
     <template v-else>
-      <div class="flex-center flex-col">
-        <span class="i-carbon-3d-mpr-toggle text-lg" />
+      <div class="justify- h-full flex flex-center flex-col -mt-10%">
+        <span class="i-carbon-3d-mpr-toggle text-xl" />
 
-        <p class="mt-4 font-medium">
+        <p class="mt-4 text-lg font-medium">
           {{ t('dashboard.no_project') }}
         </p>
 
-        <p class="mt-2 text-center text-sm text-muted-foreground">
+        <p class="mt-2 text-center text-muted-foreground">
           Add a new project and let our app automatically detect and <br> split songs in audio files.
         </p>
 

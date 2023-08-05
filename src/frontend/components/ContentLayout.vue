@@ -7,14 +7,14 @@ useDocTitle(props.header ?? '')
 </script>
 
 <template>
-  <div class="space-y-11">
+  <div class="wh-full space-y-11">
     <slot name="header">
       <h1 v-if="header" class="text-4xl">
         {{ header }}
       </h1>
     </slot>
 
-    <div>
+    <div class="wh-full">
       <slot />
     </div>
   </div>
