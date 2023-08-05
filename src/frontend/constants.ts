@@ -4,4 +4,4 @@ export const LangMap: Record<string, string> = {
   fr: 'French',
 }
 
-export const NOTIFICATION_DURAION = 5000
+export const TOAST_DURATION = 5000

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { getNotifications } = useNotificationStore()
+const { getToasts } = useToastStore()
 </script>
 
 <template>
@@ -12,6 +12,6 @@ const { getNotifications } = useNotificationStore()
     enter-from-class="opacity-0 translate-x-40px"
     leave-to-class="opacity-0 translate-x-40px"
   >
-    <Notification v-for="(n, index) in getNotifications()" :key="index" :noti="n" />
+    <Toast v-for="t, in getToasts()" :key="t.id" :toast="t" />
   </TransitionGroup>
 </template>

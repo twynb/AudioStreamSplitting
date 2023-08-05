@@ -77,11 +77,12 @@ declare global {
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
-  const useNotificationStore: typeof import('./stores/useNotificationStore')['useNotificationStore']
+  const useNotificationStore: typeof import('./stores/useToastStore')['useNotificationStore']
   const usePost: typeof import('./composables/usePost')['usePost']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useToastStore: typeof import('./stores/useToastStore')['useToastStore']
   const useUUID: typeof import('./composables/useUUID')['useUUID']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
@@ -169,11 +170,11 @@ declare module 'vue' {
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
-    readonly useNotificationStore: UnwrapRef<typeof import('./stores/useNotificationStore')['useNotificationStore']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
@@ -255,11 +256,11 @@ declare module '@vue/runtime-core' {
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
-    readonly useNotificationStore: UnwrapRef<typeof import('./stores/useNotificationStore')['useNotificationStore']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>

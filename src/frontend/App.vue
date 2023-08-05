@@ -19,6 +19,6 @@ handleAppInit()
 
     <ModalsContainer />
 
-    <NotificationContainer />
+    <ToastContainer />
   </div>
 </template>

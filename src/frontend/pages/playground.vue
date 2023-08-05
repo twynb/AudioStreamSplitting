@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const { createNotification } = useNotificationStore()
+const { toast } = useToastStore()
+const a = ref(1)
 
 function foo() {
-  createNotification({
-    title: 'Scheduled: something',
+  toast({
+    title: `${a.value}`,
     content: 'Friday, February 10, 2023 at 5:57 PM',
   })
+  a.value++
 }
 </script>
 
