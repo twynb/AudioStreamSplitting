@@ -8,12 +8,18 @@ export const useToastStore = defineStore('toast', () => {
     return toasts.value
   }
 
-  function toast(n: Omit<Toast, 'id'>) {
-    const toastId = id.value
-    id.value++
-    toasts.value.push({ id: toastId, ...n })
+  function toast(t: Omit<Toast, 'id'>) {
+    const newToast: Toast = {
+      id: id.value,
+      duration: TOAST_DURATION,
+      variant: 'default',
+      ...t,
+    }
 
-    setTimeout(() => removeToast(toastId), TOAST_DURATION)
+    id.value++
+    toasts.value.push({ ...newToast })
+
+    setTimeout(() => removeToast(newToast.id), newToast.duration)
   }
 
   function removeToast(id: number) {

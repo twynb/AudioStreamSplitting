@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TOAST_DURATION } from '../constants'
 
-defineProps<{
+const props = defineProps<{
   toast: Toast
 }>()
 
@@ -12,16 +12,20 @@ const interval = setInterval(() => {
   width.value += 1
   if (width.value >= 100)
     clearInterval(interval)
-}, TOAST_DURATION / 100)
+}, (props.toast.duration ?? TOAST_DURATION) / 100)
 </script>
 
 <template>
   <li
-    class="relative max-w-400px overflow-hidden border border-border rounded-md bg-background p-4 pr-8"
+    class="group relative min-w-350px overflow-hidden border rounded-md p-6 pr-10"
+    :class="{
+      'border-border bg-background': toast.variant === 'default',
+      'border-destructive bg-destructive text-destructive-foreground': toast.variant === 'destructive',
+    }"
   >
     <slot>
       <div class="grid gap-3">
-        <div class="font-semibold">
+        <div v-if="toast.title" class="font-semibold">
           {{ toast.title }}
         </div>
 
@@ -31,10 +35,10 @@ const interval = setInterval(() => {
       </div>
     </slot>
 
-    <BaseButton class="absolute right-1 top-1 scale-90" variant="ghost" icon-only @click="removeToast(toast.id)">
+    <div class="absolute right-1 top-1 cursor-pointer p-2 opacity-0 transition-opacity group-hover:opacity-50 hover:!opacity-100" @click="removeToast(toast.id)">
       <span class="i-carbon-close" />
-    </BaseButton>
+    </div>
 
-    <div class="absolute bottom-0 left-0 h-1px bg-primary" :style="{ width: `${width}%` }" />
+    <div class="absolute bottom-0 left-0 h-1px bg-primary transition-width" :style="{ width: `${width}%` }" />
   </li>
 </template>

@@ -4,8 +4,10 @@ const a = ref(1)
 
 function foo() {
   toast({
-    title: `${a.value}`,
+    title: 'asf',
     content: 'Friday, February 10, 2023 at 5:57 PM',
+    variant: 'destructive',
+    duration: 10_000,
   })
   a.value++
 }
