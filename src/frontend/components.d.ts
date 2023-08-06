@@ -15,6 +15,7 @@ declare module 'vue' {
     BaseSelect: typeof import('./components/BaseSelect.vue')['default']
     BaseSeparator: typeof import('./components/BaseSeparator.vue')['default']
     BaseSkeleton: typeof import('./components/BaseSkeleton.vue')['default']
+    BaseSlider: typeof import('./components/BaseSlider.vue')['default']
     BaseSwitch: typeof import('./components/BaseSwitch.vue')['default']
     ContentLayout: typeof import('./components/ContentLayout.vue')['default']
     CreateProjectModal: typeof import('./components/dialogs/CreateProjectModal.vue')['default']
@@ -25,5 +26,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']
+    Toast: typeof import('./components/Toast.vue')['default']
+    ToastContainer: typeof import('./components/ToastContainer.vue')['default']
   }
 }

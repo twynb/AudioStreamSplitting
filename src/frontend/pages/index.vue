@@ -3,6 +3,7 @@ import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 
 const { projects } = storeToRefs(useDBStore())
 const { t } = useI18n()
+const { toast } = useToastStore()
 
 const { execute, isFetching } = usePost<ProjectResponse>({
   url: '/info',
@@ -16,6 +17,11 @@ const { execute, isFetching } = usePost<ProjectResponse>({
       foundCount: 0,
       expectedCount: files.length,
       createAt: useDateFormat(new Date(), 'DD/MM/YYYY'),
+    })
+
+    toast({
+      title: 'Project created',
+      content: `${name} with ${files.length} files is added to dashboard`,
     })
   },
 })
@@ -51,23 +57,44 @@ function handleDeleteItem(itemId: string) {
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 hover:border-accent-foreground" @click="open">
-        <div class="flex flex-col items-center gap-y-1 font-medium">
-          {{ t('global.new') }}
-          <span class="i-carbon-add text-lg" />
+    <template v-if="projects.length">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
+          <div class="flex flex-col items-center gap-y-1 font-medium">
+            {{ t('button.new_project') }}
+            <span class="i-carbon-add text-lg" />
+          </div>
         </div>
+
+        <DashboardItemSkeleton v-if="isFetching" />
+
+        <DashboardItem
+          v-for="project in projects"
+          :key="project.id" :project="project"
+          @click="handleEditItem(project.id)"
+          @edit="handleEditItem"
+          @delete="handleDeleteItem"
+        />
       </div>
+    </template>
 
-      <DashboardItemSkeleton v-if="isFetching" />
+    <template v-else>
+      <div class="justify- h-full flex flex-center flex-col -mt-10%">
+        <span class="i-carbon-3d-mpr-toggle text-xl" />
 
-      <DashboardItem
-        v-for="project in projects"
-        :key="project.id" :project="project"
-        @click="handleEditItem(project.id)"
-        @edit="handleEditItem"
-        @delete="handleDeleteItem"
-      />
-    </div>
+        <p class="mt-4 text-lg font-medium">
+          {{ t('dashboard.no_project') }}
+        </p>
+
+        <p class="mt-2 text-center text-muted-foreground">
+          Add a new project and let our app automatically detect and <br> split songs in audio files.
+        </p>
+
+        <BaseButton class="mt-4 gap-1" @click="open">
+          <span class="i-carbon-add" />
+          {{ t('button.new') }}
+        </BaseButton>
+      </div>
+    </template>
   </ContentLayout>
 </template>

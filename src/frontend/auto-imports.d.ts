@@ -70,16 +70,19 @@ declare global {
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
+  const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
+  const useNotificationStore: typeof import('./stores/useToastStore')['useNotificationStore']
   const usePost: typeof import('./composables/usePost')['usePost']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useToastStore: typeof import('./stores/useToastStore')['useToastStore']
   const useUUID: typeof import('./composables/useUUID')['useUUID']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
@@ -160,6 +163,7 @@ declare module 'vue' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -170,6 +174,7 @@ declare module 'vue' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
@@ -244,6 +249,7 @@ declare module '@vue/runtime-core' {
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
+    readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -254,6 +260,7 @@ declare module '@vue/runtime-core' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>

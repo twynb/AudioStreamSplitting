@@ -7,7 +7,7 @@ import './main.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
 
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.baseURL = 'http://localhost:55555/api'
 
 const app = createApp(App)
 Object.values(import.meta.glob<{ install: (app: AppType) => void }>('./modules/*.ts', { eager: true }))

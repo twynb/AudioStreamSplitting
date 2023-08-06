@@ -1,0 +1,47 @@
+{
+  "button": {
+    "back_to_dashboard": "Zurück zum Dashboard",
+    "cancel": "Stornieren",
+    "create": "Erstellen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "new": "Neu",
+    "new_project": "Neues Projekt",
+    "upload": "Hochladen"
+  },
+  "dashboard": {
+    "project": {
+      "create_at": "Erstellen Sie unter"
+    }
+  },
+  "dialog": {
+    "create_project": {
+      "create_new_project": "Neues Projekt erstellen",
+      "drop_message": "Ziehen und ablegen oder Durchsuchen",
+      "file_last_modified": "Zuletzt bearbeitet",
+      "file_size": "Größe",
+      "list_uploaded_file": "Eine Liste Ihrer hochgeladenen Dateien.",
+      "project_description": "Beschreibung",
+      "project_name": "Name",
+      "project_upload": "Hochladen",
+      "support_files": "Unterstützt MP3- und WAV-Dateien"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Armaturenbrett",
+    "notifications": "Benachrichtigungen",
+    "record": "Aufzeichnen",
+    "settings": "Einstellungen",
+    "statistics": "Statistiken"
+  },
+  "settings": {
+    "appearance": {
+      "darkmode": "Dunkler Modus",
+      "index": "Aussehen"
+    },
+    "general": {
+      "index": "Allgemein",
+      "language": "Sprache"
+    }
+  }
+}
