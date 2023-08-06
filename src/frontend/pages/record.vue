@@ -83,12 +83,27 @@ function handleDelete() {
   state.value = 'record'
   blob.value = undefined
 }
+async function handleSave() {
+  if (!blob.value)
+    return
+
+  // @ts-expect-error showSaveFilePicker is still in experimental
+  const newHandle = await window.showSaveFilePicker({
+    suggestedName: 'record.webm',
+  })
+
+  const writableStream = await newHandle.createWritable()
+
+  await writableStream.write(blob.value)
+
+  await writableStream.close()
+}
 
 function handleSubmit() {
   if (!blob.value)
     return
 
-  const file = new File([blob.value], `record.${blob.value.type}`, { type: blob.value.type })
+  const file = new File([blob.value], 'record.webm', { type: 'audio/webm' })
 
   const { execute } = usePost<ProjectResponse>({
     url: '/info',
@@ -129,7 +144,7 @@ onUnmounted(() => {
         </template>
 
         <template v-else-if="state === 'play'">
-          <BaseButton :disabled="!url" icon-only variant="ghost" class="mr-auto" :to="url" :download="`record_${useDateFormat(new Date(), 'HH:mm:ss_DD/MM/YYYY')}`">
+          <BaseButton icon-only variant="ghost" class="mr-auto" @click="handleSave">
             <span class="i-carbon-download" />
           </BaseButton>
 
