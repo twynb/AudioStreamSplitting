@@ -1,47 +1,51 @@
 <script setup lang="ts">
+import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
 
 let ws: WaveSurfer
 let record: RecordPlugin
+const wsConfig: WaveSurferOptions = {
+  container: '#waveform',
+  waveColor: 'rgb(173, 250, 29)',
+  progressColor: '#8EAC50',
+  barRadius: 5,
+  barWidth: 5,
+  barGap: 2,
+  cursorWidth: 3,
+}
 const state = ref<'record' | 'play'>('record')
 const isRecording = ref(false)
 const isPlaying = ref(false)
-const downloadConfig = ref({
-  url: '',
-  name: '',
-})
+const blob = shallowRef<Blob>()
+const url = ref('')
 
-onMounted(() => {
-  ws = WaveSurfer.create({
-    container: '#waveform',
-    waveColor: 'rgb(173, 250, 29)',
-    progressColor: '#8EAC50',
-    barRadius: 9999,
-    barWidth: 3,
-    barGap: 1,
-  })
-
-  ws.on('interaction', () => {
-    isPlaying.value = true
-    ws.play()
-  })
-  ws.on('finish', () => {
-    ws.setTime(0)
-    isPlaying.value = false
-  })
+onMounted(() => initialize())
+function initialize() {
+  ws = WaveSurfer.create({ ...wsConfig })
 
   record = ws.registerPlugin(RecordPlugin.create())
-})
+  record.on('record-end', (_blob) => {
+    ws.destroy()
+
+    blob.value = _blob
+    url.value = URL.createObjectURL(blob.value)
+    ws = WaveSurfer.create({ ...wsConfig, url: url.value })
+
+    ws.on('interaction', () => {
+      isPlaying.value = true
+      ws.playPause()
+    })
+    ws.on('finish', () => {
+      ws.setTime(0)
+      isPlaying.value = false
+    })
+  })
+}
 
 function handleRecord() {
-  if (ws.isPlaying())
-    ws.pause()
-
-  if (record.isRecording())
-    record.stopRecording()
-
   isRecording.value = true
+  record.startMic()
   record.startRecording()
 }
 
@@ -49,13 +53,7 @@ function handleStop() {
   isRecording.value = false
   state.value = 'play'
   record.stopRecording()
-
-  setTimeout(() => {
-    downloadConfig.value = {
-      url: record.getRecordedUrl(),
-      name: `record_${useDateFormat(new Date(), 'HH:mm:ss_DD/MM/YYYY')}`,
-    }
-  }, 100)
+  record.stopMic()
 }
 
 function handlePlay() {
@@ -77,37 +75,40 @@ function handleForward() {
 }
 
 function handleDelete() {
-  ws.empty()
+  ws.destroy()
+  initialize()
+
   isPlaying.value = false
   isRecording.value = false
   state.value = 'record'
-  downloadConfig.value = { name: '', url: '' }
+  blob.value = undefined
 }
 
 function handleSubmit() {
-  axios.get(record.getRecordedUrl(), { responseType: 'blob', baseURL: '' })
-    .then(({ data }) => {
-      const file = new File([data], data.name, { type: data.type })
+  if (!blob.value)
+    return
 
-      const { execute: executePost } = usePost<ProjectResponse>({
-        url: '/info',
-        axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
-        onSuccess({ name, description, files }) {
-          console.log(name, description, files)
-        },
-      })
+  const file = new File([blob.value], `record.${blob.value.type}`, { type: blob.value.type })
 
-      const formData = new FormData()
-      formData.append('name', 'record_name')
-      formData.append('description', 'record_description')
-      formData.append('file', file)
-      executePost(formData)
-    })
+  const { execute } = usePost<ProjectResponse>({
+    url: '/info',
+    axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
+    onSuccess({ name, description, files }) {
+      console.log(name, description, files)
+    },
+  })
+
+  const formData = new FormData()
+  formData.append('name', 'record_name')
+  formData.append('description', 'record_description')
+  formData.append('file', file)
+  execute(formData)
 }
 
 onUnmounted(() => {
   record.destroy()
   ws.destroy()
+  url.value && URL.revokeObjectURL(url.value)
 })
 </script>
 
@@ -128,7 +129,7 @@ onUnmounted(() => {
         </template>
 
         <template v-else-if="state === 'play'">
-          <BaseButton :disabled="!downloadConfig.url" icon-only variant="ghost" class="mr-auto" :to="downloadConfig.url" :download="downloadConfig.name">
+          <BaseButton :disabled="!url" icon-only variant="ghost" class="mr-auto" :to="url" :download="`record_${useDateFormat(new Date(), 'HH:mm:ss_DD/MM/YYYY')}`">
             <span class="i-carbon-download" />
           </BaseButton>
 
