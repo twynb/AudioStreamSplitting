@@ -4,14 +4,14 @@ import librosa
 import numpy as np
 from typing import Tuple,Generator
 
-def readAudiofileToNumPy(audiofile)-> Tuple[np.ndarray, float]:
+def readAudiofileToNumPy(audiofile, mono=False)-> Tuple[np.ndarray, float]:
     """
     :param audiofile: Path to audiofile
     :returns: Tuple[np.ndarray,float] array of sounddata
     """
-    return librosa.load(audiofile)
+    return librosa.load(audiofile, mono=mono)
 
-def readAudiofileToStream(audiofile,rate=128) -> Generator[np.ndarray, None, None]:
+def readAudiofileToStream(audiofile,rate=128,mono=False) -> Generator[np.ndarray, None, None]:
     """
     :param audiofile: Path to audiofile
     :param rate: block length of stream
@@ -24,7 +24,7 @@ def readAudiofileToStream(audiofile,rate=128) -> Generator[np.ndarray, None, Non
     frame_length = int(2048 * sr) // default_sr
     hop_length = int(512 * sr) // default_sr
 
-    return librosa.stream(audiofile,block_length=rate,frame_length=frame_length,hop_length=hop_length)
+    return librosa.stream(audiofile,block_length=rate,frame_length=frame_length,hop_length=hop_length,mono=mono)
 
 def saveNumPyAsAudioFile(song:np.ndarray, songname:str,path:str , rate=100 ,tags:dict={},extention = ".mp3"):
     """
