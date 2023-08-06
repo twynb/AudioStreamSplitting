@@ -1,15 +1,16 @@
 {
   "name": "audio_streaming_splitting",
   "private": true,
+  "packageManager": "npm@9.6.7",
   "scripts": {
     "fe": "npm run vite",
-    "fe:test": "vitest",
+    "fe:test:unit": "vitest -c src/frontend/vite.config.ts",
     "be": "python3 src/backend/main.py --alone",
     "be:debug": "python3 src/backend/main.py --alone --debug",
     "view:app": "npm run build:fe && python3 src/backend/main.py",
     "view:app:debug": "npm run build:fe:dev && python3 src/backend/main.py --debug",
     "build:fe": "npm run typecheck && npm run vite build",
-    "build:fe:dev": "npm run typecheck && npm run vite build -- --mode dev",
+    "view:app:debug": "npm run build:fe:dev && python3 src/backend/main.py --debug",
     "build:app": "npm run build:fe && pyinstaller build.spec",
     "preview": "dist/app",
     "vite": "vite -c src/frontend/vite.config.ts",
@@ -40,6 +41,8 @@
     "@vue/test-utils": "^2.4.1",
     "eslint": "^8.46.0",
     "jsdom": "^22.1.0",
+    "lint-staged": "^13.2.3",
+    "simple-git-hooks": "^2.8.1",
     "taze": "^0.11.2",
     "typescript": "^5.1.3",
     "unocss": "^0.54.1",
@@ -49,6 +52,13 @@
     "vite-plugin-pages": "^0.31.0",
     "vitest": "^0.34.1",
     "vue-tsc": "^1.8.8"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged",
+    "pre-push": "npm run typecheck"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   },
   "eslintConfig": {
     "extends": [

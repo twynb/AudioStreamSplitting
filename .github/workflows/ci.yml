@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+        python-version: [3.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          npm ci
+
+      - name: Lint and Typecheck (Frontend)
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Test (Frontend)
+        run: npm run fe:test:unit
+
+      - name: Lint (Backend)
+        run: ruff check --format=github --target-version=py310 --fix src/backend/
+
+      - name: Test (Backend)
+        run: pytest
+
+      - name: Build app
+        run: npm run build:app

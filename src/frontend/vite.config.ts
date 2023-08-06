@@ -27,6 +27,7 @@ export default defineConfig({
         'vue-router',
         'pinia',
         'vue-i18n',
+        'vitest',
         {
           'vue-final-modal': ['useModal'],
           'axios': [['default', 'axios']],

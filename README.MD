@@ -17,7 +17,7 @@
 - Python 3.10 or later: [Download here](https://www.python.org/downloads/)
 - pip: [Download here](https://pip.pypa.io/en/stable/cli/pip_download/)
 - pyinstaller: [Download here](https://pypi.org/project/pyinstaller/)
-- Node.js 18.6.0 or later: [Download here](https://nodejs.org/en/download)
+- Node.js 18.17.0 or later: [Download here](https://nodejs.org/en/download)
 
 ## Installation
 
