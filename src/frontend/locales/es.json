@@ -1,0 +1,47 @@
+{
+  "button": {
+    "back_to_dashboard": "Volver al panel",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "delete": "Borrar",
+    "edit": "Editar",
+    "new": "Nuevo",
+    "new_project": "Nuevo proyecto",
+    "upload": "Subir"
+  },
+  "dashboard": {
+    "project": {
+      "create_at": "Crear en"
+    }
+  },
+  "dialog": {
+    "create_project": {
+      "create_new_project": "Crear nuevo proyecto",
+      "drop_message": "Arrastrar y soltar, o Examinar",
+      "file_last_modified": "Última modificación",
+      "file_size": "Tamaño",
+      "list_uploaded_file": "Una lista de sus archivos subidos.",
+      "project_description": "Descripción",
+      "project_name": "Nombre",
+      "project_upload": "Subir",
+      "support_files": "Admite archivos mp3 y wav"
+    }
+  },
+  "settings": {
+    "appearance": {
+      "darkmode": "Modo oscuro",
+      "index": "Apariencia"
+    },
+    "general": {
+      "index": "General",
+      "language": "Idioma"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Panel",
+    "notifications": "Notificaciones",
+    "record": "Registro",
+    "settings": "Ajustes",
+    "statistics": "Estadísticas"
+  }
+}

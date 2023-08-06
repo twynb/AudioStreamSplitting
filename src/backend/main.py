@@ -1,9 +1,8 @@
 import argparse
-import threading
-import webview
-
-from werkzeug.serving import make_server
-from server import server
+from flaskwebgui import FlaskUI, find_browser
+from app import app
+import os
+import tempfile
 
 parser = argparse.ArgumentParser(description='Script description')
 
@@ -15,17 +14,34 @@ args = parser.parse_args()
 debug_mode = args.debug
 alone_mode = args.alone
 
+port = 55555
+browser_path = find_browser()
+profile_dir = os.path.join(tempfile.gettempdir(), "audioss")
+
+browser_command=[ browser_path,
+                  f'--user-data-dir={profile_dir}',
+                  '--new-window',
+                  '--disable-extensions',
+                  '--disable-background-networking',
+                  '--disable-sync',
+                  '--disable-translate',
+                  '--disable-background-timer-throttling',
+                  '--disable-notifications',
+                  '--no-first-run',
+                  '--window-size=1280,800',
+                  f'--app=http://127.0.0.1:{port}'
+                  ]
+
 if __name__ == '__main__':
     if alone_mode:
-        server.run(debug=True if debug_mode else False)
+        app.run(debug=debug_mode, port=port)
     else:
-        flask_thread = threading.Thread(target=make_server(
-            'localhost', 5000, server).serve_forever)
-        flask_thread.start()
-
-        # TODO implement HMR for backend
-
-        webview.create_window(title='AUDIO', url=server, min_size=(1024, 768))
-        webview.start(debug=True if debug_mode else False)
-
-        flask_thread.join()
+        FlaskUI(
+            server='flask',
+            server_kwargs={
+               'app': app,
+               'port': port,
+               'debug': debug_mode,
+            },
+            browser_command=browser_command
+            ).run()

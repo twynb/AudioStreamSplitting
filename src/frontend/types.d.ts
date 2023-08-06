@@ -20,3 +20,12 @@ interface Project extends ProjectResponse{
   createAt: string
 }
 
+type TemplateRef = Element | ComponentPublicInstance | null
+
+interface Toast{
+  id: number
+  title?: string
+  content: string
+  variant?: 'default' | 'destructive'
+  duration?: number
+}
