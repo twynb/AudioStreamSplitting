@@ -90,6 +90,12 @@ async function handleSave() {
   // @ts-expect-error showSaveFilePicker is still in experimental
   const newHandle = await window.showSaveFilePicker({
     suggestedName: 'record.webm',
+    types: [
+      {
+        description: 'WebM file',
+        accept: { 'audio/webm': ['.webm'] },
+      },
+    ],
   })
 
   const writableStream = await newHandle.createWritable()
