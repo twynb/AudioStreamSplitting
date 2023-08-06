@@ -1,0 +1,77 @@
+<script setup lang="ts">
+const { t } = useI18n()
+const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
+</script>
+
+<template>
+  <nav
+    class="h-full flex flex-col gap-y-10 bg-background p-6 transition-width duration-150 ease-in"
+    :class="[isSidebarMinimized ? 'w-105px' : 'w-[280px]']"
+  >
+    <div
+      class="brand flex cursor-pointer items-center gap-x-3"
+    >
+      <div
+        class="logo ml-2 h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
+      >
+        <span
+          class="i-carbon-cut ml-0.5 text-xl text-primary-foreground"
+        />
+      </div>
+      <div
+        v-if="!isSidebarMinimized"
+        class="shrink-0 text-lg font-medium"
+      >
+        LoremIpsum
+      </div>
+    </div>
+
+    <ul class="space-y-6">
+      <SideBarRow
+        icon="i-carbon-dashboard"
+        :text="t('sidebar.dashboard')"
+        link="/"
+      />
+
+      <SideBarRow
+        icon="i-carbon-activity"
+        :text="t('sidebar.record')"
+        link="/record"
+      />
+
+      <SideBarRow
+        icon="i-carbon-chart-line-data"
+        :text="t('sidebar.statistics')"
+        link="/statistics"
+      />
+
+      <SideBarRow
+        icon="i-carbon-3d-mpr-toggle"
+        text="Playground"
+        link="/playground"
+      />
+    </ul>
+
+    <ul class="mt-auto">
+      <li class="flex justify-center">
+        <BaseButton
+          variant="ghost" icon-only
+          @click="isSidebarMinimized = !isSidebarMinimized"
+        >
+          <span
+            class="text-sm"
+            :class="isSidebarMinimized ? 'i-carbon:side-panel-open-filled' : 'i-carbon:side-panel-close-filled'"
+          />
+        </BaseButton>
+      </li>
+
+      <BaseSeparator orientation="horizontal" />
+
+      <SideBarRow
+        icon="i-carbon-settings"
+        :text="t('sidebar.settings')"
+        link="/settings"
+      />
+    </ul>
+  </nav>
+</template>
