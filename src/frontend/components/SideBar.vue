@@ -14,15 +14,13 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
       <div
         class="logo ml-2 h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
       >
-        <span
-          class="i-carbon-cut ml-0.5 text-xl text-primary-foreground"
-        />
+        <BaseLogo class="text-primary-foreground" />
       </div>
       <div
         v-if="!isSidebarMinimized"
         class="shrink-0 text-lg font-medium"
       >
-        LoremIpsum
+        Audio Splitter
       </div>
     </div>
 

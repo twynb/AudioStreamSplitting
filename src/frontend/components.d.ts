@@ -11,6 +11,7 @@ declare module 'vue' {
     BaseButton: typeof import('./components/BaseButton.vue')['default']
     BaseInput: typeof import('./components/BaseInput.vue')['default']
     BaseLabel: typeof import('./components/BaseLabel.vue')['default']
+    BaseLogo: typeof import('./components/BaseLogo.vue')['default']
     BaseModal: typeof import('./components/dialogs/BaseModal.vue')['default']
     BaseSelect: typeof import('./components/BaseSelect.vue')['default']
     BaseSeparator: typeof import('./components/BaseSeparator.vue')['default']
