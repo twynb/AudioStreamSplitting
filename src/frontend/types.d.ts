@@ -1,3 +1,7 @@
+interface Document{
+  startViewTransition: (fn:()=> void) => void
+}
+
 interface ProjectFile{
   name:string
   format:string
