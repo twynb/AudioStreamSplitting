@@ -16,7 +16,7 @@ alone_mode = args.alone
 
 port = 55555
 browser_path = find_browser()
-profile_dir = os.path.join(tempfile.gettempdir(), "audioss")
+profile_dir = os.path.join(tempfile.gettempdir(), "audiosplitter")
 
 browser_command=[ browser_path,
                   f'--user-data-dir={profile_dir}',

@@ -66,12 +66,8 @@ function handlePause() {
   ws.pause()
 }
 
-function handleRewind() {
-  ws.setTime(Math.min(ws.getCurrentTime() - 5, 0))
-}
-
-function handleForward() {
-  ws.setTime(Math.max(ws.getCurrentTime() + 5, ws.getDuration()))
+function handleSkip(sec: number) {
+  ws.skip(sec)
 }
 
 function handleDelete() {
@@ -154,7 +150,7 @@ onUnmounted(() => {
             <span class="i-carbon-download" />
           </BaseButton>
 
-          <BaseButton icon-only variant="ghost" @click="handleRewind">
+          <BaseButton icon-only variant="ghost" @click="handleSkip(-5)">
             <span class="i-carbon-rewind-5 text-lg" />
           </BaseButton>
 
@@ -166,7 +162,7 @@ onUnmounted(() => {
             <span class="i-carbon-play-filled-alt text-xl" />
           </BaseButton>
 
-          <BaseButton icon-only variant="ghost" @click="handleForward">
+          <BaseButton icon-only variant="ghost" @click="handleSkip((5))">
             <span class="i-carbon-forward-5 text-lg" />
           </BaseButton>
 
