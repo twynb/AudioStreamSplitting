@@ -107,7 +107,7 @@ function handleSubmit() {
 
   const file = new File([blob.value], 'record.webm', { type: 'audio/webm' })
 
-  const { execute } = usePost<ProjectResponse>({
+  const { execute } = usePost<Project>({
     url: '/info',
     axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
     onSuccess({ name, description, files }) {

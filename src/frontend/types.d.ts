@@ -1,32 +1,22 @@
-interface Document{
-  startViewTransition: (fn:()=> void) => void
+interface Document {
+  startViewTransition: (fn: () => void) => void
 }
 
-interface ProjectFile{
-  name:string
-  format:string
-  duration: number
-  size: number
-  numChannels: number
-  numSamples:number
-}
-
-interface ProjectResponse{
+interface Project {
+  id: string
   name: string
   description: string
-  files: ProjectFile[]
-}
-
-interface Project extends ProjectResponse{
-  id: string
-  expectedCount: number
-  foundCount: number
+  path:string,
+  files: {
+    fileName: string,
+    filePath: string,
+  }[]
   createAt: string
 }
 
 type TemplateRef = Element | ComponentPublicInstance | null
 
-interface Toast{
+interface Toast {
   id: number
   title?: string
   content: string

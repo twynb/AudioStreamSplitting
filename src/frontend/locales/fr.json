@@ -7,16 +7,18 @@
     "edit": "Modifier",
     "new": "Nouveau",
     "new_project": "Nouveau projet",
-    "upload": "Télécharger"
+    "upload": "Télécharger",
+    "confirm": "Confirmer"
   },
   "dashboard": {
     "project": {
-      "create_at": "Créer à"
+      "create_at": "Créer à",
+      "no_project": "Pas encore de projet"
     }
   },
   "dialog": {
     "create_project": {
-      "create_new_project": "Créer un nouveau projet",
+      "title": "Créer un nouveau projet",
       "drop_message": "Glisser-déposer ou Parcourir",
       "file_last_modified": "Dernière modification",
       "file_size": "Taille",
@@ -25,6 +27,9 @@
       "project_name": "Nom",
       "project_upload": "Télécharger",
       "support_files": "Prend en charge les fichiers mp3 et wav"
+    },
+    "confirm": {
+      "title": "Es-tu sûr ?"
     }
   },
   "sidebar": {

@@ -91,7 +91,7 @@ function handleCancle() {
 </script>
 
 <template>
-  <BaseModal :title="t('dialog.create_project.create_new_project')" content-class="w-full max-w-65vw 2xl:max-w-50vw" @close-with-x="emits('close')">
+  <BaseModal :title="t('dialog.create_project.title')" content-class="w-full max-w-65vw 2xl:max-w-50vw">
     <template #body>
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">

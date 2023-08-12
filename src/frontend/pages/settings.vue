@@ -47,6 +47,8 @@ function handleToggleDark() {
               </template>
             </BaseSelect>
           </div>
+
+          <SettingsClear />
         </div>
       </div>
 

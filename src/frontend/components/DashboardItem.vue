@@ -21,11 +21,12 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
   <div
     class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground"
   >
-    <header class="space-y-1">
+    <div>
       <div class="flex items-center justify-between">
         <p class="font-medium">
           {{ project.name }}
         </p>
+
         <BaseButton ref="moreBtn" variant="ghost" icon-only @click.stop="isMoreMenuOpen = true">
           <span class="i-carbon-overflow-menu-vertical" />
         </BaseButton>
@@ -54,16 +55,22 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           </div>
         </Transition>
       </div>
+
       <p class="text-balance text-muted-foreground">
         {{ project.description }}
       </p>
-    </header>
-
-    <div class="my-5">
-      <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-4 w-full overflow-hidden rounded-full bg-secondary">
-        <div data-state="indeterminate" data-max="100" class="h-full w-full bg-primary transition-all" :style="{ transform: `translateX(${(project.foundCount * 100 / project.expectedCount) - 100}%)` }" />
-      </div>
     </div>
+
+    <ul class="my-5">
+      <li v-for="{ fileName } in project.files" :key="fileName" class="flex text-sm">
+        <div class="basis-1/2">
+          {{ fileName }}
+        </div>
+        <div class="basis-1/2 pr-3 text-right">
+          0%
+        </div>
+      </li>
+    </ul>
 
     <div class="mt-auto text-sm italic text-muted-foreground space-x-1">
       <span>
@@ -71,7 +78,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
       </span>
 
       <span>
-        {{ project.createAt }}
+        {{ useDateFormat(project.createAt, 'DD/MM/YYYY') }}
       </span>
     </div>
   </div>
