@@ -7,6 +7,7 @@ const emits = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { getProjects } = useDBStore()
 
 const data = ref({
   name: '',
@@ -82,6 +83,9 @@ function handleSubmit() {
   }
 
   errors.value.name = data.value.name ? '' : 'No name is given'
+  if (getProjects().find(p => p.name === data.value.name))
+    errors.value.name = `${data.value.name} is already existed. Please choose an other name.`
+
   errors.value.file = data.value.files.length ? '' : 'No file is uploaded. Please upload at least one file to create project.'
 }
 
@@ -95,13 +99,11 @@ function handleCancle() {
     <template #body>
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">
-          <BaseLabel for="name" :class="{ 'text-destructive': errors.name }">
+          <BaseLabel for="name" :has-error="!!errors.name">
             {{ t('dialog.create_project.project_name') }}
           </BaseLabel>
           <BaseInput id="name" v-model="data.name" name="name" />
-          <p v-if="errors.name" class="text-sm text-destructive">
-            {{ errors.name }}
-          </p>
+          <BaseError :error="errors.name" />
         </div>
 
         <div class="space-y-1">
@@ -112,7 +114,7 @@ function handleCancle() {
         </div>
 
         <div class="col-span-2 space-y-1">
-          <BaseLabel :class="{ 'text-destructive': errors.file }" @click="open()">
+          <BaseLabel :has-error="!!errors.file" @click="open()">
             {{ t('dialog.create_project.project_upload') }}
           </BaseLabel>
 
@@ -144,9 +146,7 @@ function handleCancle() {
             </p>
           </div>
 
-          <p v-if="errors.file" class="text-sm text-destructive">
-            {{ errors.file }}
-          </p>
+          <BaseError :error="errors.file" />
         </div>
 
         <div class="overflow col-span-2 space-y-1">

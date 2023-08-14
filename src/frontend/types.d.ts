@@ -6,13 +6,22 @@ interface Project {
   id: string
   name: string
   description: string
-  path:string,
+  path: string,
+  visited?: boolean
   files: {
     fileName: string,
     filePath: string,
+    info: {
+      duration: number,
+      numChannels: number,
+      numSamples: number,
+      sampleRate: number
+    }
   }[]
   createAt: string
 }
+
+type ProcessAudioFile = Omit<Project['files'][0],'fileName'>
 
 type TemplateRef = Element | ComponentPublicInstance | null
 

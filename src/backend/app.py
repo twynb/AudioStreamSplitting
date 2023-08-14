@@ -2,6 +2,8 @@ import datetime
 import os
 import uuid
 
+import librosa
+
 from flask import (
     Flask,
     jsonify,
@@ -58,6 +60,25 @@ def create_project():
         project["files"].append({"fileName": file_name, "filePath": file_path})
 
     return jsonify(project)
+
+
+@app.route("/api/process_audio", methods=["POST"])
+def process_audio():
+    data = request.json
+    file_path = data["filePath"]
+    audio_data, sample_rate = librosa.load(file_path, sr=None)
+    duration = librosa.get_duration(y=audio_data, sr=sample_rate)
+    num_channels = audio_data.shape[0]
+    num_samples = len(audio_data)
+    info = {
+        "duration": duration,
+        "numChannels": num_channels,
+        "numSamples": num_samples,
+        "sampleRate": sample_rate,
+    }
+    file = {"filePath": file_path, "info": info}
+
+    return jsonify(file)
 
 
 @app.route("/api/clear_all", methods=["GET"])

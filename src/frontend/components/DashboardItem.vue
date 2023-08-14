@@ -56,7 +56,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
         </Transition>
       </div>
 
-      <p class="text-balance text-muted-foreground">
+      <p class="text-balance text-muted-foreground -mt-2">
         {{ project.description }}
       </p>
     </div>
@@ -65,9 +65,6 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
       <li v-for="{ fileName } in project.files" :key="fileName" class="flex text-sm">
         <div class="basis-1/2">
           {{ fileName }}
-        </div>
-        <div class="basis-1/2 pr-3 text-right">
-          0%
         </div>
       </li>
     </ul>

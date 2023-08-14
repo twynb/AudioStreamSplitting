@@ -11,7 +11,7 @@ export const useDBStore = defineStore('db', () => {
     return projects.value.find(({ id }) => id === projectId)
   }
 
-  function createProject(project: Project) {
+  function createProject(project: Omit<Project, 'visited'>) {
     projects.value.unshift(project)
   }
 

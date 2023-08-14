@@ -3,6 +3,9 @@ import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
 
+const { createProject } = useDBStore()
+const router = useRouter()
+
 let ws: WaveSurfer
 let record: RecordPlugin
 const wsConfig: WaveSurferOptions = {
@@ -25,57 +28,34 @@ function initialize() {
   ws = WaveSurfer.create({ ...wsConfig })
 
   record = ws.registerPlugin(RecordPlugin.create())
+  record.on('record-start', () => isRecording.value = true)
   record.on('record-end', (_blob) => {
     ws.destroy()
+    record.destroy()
+
+    isRecording.value = false
+    state.value = 'play'
 
     blob.value = _blob
     url.value = URL.createObjectURL(blob.value)
-    ws = WaveSurfer.create({ ...wsConfig, url: url.value })
 
-    ws.on('interaction', () => {
-      isPlaying.value = true
-      ws.playPause()
-    })
-    ws.on('finish', () => {
-      ws.setTime(0)
-      isPlaying.value = false
-    })
+    ws = WaveSurfer.create({ ...wsConfig, url: url.value })
+    ws.on('play', () => isPlaying.value = true)
+    ws.on('pause', () => isPlaying.value = false)
+    ws.on('interaction', () => ws.playPause())
+    ws.on('finish', () => ws.setTime(0))
   })
 }
 
 function handleRecord() {
-  isRecording.value = true
-  record.startMic()
   record.startRecording()
-}
-
-function handleStop() {
-  isRecording.value = false
-  state.value = 'play'
-  record.stopRecording()
-  record.stopMic()
-}
-
-function handlePlay() {
-  isPlaying.value = true
-  ws.play()
-}
-
-function handlePause() {
-  isPlaying.value = false
-  ws.pause()
-}
-
-function handleSkip(sec: number) {
-  ws.skip(sec)
+  record.startMic()
 }
 
 function handleDelete() {
   ws.destroy()
   initialize()
 
-  isPlaying.value = false
-  isRecording.value = false
   state.value = 'record'
   blob.value = undefined
 }
@@ -86,38 +66,47 @@ async function handleSave() {
   // @ts-expect-error showSaveFilePicker is still in experimental
   const newHandle = await window.showSaveFilePicker({
     suggestedName: 'record.webm',
-    types: [
-      {
-        description: 'WebM file',
-        accept: { 'audio/webm': ['.webm'] },
-      },
-    ],
+    types: [{
+      description: 'WebM file',
+      accept: { 'audio/webm': ['.webm'] },
+    }],
   })
 
   const writableStream = await newHandle.createWritable()
-
   await writableStream.write(blob.value)
-
   await writableStream.close()
 }
+
+/**
+ * Submit
+*/
+
+const submitInfo = ref({ name: '', description: '' })
+const submitError = ref({ name: '' })
 
 function handleSubmit() {
   if (!blob.value)
     return
 
+  if (!submitInfo.value.name) {
+    submitError.value.name = 'Please give a name'
+    return
+  }
+
   const file = new File([blob.value], 'record.webm', { type: 'audio/webm' })
 
   const { execute } = usePost<Project>({
-    url: '/info',
+    url: '/create_project',
     axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
-    onSuccess({ name, description, files }) {
-      console.log(name, description, files)
+    onSuccess(project) {
+      createProject(project)
+      router.push(`/project/${project.id}`)
     },
   })
 
   const formData = new FormData()
-  formData.append('name', 'record_name')
-  formData.append('description', 'record_description')
+  formData.append('name', submitInfo.value.name)
+  formData.append('description', submitInfo.value.description)
   formData.append('file', file)
   execute(formData)
 }
@@ -136,7 +125,7 @@ onUnmounted(() => {
 
       <div class="flex items-center justify-center gap-x-8">
         <template v-if="state === 'record'">
-          <BaseButton v-if="isRecording" icon-only variant="ghost" @click="handleStop">
+          <BaseButton v-if="isRecording" icon-only variant="ghost" @click="record.destroy()">
             <span class="i-carbon-stop-filled-alt text-xl" />
           </BaseButton>
 
@@ -150,19 +139,19 @@ onUnmounted(() => {
             <span class="i-carbon-download" />
           </BaseButton>
 
-          <BaseButton icon-only variant="ghost" @click="handleSkip(-5)">
+          <BaseButton icon-only variant="ghost" @click="ws.skip(-5)">
             <span class="i-carbon-rewind-5 text-lg" />
           </BaseButton>
 
-          <BaseButton v-if="isPlaying" icon-only variant="ghost" @click="handlePause">
+          <BaseButton v-if="isPlaying" icon-only variant="ghost" @click="ws.pause()">
             <span class="i-carbon-pause-filled text-xl" />
           </BaseButton>
 
-          <BaseButton v-else icon-only variant="ghost" @click="handlePlay">
+          <BaseButton v-else icon-only variant="ghost" @click="ws.play()">
             <span class="i-carbon-play-filled-alt text-xl" />
           </BaseButton>
 
-          <BaseButton icon-only variant="ghost" @click="handleSkip((5))">
+          <BaseButton icon-only variant="ghost" @click="ws.skip((5))">
             <span class="i-carbon-forward-5 text-lg" />
           </BaseButton>
 
@@ -172,14 +161,37 @@ onUnmounted(() => {
         </template>
       </div>
 
-      <template v-if="state === 'play'">
-        <p class="text-red">
-          Currently audio is recorded with type .webm, which cannot be proceeded with librosa
-        </p>
-        <BaseButton @click="handleSubmit">
-          Submit
-        </BaseButton>
-      </template>
+      <Transition
+        enter-active-class="transition-all ease duration-300"
+        leave-active-class="transition-all ease duration-300" enter-from-class="opacity-0 -translate-y-50px"
+        leave-to-class="opacity-0 -translate-y-50px"
+      >
+        <template v-if="state === 'play'">
+          <div class="flex justify-center !mt-10">
+            <div class="max-w-400px w-full flex flex-col border border-border rounded-md p-5">
+              <div class="mb-3 space-y-1">
+                <BaseLabel for="record_name" :has-error="!!submitError.name">
+                  Name
+                </BaseLabel>
+                <BaseInput id="record_name" v-model="submitInfo.name" name="record_name" />
+                <p v-if="submitError.name" class="text-sm text-destructive">
+                  {{ submitError.name }}
+                </p>
+              </div>
+
+              <div class="mb-6 space-y-1">
+                <BaseLabel for="record_name">
+                  Description
+                </BaseLabel>
+                <BaseInput id="record_description" v-model="submitInfo.description" name="record_description" />
+              </div>
+              <BaseButton @click="handleSubmit">
+                Create new project
+              </BaseButton>
+            </div>
+          </div>
+        </template>
+      </Transition>
     </div>
   </ContentLayout>
 </template>
