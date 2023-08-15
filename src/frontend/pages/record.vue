@@ -98,7 +98,7 @@ function handleSubmit() {
   const file = new File([blob.value], 'record.webm', { type: 'audio/webm' })
 
   const { execute } = usePost<Project>({
-    url: '/create_project',
+    url: '/project/create',
     axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
     onSuccess(project) {
       createProject(project)
@@ -171,7 +171,7 @@ onUnmounted(() => {
       >
         <template v-if="state === 'play'">
           <div class="flex justify-center !mt-10">
-            <div class="max-w-400px w-full flex flex-col border border-border rounded-md p-5">
+            <form class="max-w-400px w-full flex flex-col border border-border rounded-md p-5" @submit.prevent="handleSubmit">
               <div class="mb-3 space-y-1">
                 <BaseLabel for="record_name" :has-error="!!submitError.name">
                   Name
@@ -188,10 +188,10 @@ onUnmounted(() => {
                 </BaseLabel>
                 <BaseInput id="record_description" v-model="submitInfo.description" name="record_description" />
               </div>
-              <BaseButton @click="handleSubmit">
+              <BaseButton type="submit">
                 Create new project
               </BaseButton>
-            </div>
+            </form>
           </div>
         </template>
       </Transition>

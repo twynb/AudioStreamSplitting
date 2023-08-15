@@ -5,7 +5,7 @@ const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
 
 const { execute } = usePost<Project>({
-  url: '/create_project',
+  url: '/project/create',
   axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
   onSuccess(project) {
     createProject(project)

@@ -12,7 +12,7 @@ if (!project)
 else
   project.visited = true
 
-const { data } = await axios.post('/get_audio', { audioPath: project?.files[0].filePath }, { responseType: 'blob' })
+const { data } = await axios.post('/audio/get', { audioPath: project?.files[0].filePath }, { responseType: 'blob' })
 const url = URL.createObjectURL(data)
 const isAudioLoading = ref(true)
 
@@ -32,7 +32,7 @@ onMounted(() => {
 })
 
 const { execute, isFetching } = usePost<ProcessAudioFile>({
-  url: '/process_audio',
+  url: '/audio/process',
   onSuccess(data) {
     if (project && data) {
       const fileIndex = project.files.findIndex(({ filePath }) => filePath === data.filePath)
@@ -46,7 +46,7 @@ const { execute, isFetching } = usePost<ProcessAudioFile>({
 </script>
 
 <template>
-  <ContentLayout v-if="project">
+  <ContentLayout v-if="project" :header="project.name">
     <template #header>
       <div class="flex items-center justify-between gap-x-3">
         <h1 class="text-4xl">

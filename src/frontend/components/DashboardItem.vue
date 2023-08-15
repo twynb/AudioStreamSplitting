@@ -47,13 +47,13 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
             <ul>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', project.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('edit', project.id)">
                   <span class="i-carbon-edit" />
                   {{ t('button.edit') }}
                 </BaseButton>
               </li>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', project.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('delete', project.id)">
                   <span class="i-carbon-trash-can" />
                   {{ t('button.delete') }}
                 </BaseButton>
@@ -86,6 +86,6 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
       </span>
     </div>
 
-    <BaseBadge v-if="!project.visited" class="absolute animate-pulse -right-1 -top-1 !h-3 !w-3" />
+    <BaseBadge v-if="!project.visited" class="absolute -right-1 -top-1 !h-3 !w-3" />
   </div>
 </template>
