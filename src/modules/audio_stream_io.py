@@ -2,6 +2,8 @@ import music_tag
 import soundfile
 import librosa
 import numpy as np
+
+from os import path
 from typing import Tuple,Generator
 
 def readAudiofileToNumPy(audiofile, mono=False)-> Tuple[np.ndarray, float]:
@@ -11,7 +13,7 @@ def readAudiofileToNumPy(audiofile, mono=False)-> Tuple[np.ndarray, float]:
     """
     return librosa.load(audiofile, mono=mono)
 
-def readAudiofileToStream(audiofile,rate=128,mono=False) -> Generator[np.ndarray, None, None]:
+def readAudiofileToStream(audiofile,rate=128,mono=False) -> (Generator[np.ndarray, None, None], float, int):
     """
     :param audiofile: Path to audiofile
     :param rate: block length of stream
@@ -21,28 +23,28 @@ def readAudiofileToStream(audiofile,rate=128,mono=False) -> Generator[np.ndarray
     sr = librosa.get_samplerate(audiofile)
     default_sr = 22050
 
-    frame_length = int(2048 * sr) // default_sr
-    hop_length = int(512 * sr) // default_sr
+    frame_length = int(1024 * sr) // default_sr
+    hop_length = int(1024 * sr) // default_sr
 
-    return librosa.stream(audiofile,block_length=rate,frame_length=frame_length,hop_length=hop_length,mono=mono)
+    return librosa.stream(audiofile, block_length=rate, frame_length=frame_length, hop_length=hop_length, mono=mono), sr, hop_length
 
-def saveNumPyAsAudioFile(song:np.ndarray, songname:str,path:str , rate=100 ,tags:dict={},extention = ".mp3"):
+def saveNumPyAsAudioFile(song:np.ndarray, songname:str, file_path:str, rate=100, tags:dict={}, extention = ".mp3"):
     """
     :param song: np.ndarray of the song
     :param songname: name of the song
-    :param path: path to file (without filename)
+    :param file_path: path to file (without filename)
     :param rate: samplerate of the song {Default: 100}
     :param tags: dict of tags {Default: {}}
     :param extention: string of the extention {Default: ".mp3"}
     :returns: none
     """
-    savename = path+songname+extention
-    soundfile.write(savename,song,rate)
-    tagAudiofile(savename,songname,tags)
+    savename = path.join(file_path, songname + extention)
+    soundfile.write(savename, song.T, rate)
+    tagAudiofile(savename, songname, tags)
 
 def tagAudiofile(savename:str,songname:str,tags:dict):
     """
-    :param savename: path to savefile 
+    :param savename: path to savefile
     :param songname: name of the song
     :param tags:
         album
