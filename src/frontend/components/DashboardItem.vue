@@ -85,5 +85,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
         {{ useDateFormat(project.createAt, 'DD/MM/YYYY') }}
       </span>
     </div>
+
+    <BaseBadge v-if="!project.visited" class="absolute animate-pulse -right-1 -top-1 !h-3 !w-3" />
   </div>
 </template>

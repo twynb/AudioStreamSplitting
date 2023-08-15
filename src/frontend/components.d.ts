@@ -12,6 +12,7 @@ declare module 'vue' {
     BaseError: typeof import('./components/BaseError.vue')['default']
     BaseInput: typeof import('./components/BaseInput.vue')['default']
     BaseLabel: typeof import('./components/BaseLabel.vue')['default']
+    BaseLoader: typeof import('./components/BaseLoader.vue')['default']
     BaseLogo: typeof import('./components/BaseLogo.vue')['default']
     BaseModal: typeof import('./components/dialogs/BaseModal.vue')['default']
     BaseProgress: typeof import('./components/BaseProgress.vue')['default']

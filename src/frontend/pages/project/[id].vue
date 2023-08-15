@@ -1,12 +1,35 @@
 <script setup lang="ts">
-const props = defineProps<{ id: string }>()
-const router = useRouter()
-const { getProjectById } = useDBStore()
+import WaveSurfer from 'wavesurfer.js'
 
+const props = defineProps<{ id: string }>()
+
+const { getProjectById } = useDBStore()
 const project = getProjectById(props.id)
+const router = useRouter()
 
 if (!project)
   router.push('/')
+else
+  project.visited = true
+
+const { data } = await axios.post('/get_audio', { audioPath: project?.files[0].filePath }, { responseType: 'blob' })
+const url = URL.createObjectURL(data)
+const isAudioLoading = ref(true)
+
+onMounted(() => {
+  const ws = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: 'rgb(173, 250, 29)',
+    progressColor: '#8EAC50',
+    barRadius: 5,
+    barWidth: 5,
+    barGap: 2,
+    cursorWidth: 3,
+    url,
+  })
+  ws.on('interaction', () => ws.playPause())
+  ws.on('ready', () => isAudioLoading.value = false)
+})
 
 const { execute, isFetching } = usePost<ProcessAudioFile>({
   url: '/process_audio',
@@ -35,6 +58,13 @@ const { execute, isFetching } = usePost<ProcessAudioFile>({
         </BaseButton>
       </div>
     </template>
+
+    <div class="relative">
+      <div id="waveform" class="border rounded-md" />
+      <div v-if="isAudioLoading" class="absolute-center">
+        <BaseLoader />
+      </div>
+    </div>
 
     <table class="w-full text-sm">
       <thead>

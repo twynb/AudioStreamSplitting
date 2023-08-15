@@ -3,6 +3,7 @@ const props = defineProps<{
   icon: string
   text: string
   link?: string
+  badgeCount?: number
 }>()
 
 const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
@@ -35,9 +36,11 @@ const route = useRoute()
     </Transition>
 
     <BaseBadge
-      v-if="link === '/playground'" class="absolute transition-all" :class="[
-        isSidebarMinimized ? '!w-4 !h-4 !text-xs right-1 top-1' : 'top-1/2 right-4 -translate-y-1/2',
-      ]" content="1"
-    />
+      v-if="badgeCount" class="absolute transition-all" :class="[
+        isSidebarMinimized ? '!text-xs right-1 top-1' : 'top-1/2 right-4 -translate-y-1/2',
+      ]"
+    >
+      {{ badgeCount }}
+    </BaseBadge>
   </li>
 </template>

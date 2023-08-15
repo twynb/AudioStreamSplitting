@@ -84,6 +84,8 @@ async function handleSave() {
 const submitInfo = ref({ name: '', description: '' })
 const submitError = ref({ name: '' })
 
+const { toast } = useToastStore()
+
 function handleSubmit() {
   if (!blob.value)
     return
@@ -100,6 +102,7 @@ function handleSubmit() {
     axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
     onSuccess(project) {
       createProject(project)
+      toast({ content: '.wav cannot be processed at the moment!', variant: 'destructive' })
       router.push(`/project/${project.id}`)
     },
   })

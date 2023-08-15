@@ -11,6 +11,7 @@ from flask import (
     request,
     send_from_directory,
     make_response,
+    send_file,
 )
 from flask_cors import CORS
 from utils import audios_dir, mkdir
@@ -79,6 +80,13 @@ def process_audio():
     file = {"filePath": file_path, "info": info}
 
     return jsonify(file)
+
+
+@app.route("/api/get_audio", methods=["POST"])
+def get_audio():
+    data = request.json
+    audio_path = data["audioPath"]
+    return send_file(audio_path)
 
 
 @app.route("/api/clear_all", methods=["GET"])

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
+const { getProjects } = useDBStore()
+const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) => visited !== true).length)
 </script>
 
 <template>
@@ -29,6 +31,7 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
         icon="i-carbon-dashboard"
         :text="t('sidebar.dashboard')"
         link="/"
+        :badge-count="dashboardBadgeCount"
       />
 
       <SideBarRow
