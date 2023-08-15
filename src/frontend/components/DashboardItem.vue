@@ -19,6 +19,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
 
 <template>
   <div
+    tabindex="1"
     class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground"
   >
     <div>
@@ -27,7 +28,13 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           {{ project.name }}
         </p>
 
-        <BaseButton ref="moreBtn" variant="ghost" icon-only @click.stop="isMoreMenuOpen = true">
+        <BaseButton
+          ref="moreBtn" variant="ghost" icon-only
+          @click.stop="isMoreMenuOpen = true"
+          @keydown.enter.stop="isMoreMenuOpen = true"
+          @keydown.space.stop="isMoreMenuOpen = true"
+          @keydown.escape.stop="isMoreMenuOpen = false"
+        >
           <span class="i-carbon-overflow-menu-vertical" />
         </BaseButton>
 
@@ -37,7 +44,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           enter-from-class="opacity-0 scale-90"
           leave-to-class="opacity-0 scale-90"
         >
-          <div v-if="isMoreMenuOpen" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
+          <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
             <ul>
               <li class="px-1">
                 <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', project.id)">

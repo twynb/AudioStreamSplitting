@@ -32,13 +32,21 @@ const { open, close } = useModal({
 })
 
 const router = useRouter()
+
+function handleToProject(id: string) {
+  router.push(`/project/${id}`)
+}
 </script>
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
     <template v-if="getProjects().length">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
+        <div
+          tabindex="1" class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground" @click="open"
+          @keydown.enter.prevent="open"
+          @keydown.space.prevent="open"
+        >
           <div class="flex flex-col items-center gap-y-1 font-medium">
             {{ t('button.new_project') }}
             <span class="i-carbon-add text-lg" />
@@ -48,8 +56,10 @@ const router = useRouter()
         <DashboardItem
           v-for="project in getProjects()"
           :key="project.id" :project="project"
-          @click="router.push(`/project/${project.id}`)"
-          @edit="router.push(`/project/${project.id}`)"
+          @keydown.enter.prevent="handleToProject(project.id)"
+          @keydown.space.prevent="handleToProject(project.id)"
+          @click="handleToProject(project.id)"
+          @edit="handleToProject(project.id)"
           @delete="deleteProject"
         />
       </div>

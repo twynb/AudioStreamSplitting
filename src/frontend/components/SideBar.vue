@@ -51,10 +51,15 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
     </ul>
 
     <ul class="mt-auto">
-      <li class="flex justify-center">
+      <li
+        class="flex justify-center"
+        tabindex="1"
+        @click="isSidebarMinimized = !isSidebarMinimized"
+        @keydown.enter.prevent="isSidebarMinimized = !isSidebarMinimized"
+        @keydown.space.prevent="isSidebarMinimized = !isSidebarMinimized"
+      >
         <BaseButton
           variant="ghost" icon-only
-          @click="isSidebarMinimized = !isSidebarMinimized"
         >
           <span
             class="text-sm"
