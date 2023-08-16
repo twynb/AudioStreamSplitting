@@ -1,48 +1,45 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-a = Analysis(
-    ['src/backend/main.py'],
-    pathex=['src/backend'],
+a = Analysis(  # noqa F821
+    ["src/backend/main.py"],
+    pathex=["src/backend"],
     binaries=[],
-    datas=[('gui/*', './gui')],
+    datas=[("gui/*", "./gui")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[
-      'altgraph',
-      'certifi',
-      'idna',
-      'iniconfig',
-      'Jinja2',
-      'MarkupSafe',
-      'pooch',
-      'pytest',
-      'ruff',
-      'tomli',
-      'watchdog',
+        "altgraph",
+        "certifi",
+        "black",
+        "idna",
+        "iniconfig",
+        "Jinja2",
+        "MarkupSafe",
+        "pooch",
+        "pytest",
+        "ruff",
+        "tomli",
+        "watchdog",
     ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=None,
     noarchive=False,
-  )
+)
 
-pyz = PYZ(
-    a.pure,
-    a.zipped_data,
-    cipher=None
-    )
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)  # noqa F821
 
-exe = EXE(
+exe = EXE(  # noqa F821
     pyz,
     a.scripts,
     a.binaries,
     a.zipfiles,
     a.datas,
     [],
-    name='app',
-    icon='src/frontend/public/logo.ico',
+    name="app",
+    icon="src/frontend/public/logo.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=True,
@@ -53,4 +50,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    )
+)

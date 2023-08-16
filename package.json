@@ -2,6 +2,10 @@
   "name": "audio_streaming_splitting",
   "private": true,
   "packageManager": "npm@9.6.7",
+  "engines": {
+    "npm": ">= 9.6.7",
+    "node": ">= 18.17.0"
+  },
   "scripts": {
     "fe": "npm run vite",
     "fe:test:unit": "vitest -c src/frontend/vite.config.ts",
@@ -11,9 +15,12 @@
     "view:app:debug": "npm run build:fe:dev && python3 src/backend/main.py --debug",
     "build:fe": "npm run typecheck && npm run vite build",
     "build:app": "npm run build:fe && pyinstaller build.spec",
+    "build:app:nocheck": "npm run vite build && pyinstaller build.spec",
     "preview": "dist/app",
     "vite": "vite -c src/frontend/vite.config.ts",
-    "lint": "eslint src/frontend --fix",
+    "lint:fe": "eslint src/frontend --fix",
+    "lint:be": "ruff check --format=github --target-version=py310 --fix src/backend/",
+    "format:be": "black src/backend",
     "typecheck": "vue-tsc -p src/frontend --noEmit",
     "up": "taze major -I"
   },
