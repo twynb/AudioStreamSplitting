@@ -37,12 +37,12 @@ def saveNumPyAsAudioFile(song:np.ndarray, songname:str,path:str , rate=100 ,tags
     :returns: none
     """
     savename = path+songname+extention
-    soundfile.write(savename,song,rate)
+    soundfile.write(savename,song.T,rate)
     tagAudiofile(savename,songname,tags)
 
 def tagAudiofile(savename:str,songname:str,tags:dict):
     """
-    :param savename: path to savefile 
+    :param savename: path to savefile
     :param songname: name of the song
     :param tags:
         album
