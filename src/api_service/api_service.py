@@ -14,8 +14,6 @@ API-Service Workflow:
 TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!
 """
 
-# constant defining how much of the song_data is used for creating a fingerprint, by taking the first/last 1/FINGERPRINT_SEGMENT of data.
-FINGERPRINT_SEGMENT = 3
 # constant for the API key. TODO: allow user to provide API key.
 API_KEY = "b'kDPSCEb4"
 
@@ -25,13 +23,14 @@ class SongOptionResult(Enum):
     """
     SONG_EXTENDED = 0 # analysed song has results matching with the previous song, so the previous song is extended. Happens if a song was split in the middle.
     SONG_FINISHED = 1 # analysed song has no results matching with the previous song, so the previous song can be retrieved using get_last_song().
-    FINGERPRINT_MISMATCH = 2 # fingerprints from the start and end of the analysed song have no matching results. Happens if two songs are still together after splitting.
+    # commented out for now because AcoustID doesn't support this
+    # FINGERPRINT_MISMATCH = 2 # fingerprints from the start and end of the analysed song have no matching results. Happens if two songs are still together after splitting.
     SONG_NOT_RECOGNISED = 3 # analysed song has no results from the API. Happens when the song isn't yet in the AcoustID database.
 
 lastSongData = np.array([[], []])
-lastSongMetadataOptions = ({"id": "", "title": "not-set", "album": "not-set", "artist": "not-set", "album-artist": "not-set", "year": "not-set", "number": 0})
+lastSongMetadataOptions = [{"id": "", "title": "not-set", "album": "not-set", "artist": "not-set", "album-artist": "not-set", "year": "not-set", "number": 0}]
 currentSongData = np.array([[], []])
-currentSongMetadataOptions = ()
+currentSongMetadataOptions = [{"id": "", "title": "not-set", "album": "not-set", "artist": "not-set", "album-artist": "not-set", "year": "not-set", "number": 0}]
 
 def get_last_song():
     """
@@ -49,22 +48,15 @@ def get_song_options(songData, samplerate):
     """
     global currentSongMetadataOptions
     global currentSongData
-    fingerprintStart = create_fingerprint(songData, samplerate, True)
-    fingerprintEnd = create_fingerprint(songData, samplerate, False)
-    fingerprintLength = samplerate * len(songData[0]) / FINGERPRINT_SEGMENT
-    metadataStart = get_api_song_data(fingerprintStart, fingerprintLength)
-    metadataEnd = get_api_song_data(fingerprintEnd, fingerprintLength)
-    if(len(metadataStart) == 0 and len(metadataEnd) == 0):
+    duration, fingerprint = create_fingerprint(songData, samplerate)
+    metadata = get_api_song_data(fingerprint, duration)
+    if(len(metadata) == 0):
         store_finished_song()
         return SongOptionResult.SONG_NOT_RECOGNISED
 
-    overlappingMetadata = get_overlapping_metadata_values(metadataStart, metadataEnd)
-    if len(overlappingMetadata) == 0:
-        return SongOptionResult.FINGERPRINT_MISMATCH
-
-    matchMetadataOptions = get_overlapping_metadata_values(currentSongMetadataOptions, overlappingMetadata)
+    matchMetadataOptions = get_overlapping_metadata_values(currentSongMetadataOptions, metadata)
     if len(matchMetadataOptions) == 0:
-        store_finished_song(songData=songData, metadataOptions=overlappingMetadata)
+        store_finished_song(songData=songData, metadataOptions=metadata)
         return SongOptionResult.SONG_FINISHED
     else:
         currentSongMetadataOptions = matchMetadataOptions
@@ -90,39 +82,21 @@ def get_overlapping_metadata_values(metadata1, metadata2):
                 overlappingMetadata.add(metadata)
         return overlappingMetadata
 
-def create_fingerprint(songData, samplerate, fromBeginning = True):
+def create_fingerprint(songData, samplerate):
     """
-    create a fingerprint for either the first or last 1/FINGERPRINT_SEGMENT-th part of the audio data.
+    create a fingerprint for the audio data.
     :param songData: the audio data to generate a fingerprint from.
     :param samplerate: the audio data's sample rate.
     :param fromBeginning: whether to generate the fingerprint from the beginning or end of the audio data.
-    :returns: the acoustID fingerprint.
+    :returns: (song duration, fingerprint)
     """
-    newData = get_sample_segment_for_fingerprint(songData, fromBeginning)
     filename = "TEMP_FILE_FOR_FINGERPRINTING"
 
-    saveNumPyAsAudioFile(newData, filename, os.path.abspath('') + '\\', rate=samplerate)
+    saveNumPyAsAudioFile(songData, filename, os.path.abspath('') + '\\', rate=samplerate)
     filenameWithPath = os.path.abspath(filename + '.mp3')
-    fingerprint = acoustid.fingerprint_file(filenameWithPath)
+    fingerprintDuration, fingerprint = acoustid.fingerprint_file(filenameWithPath)
     os.remove(filenameWithPath)
-    return fingerprint
-
-def get_sample_segment_for_fingerprint(songData, fromBeginning):
-    """
-    get a segment of the audio data to sample for a fingerprint, formatted for acoustid.fingerprint().
-    :param songData: the audio data to generate a fingerprint from.
-    :param fromBeginning: whether to generate the sample segment from the beginning or end of the data.
-    :returns: numpy.ndarray the sample segment.
-    """
-    newData = np.array([[],[]])
-    sampleSize = round(len(songData[0]) / FINGERPRINT_SEGMENT)
-    if(fromBeginning):
-        newData = np.array([songData[0][0:sampleSize], songData[1][0:sampleSize]])
-    else:
-        endIndex = len(songData[0])-1
-        startIndex = endIndex-sampleSize
-        newData = np.array([songData[0][startIndex:endIndex], songData[1][startIndex:endIndex]])
-    return ((newData - 0.5) * 2 * np.iinfo(np.int16).max).astype(np.int16)
+    return (fingerprintDuration, fingerprint)
 
 def get_api_song_data(fingerprint, fingerprintLength):
     """
@@ -132,14 +106,13 @@ def get_api_song_data(fingerprint, fingerprintLength):
     :returns: list({"id": the id, "score": how well the result matches the fingerprint, "title": song title, "artist": song artist})
     """
     try:
-        lookupResult = acoustid.parse_lookup_result(acoustid.lookup(API_KEY, fingerprint, fingerprintLength))
-        result = ()
-        for lookupRes in lookupResult:
-            result.append({"score": lookupRes[0], "id": lookupRes[1], "title": lookupRes[2], "artist": lookupRes[3]})
+        result = []
+        for score, recording_id, title, artist in acoustid.parse_lookup_result(acoustid.lookup(API_KEY, fingerprint, fingerprintLength)):
+            result.append({"score": score, "id": recording_id, "title": title, "artist": artist})
         return result
     except acoustid.WebServiceError:
-        return ()
-    return ()
+        return []
+    return []
 
 def store_finished_song(songData = np.array([[],[]]), metadataOptions = ()):
     """
