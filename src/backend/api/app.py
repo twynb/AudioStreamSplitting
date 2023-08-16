@@ -10,7 +10,7 @@ from flask import (
 from flask_cors import CORS
 
 cwd = os.path.dirname(os.path.abspath(__file__))
-gui_dir = os.path.join(cwd, "..", "..", "gui")
+gui_dir = os.path.join(cwd, "..", "..", "..", "gui")
 if not os.path.exists(gui_dir):
     gui_dir = os.path.join(cwd, "gui")
 

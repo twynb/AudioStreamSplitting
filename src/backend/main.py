@@ -1,7 +1,7 @@
 import argparse
 from flaskwebgui import FlaskUI, find_browser
-from app import app
-from path import profile_dir
+from api.app import app
+from utils.path import profile_dir
 
 parser = argparse.ArgumentParser(description="Script description")
 
@@ -26,7 +26,12 @@ browser_command = [
     "--disable-translate",
     "--disable-background-timer-throttling",
     "--disable-notifications",
+    "--disable-pinch",
+    "--disable-geolocation",
+    "--disable-default-apps",
+    "--disable-infobars",
     "--no-first-run",
+    "--no-default-browser-check",
     "--window-size=1280,800",
     f"--app=http://127.0.0.1:{port}",
 ]

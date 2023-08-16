@@ -3,7 +3,7 @@ import os
 import uuid
 
 from flask import Blueprint, jsonify, make_response, request
-from path import audios_dir, mkdir
+from utils.path import audios_dir, mkdir
 
 project_bp = Blueprint("project", __name__)
 
