@@ -7,6 +7,8 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'succeedProcess', v: ProcessAudioFile): void
+  (e: 'updatePeaks', v: { filePath: string; peaks: number[][] }): void
+
 }>()
 
 const { data } = await axios.post('/audio/get', { audioPath: props.file.filePath }, { responseType: 'blob' })
@@ -26,11 +28,13 @@ function handleLoadWaveform() {
     barGap: 2,
     cursorWidth: 3,
     url,
+    peaks: props.file.peaks,
   })
   ws.on('interaction', () => ws.playPause())
   ws.on('ready', () => {
     isWsLoaded.value = true
     isAudioLoading.value = false
+    emits('updatePeaks', { peaks: ws.exportPeaks(), filePath: props.file.filePath })
   })
 }
 
@@ -40,10 +44,22 @@ const { execute, isFetching } = usePost<ProcessAudioFile>({
     emits('succeedProcess', data)
   },
 })
+
+onMounted(() => {
+  if (props.file.peaks)
+    handleLoadWaveform()
+})
 </script>
 
 <template>
-  <div>
+  <div class="space-y-2">
+    <div class="flex items-center gap-x-2">
+      <span class="text-xs" :class="file.info ? 'i-carbon:checkmark-filled' : 'i-carbon:subtract-alt'" />
+      <p class="text-sm">
+        {{ file.fileName }}
+      </p>
+    </div>
+
     <div class="relative">
       <div :id="`waveform_${file.name}`" class="min-h-128px border rounded-md" />
 
@@ -56,61 +72,24 @@ const { execute, isFetching } = usePost<ProcessAudioFile>({
       </div>
     </div>
 
-    <table class="w-full caption-bottom text-sm">
-      <caption class="mt-4 text-sm text-muted-foreground">
-        .wav cannot be processed at the moment!
-      </caption>
-      <thead>
-        <tr class="border-b border-b-border">
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            Song name
-          </th>
+    <p v-if="file.fileType === 'webm'" class="text-center text-sm text-muted-foreground">
+      .wav cannot be processed at the moment!
+    </p>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            Song path
-          </th>
+    <BaseButton
+      :disabled="file.fileType === 'webm' || isFetching"
+      @click="execute({ filePath: file.filePath })"
+    >
+      <BaseLoader
+        v-if="isFetching"
+        class="mr-2 border-primary-foreground !border-2"
+        :size="15"
+      />
+      Process
+    </BaseButton>
 
-          <th class="h-12 px-4 text-center align-middle font-medium text-muted-foreground">
-            State
-          </th>
-
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-b border-b-border">
-          <td class="p-4 align-middle font-medium">
-            {{ file.fileName }}
-          </td>
-
-          <td class="p-4 align-middle">
-            {{ file.filePath }}
-          </td>
-
-          <td class="text-center align-middle">
-            <span v-if="file.info" class="i-carbon:checkmark-filled" />
-            <span v-else class="i-carbon:subtract-alt" />
-          </td>
-
-          <td />
-
-          <td class="cursor-pointer pr-4 text-right align-middle transition-color">
-            <BaseButton :disabled="file.fileType === 'webm' || isFetching" @click="execute({ filePath: file.filePath })">
-              <span
-                v-if="isFetching"
-                class="i-carbon-close mr-1 animate-spin"
-              />
-              Process
-            </BaseButton>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <pre>
-      {{ file }}
+    <pre lang="json">
+      {{ file.info }}
     </pre>
-
-    <BaseSeparator orientation="horizontal" class="mb-10" />
   </div>
 </template>

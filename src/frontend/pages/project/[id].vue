@@ -10,14 +10,14 @@ if (!project)
 else
   project.visited = true
 
-function handleSucceedProcess({ filePath, info }: ProcessAudioFile) {
+function updateFileProperty<TKey extends keyof Project['files'][0]>(filePath: string, key: TKey, v: Project['files'][0][TKey]) {
   if (!project)
     return
   const fileIndex = project.files.findIndex(p => p.filePath === filePath)
   if (fileIndex === -1)
     return
 
-  project.files[fileIndex].info = info
+  project.files[fileIndex][key] = v
 }
 </script>
 
@@ -36,7 +36,14 @@ function handleSucceedProcess({ filePath, info }: ProcessAudioFile) {
     </template>
 
     <template #default>
-      <ProjectItem v-for="file in project.files" :key="file.filePath" :file="file" @succeed-process="handleSucceedProcess" />
+      <div class="space-y-10">
+        <ProjectItem
+          v-for="file in project.files" :key="file.filePath"
+          :file="file"
+          @succeed-process="({ filePath, info }) => updateFileProperty(filePath, 'info', info)"
+          @update-peaks="({ filePath, peaks }) => updateFileProperty(filePath, 'peaks', peaks)"
+        />
+      </div>
     </template>
   </ContentLayout>
 </template>

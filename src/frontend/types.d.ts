@@ -13,6 +13,7 @@ interface Project {
     fileType: string,
     fileName: string,
     filePath: string,
+    peaks?: number[][]
     info: {
       duration: number,
       numChannels: number,
