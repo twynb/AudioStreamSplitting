@@ -15,7 +15,7 @@ const { open, close } = useModal({
 })
 
 async function handleClearAll() {
-  await axios.get('/clear_all')
+  await axios.get('/project/clear')
   deleteAllProjects()
   close()
 }

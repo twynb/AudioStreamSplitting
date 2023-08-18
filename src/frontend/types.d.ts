@@ -9,6 +9,8 @@ interface Project {
   path: string,
   visited?: boolean
   files: {
+    name: string,
+    fileType: string,
     fileName: string,
     filePath: string,
     info: {
@@ -21,7 +23,7 @@ interface Project {
   createAt: string
 }
 
-type ProcessAudioFile = Omit<Project['files'][0],'fileName'>
+type ProcessAudioFile = Pick<Project['files'][0], 'filePath' | 'info'>
 
 type TemplateRef = Element | ComponentPublicInstance | null
 

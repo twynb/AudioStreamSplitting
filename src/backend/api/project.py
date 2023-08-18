@@ -28,10 +28,19 @@ def create():
 
     for file in files:
         file_name = file.filename
+        name = file_name.split(".")[0]
+        file_type = file_name.split(".")[-1]
         file_path = f"{project_path}/{file_name}"
         file.save(file_path)
 
-        project["files"].append({"fileName": file_name, "filePath": file_path})
+        project["files"].append(
+            {
+                "fileName": file_name,
+                "filePath": file_path,
+                "name": name,
+                "fileType": file_type,
+            }
+        )
 
     return jsonify(project)
 

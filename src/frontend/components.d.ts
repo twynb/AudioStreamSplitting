@@ -26,6 +26,7 @@ declare module 'vue' {
     CreateProjectModal: typeof import('./components/dialogs/CreateProjectModal.vue')['default']
     DashboardItem: typeof import('./components/DashboardItem.vue')['default']
     NotFound: typeof import('./components/NotFound.vue')['default']
+    ProjectItem: typeof import('./components/ProjectItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsClear: typeof import('./components/SettingsClear.vue')['default']
