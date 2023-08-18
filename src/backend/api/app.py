@@ -9,10 +9,7 @@ from flask import (
 )
 from flask_cors import CORS
 
-cwd = os.path.dirname(os.path.abspath(__file__))
-gui_dir = os.path.join(cwd, "..", "..", "..", "gui")
-if not os.path.exists(gui_dir):
-    gui_dir = os.path.join(cwd, "gui")
+gui_dir = os.path.join(os.getcwd(), "gui")
 
 app = Flask(__name__, static_folder=gui_dir, template_folder=gui_dir)
 app.register_blueprint(audio_bp, url_prefix="/api/audio")
