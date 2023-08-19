@@ -56,7 +56,6 @@ const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) =>
     <ul class="mt-auto">
       <li
         class="flex justify-center"
-        tabindex="1"
         @click="isSidebarMinimized = !isSidebarMinimized"
         @keydown.enter.prevent="isSidebarMinimized = !isSidebarMinimized"
         @keydown.space.prevent="isSidebarMinimized = !isSidebarMinimized"

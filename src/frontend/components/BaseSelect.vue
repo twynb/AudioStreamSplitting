@@ -12,8 +12,14 @@ defineProps<{
 const modelValue = defineModel({ default: '' })
 const isExpanded = ref(false)
 const isMouseOverOpts = ref(false)
-const button = ref()
+const button = ref<HTMLButtonElement>()
 onClickOutside(button, () => isExpanded.value = false)
+
+function handleChooseOption(v: string) {
+  modelValue.value = v
+  isExpanded.value = false
+  button.value?.focus()
+}
 </script>
 
 <template>
@@ -23,7 +29,7 @@ onClickOutside(button, () => isExpanded.value = false)
       type="button"
       role="combobox"
       :aria-expanded="isExpanded"
-      class="h-10 w-full flex items-center justify-between border border-input rounded-md bg-transparent px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed placeholder:text-muted-foreground disabled:opacity-50 focus:outline-none"
+      class="h-10 w-full flex items-center justify-between border border-input rounded-md bg-transparent px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed placeholder:text-muted-foreground disabled:opacity-50 focus:ring-2 focus:ring-offset-2 focus:ring-ring"
       @click="isExpanded = !isExpanded"
     >
       <span style="pointer-events: none">
@@ -55,10 +61,14 @@ onClickOutside(button, () => isExpanded.value = false)
       >
         <li
           v-for="{ label, value } in options" :key="label"
+          tabindex="0"
           class="flex items-center gap-x-2 rounded-md px-3 py-2 hover:(bg-secondary text-secondary-foreground)"
           :class="[!isMouseOverOpts && modelValue === value ? 'bg-secondary text-secondary-foreground' : 'bg-background']"
           role="button"
-          @click="modelValue = value"
+          @click="handleChooseOption(value)"
+          @keydown.enter.prevent="handleChooseOption(value)"
+          @keydown.space.prevent="handleChooseOption(value)"
+          @keydown.escape.prevent="isExpanded = false"
         >
           <span
             class="i-carbon-checkmark text-xs"

@@ -43,7 +43,7 @@ function handleToProject(id: string) {
     <template v-if="getProjects().length">
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
         <div
-          tabindex="1" class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground" @click="open"
+          tabindex="0" class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground" @click="open"
           @keydown.enter.prevent="open"
           @keydown.space.prevent="open"
         >

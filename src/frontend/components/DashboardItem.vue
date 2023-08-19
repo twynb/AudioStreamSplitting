@@ -19,7 +19,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
 
 <template>
   <div
-    tabindex="1"
+    tabindex="0"
     class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground"
   >
     <div>

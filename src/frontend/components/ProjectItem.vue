@@ -67,6 +67,11 @@ onMounted(() => {
         <BaseLoader v-if="isAudioLoading" />
 
         <BaseButton v-else variant="outline" class="text-xs" @click="handleLoadWaveform">
+          <span class="mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+              <path fill="currentColor" d="M54 96v64a6 6 0 0 1-12 0V96a6 6 0 0 1 12 0Zm34-70a6 6 0 0 0-6 6v192a6 6 0 0 0 12 0V32a6 6 0 0 0-6-6Zm40 32a6 6 0 0 0-6 6v128a6 6 0 0 0 12 0V64a6 6 0 0 0-6-6Zm40 32a6 6 0 0 0-6 6v64a6 6 0 0 0 12 0V96a6 6 0 0 0-6-6Zm40-16a6 6 0 0 0-6 6v96a6 6 0 0 0 12 0V80a6 6 0 0 0-6-6Z" />
+            </svg>
+          </span>
           Load Waveform
         </BaseButton>
       </div>
@@ -88,7 +93,7 @@ onMounted(() => {
       Process
     </BaseButton>
 
-    <pre lang="json">
+    <pre>
       {{ file.info }}
     </pre>
   </div>

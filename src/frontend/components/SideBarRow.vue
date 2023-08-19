@@ -15,7 +15,7 @@ const route = useRoute()
 <template>
   <li
     class="relative min-h-3.5rem flex cursor-pointer items-center border-primary rounded-md p-4 text-primary transition-colors space-x-4 hover:bg-accent"
-    tabindex="1"
+    tabindex="0"
     :class="route.path === props.link ? 'bg-accent' : 'bg-background'"
     :title="text"
     @click="link && push({ path: link })"
