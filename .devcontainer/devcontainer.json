@@ -7,14 +7,16 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-azuretools.vscode-docker",
-        "mhutchie.git-graph",
-        "donjayamanne.githistory",
-        "GitHub.vscode-pull-request-github",
-        "eamodio.gitlens",
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ]
+		"ms-azuretools.vscode-docker",
+		"eamodio.gitlens",
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-python.black-formatter",
+		"antfu.unocss",
+		"charliermarsh.ruff",
+		"Vue.volar",
+		"Vue.vscode-typescript-vue-plugin"
+	]
     }
   },
   "remoteUser": "root"
