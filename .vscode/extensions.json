@@ -3,8 +3,13 @@
     "antfu.iconify",
     "antfu.unocss",
     "antfu.goto-alias",
-    "vue.volar",
     "dbaeumer.vscode-eslint",
-    "EditorConfig.EditorConfig"
+    "editorconfig.editorconfig",
+    "ms-python.black-formatter",
+    "charliermarsh.ruff",
+    "vue.vscode-typescript-vue-plugin",
+    "ms-python.vscode-pylance",
+    "ms-python.python",
+    "vue.volar"
   ]
 }

@@ -7,13 +7,7 @@ RUN apt-get update \
     && apt-get install -y \
     python3 \
     python3-pip \
-    libwebkit2gtk-4.0-dev \ 
-    libssl-dev \
-    libgtk-3-dev \
-    libayatana-appindicator3-dev \ 
-    librsvg2-dev \
-    libgirepository1.0-dev \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt package-lock.json package.json ./
 

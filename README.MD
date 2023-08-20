@@ -17,7 +17,7 @@
 - Python 3.10 or later: [Download here](https://www.python.org/downloads/)
 - pip: [Download here](https://pip.pypa.io/en/stable/cli/pip_download/)
 - pyinstaller: [Download here](https://pypi.org/project/pyinstaller/)
-- Node.js 18.17.0 or later: [Download here](https://nodejs.org/en/download)
+- Node.js 18.17.1 or later: [Download here](https://nodejs.org/en/download)
 
 ## Installation
 
@@ -30,6 +30,8 @@ You can choose between manual setup or using Docker for simplicity.
 2. Install the required Python packages using the command `pip install -r requirements.txt`.
 
 3. Install Node.js modules using the command `npm install`.
+
+4. Setup `lint-staged` and `simple-git-hooks` using the command `npx simple-git-hooks`
 
 ### Docker
 

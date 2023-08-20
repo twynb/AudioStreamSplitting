@@ -1,4 +1,4 @@
-export function useDocTitle(title: string, prefix = 'Audio SS | ') {
+export function useDocTitle(title: string, prefix = 'Audio Splitter | ') {
   if (!document)
     return
 

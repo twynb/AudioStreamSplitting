@@ -7,7 +7,8 @@
     "new_project": "New Project",
     "upload": "Upload",
     "back_to_dashboard": "Back to Dashboard",
-    "new": "New"
+    "new": "New",
+    "confirm": "Confirm"
   },
   "placeholder": {
   },
@@ -20,7 +21,8 @@
   },
   "dashboard": {
     "project": {
-      "create_at": "Create at"
+      "create_at": "Create at",
+      "no_project": "No project yet"
     }
   },
   "settings": {
@@ -35,7 +37,7 @@
   },
   "dialog": {
     "create_project": {
-      "create_new_project": "Create new project",
+      "title": "Create new project",
       "drop_message": "Drag and drop, or Browse",
       "support_files": "Support mp3 and wav files",
       "list_uploaded_file": "A list of your uploaded files.",
@@ -44,6 +46,9 @@
       "project_name": "Name",
       "project_description": "Description",
       "project_upload": "Upload"
+    },
+    "confirm": {
+      "title": "Are you sure ?"
     }
   }
 }

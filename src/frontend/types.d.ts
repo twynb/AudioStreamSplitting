@@ -1,28 +1,34 @@
-interface ProjectFile{
-  name:string
-  format:string
-  duration: number
-  size: number
-  numChannels: number
-  numSamples:number
+interface Document {
+  startViewTransition: (fn: () => void) => void
 }
 
-interface ProjectResponse{
+interface Project {
+  id: string
   name: string
   description: string
-  files: ProjectFile[]
-}
-
-interface Project extends ProjectResponse{
-  id: string
-  expectedCount: number
-  foundCount: number
+  path: string,
+  visited?: boolean
+  files: {
+    name: string,
+    fileType: string,
+    fileName: string,
+    filePath: string,
+    peaks?: number[][]
+    info: {
+      duration: number,
+      numChannels: number,
+      numSamples: number,
+      sampleRate: number
+    }
+  }[]
   createAt: string
 }
 
+type ProcessAudioFile = Pick<Project['files'][0], 'filePath' | 'info'>
+
 type TemplateRef = Element | ComponentPublicInstance | null
 
-interface Toast{
+interface Toast {
   id: number
   title?: string
   content: string

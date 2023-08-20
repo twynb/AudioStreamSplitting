@@ -19,14 +19,22 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
 
 <template>
   <div
+    tabindex="0"
     class="group relative h-full flex flex-col cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground"
   >
-    <header class="space-y-1">
+    <div>
       <div class="flex items-center justify-between">
         <p class="font-medium">
           {{ project.name }}
         </p>
-        <BaseButton ref="moreBtn" variant="ghost" icon-only @click.stop="isMoreMenuOpen = true">
+
+        <BaseButton
+          ref="moreBtn" variant="ghost" icon-only
+          @click.stop="isMoreMenuOpen = true"
+          @keydown.enter.stop="isMoreMenuOpen = true"
+          @keydown.space.stop="isMoreMenuOpen = true"
+          @keydown.escape.stop="isMoreMenuOpen = false"
+        >
           <span class="i-carbon-overflow-menu-vertical" />
         </BaseButton>
 
@@ -36,16 +44,16 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           enter-from-class="opacity-0 scale-90"
           leave-to-class="opacity-0 scale-90"
         >
-          <div v-if="isMoreMenuOpen" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
+          <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
             <ul>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('edit', project.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('edit', project.id)">
                   <span class="i-carbon-edit" />
                   {{ t('button.edit') }}
                 </BaseButton>
               </li>
               <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click="emits('delete', project.id)">
+                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('delete', project.id)">
                   <span class="i-carbon-trash-can" />
                   {{ t('button.delete') }}
                 </BaseButton>
@@ -54,16 +62,19 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           </div>
         </Transition>
       </div>
-      <p class="text-balance text-muted-foreground">
+
+      <p class="text-balance text-muted-foreground -mt-2">
         {{ project.description }}
       </p>
-    </header>
-
-    <div class="my-5">
-      <div aria-valuemax="100" aria-valuemin="0" role="progressbar" data-state="indeterminate" data-max="100" class="relative h-4 w-full overflow-hidden rounded-full bg-secondary">
-        <div data-state="indeterminate" data-max="100" class="h-full w-full bg-primary transition-all" :style="{ transform: `translateX(${(project.foundCount * 100 / project.expectedCount) - 100}%)` }" />
-      </div>
     </div>
+
+    <ul class="my-5">
+      <li v-for="{ fileName } in project.files" :key="fileName" class="flex text-sm">
+        <div class="basis-1/2">
+          {{ fileName }}
+        </div>
+      </li>
+    </ul>
 
     <div class="mt-auto text-sm italic text-muted-foreground space-x-1">
       <span>
@@ -71,8 +82,10 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
       </span>
 
       <span>
-        {{ project.createAt }}
+        {{ useDateFormat(project.createAt, 'DD/MM/YYYY') }}
       </span>
     </div>
+
+    <BaseBadge v-if="!project.visited" class="absolute -right-1 -top-1 !h-3 !w-3" />
   </div>
 </template>
