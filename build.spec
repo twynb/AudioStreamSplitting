@@ -1,40 +1,50 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-# PyInstaller options
-a = Analysis(
-    ['src/backend/main.py'],  # Entry point script(s)
-    pathex=['src/backend'],  # Additional module search path
-    binaries=[],  # Additional binaries or DLLs (if any)
-    datas=[('gui/*', './gui')],  # Additional non-Python files (if any)
-    hiddenimports=[],  # Additional imports (if any)
+a = Analysis(  # noqa F821
+    ["src/backend/main.py"],
+    pathex=["src/backend"],
+    binaries=[],
+    datas=[("gui/*", "./gui")],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        "altgraph",
+        "certifi",
+        "black",
+        "idna",
+        "iniconfig",
+        "Jinja2",
+        "MarkupSafe",
+        "pooch",
+        "pytest",
+        "ruff",
+        "tomli",
+        "watchdog",
+    ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=None,
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)  # noqa F821
 
-# Create a .exe or executable (modify as needed)
-exe = EXE(
+exe = EXE(  # noqa F821
     pyz,
     a.scripts,
     a.binaries,
     a.zipfiles,
     a.datas,
     [],
-    name='app',
+    name="app",
+    icon="src/frontend/public/logo.ico",
     debug=False,
     bootloader_ignore_signals=False,
     strip=True,
-    upx=False,
-    upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

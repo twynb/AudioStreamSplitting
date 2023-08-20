@@ -2,12 +2,8 @@
 import { VueFinalModal } from 'vue-final-modal'
 
 defineProps<{
-  title: string
+  title?: string
   contentClass?: string
-}>()
-
-const emits = defineEmits<{
-  (e: 'closeWithX'): void
 }>()
 </script>
 
@@ -18,15 +14,9 @@ const emits = defineEmits<{
     :content-class="`rounded-sm p-6 bg-background focus:outline-none border border-border ${contentClass}`"
   >
     <slot name="header">
-      <header class="flex items-center justify-between">
-        <h2 class="text-2xl">
-          {{ title }}
-        </h2>
-
-        <BaseButton variant="ghost" icon-only @click="emits('closeWithX')">
-          <span class="i-carbon-close" />
-        </BaseButton>
-      </header>
+      <h2 class="text-2xl">
+        {{ title }}
+      </h2>
     </slot>
 
     <div class="mt-8">

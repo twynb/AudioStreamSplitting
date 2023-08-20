@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
+const { getProjects } = useDBStore()
+const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) => visited !== true).length)
 </script>
 
 <template>
@@ -14,15 +16,13 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
       <div
         class="logo ml-2 h-11 w-11 flex shrink-0 items-center justify-center rounded-xl bg-primary"
       >
-        <span
-          class="i-carbon-cut ml-0.5 text-xl text-primary-foreground"
-        />
+        <BaseLogo class="text-primary-foreground" />
       </div>
       <div
         v-if="!isSidebarMinimized"
         class="shrink-0 text-lg font-medium"
       >
-        LoremIpsum
+        Audio Splitter
       </div>
     </div>
 
@@ -31,6 +31,7 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
         icon="i-carbon-dashboard"
         :text="t('sidebar.dashboard')"
         link="/"
+        :badge-count="dashboardBadgeCount"
       />
 
       <SideBarRow
@@ -53,10 +54,14 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
     </ul>
 
     <ul class="mt-auto">
-      <li class="flex justify-center">
+      <li
+        class="flex justify-center"
+        @click="isSidebarMinimized = !isSidebarMinimized"
+        @keydown.enter.prevent="isSidebarMinimized = !isSidebarMinimized"
+        @keydown.space.prevent="isSidebarMinimized = !isSidebarMinimized"
+      >
         <BaseButton
           variant="ghost" icon-only
-          @click="isSidebarMinimized = !isSidebarMinimized"
         >
           <span
             class="text-sm"

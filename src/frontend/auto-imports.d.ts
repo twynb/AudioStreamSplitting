@@ -199,7 +199,6 @@ declare module 'vue' {
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
-    readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly vi: UnwrapRef<typeof import('vitest')['vi']>
     readonly vitest: UnwrapRef<typeof import('vitest')['vitest']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
@@ -298,7 +297,6 @@ declare module '@vue/runtime-core' {
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
-    readonly useUUID: UnwrapRef<typeof import('./composables/useUUID')['useUUID']>
     readonly vi: UnwrapRef<typeof import('vitest')['vi']>
     readonly vitest: UnwrapRef<typeof import('vitest')['vitest']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>

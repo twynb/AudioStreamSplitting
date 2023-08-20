@@ -7,16 +7,18 @@
     "edit": "Bearbeiten",
     "new": "Neu",
     "new_project": "Neues Projekt",
-    "upload": "Hochladen"
+    "upload": "Hochladen",
+    "confirm": "Bestätigen"
   },
   "dashboard": {
     "project": {
-      "create_at": "Erstellen Sie unter"
+      "create_at": "Erstellen Sie unter",
+      "no_project": "Noch kein Projekt"
     }
   },
   "dialog": {
     "create_project": {
-      "create_new_project": "Neues Projekt erstellen",
+      "title": "Neues Projekt erstellen",
       "drop_message": "Ziehen und ablegen oder Durchsuchen",
       "file_last_modified": "Zuletzt bearbeitet",
       "file_size": "Größe",
@@ -25,6 +27,9 @@
       "project_name": "Name",
       "project_upload": "Hochladen",
       "support_files": "Unterstützt MP3- und WAV-Dateien"
+    },
+    "confirm": {
+      "title": "Bist du sicher ?"
     }
   },
   "sidebar": {
