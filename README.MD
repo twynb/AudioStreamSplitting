@@ -33,6 +33,8 @@ You can choose between manual setup or using Docker for simplicity.
 
 4. Setup `lint-staged` and `simple-git-hooks` using the command `npx simple-git-hooks`
 
+5. Install the fpcalc tool by including the relevant subdirectory of ``libraries/chromaprint`` in your system PATH or, preferably, copy the fpcalc executable in that subdirectory to a different place on your machine and adding that to your system PATH.
+
 ### Docker
 
 If you are using VSCode as your code editor, it is recommended to set up a container with the appropriate extension.
