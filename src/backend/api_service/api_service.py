@@ -4,15 +4,7 @@ import acoustid
 from ..io.io import saveNumPyAsAudioFile
 import os
 
-"""
-API-Service Workflow:
-1. call get_song_options() with your audio data segment and its sample rate
-2a. if SongOptionResult.SONG_EXTENDED is returned, repeat 1. with your next segment.
-2b. if SongOptionResult.SONG_FINISHED is returned, get the finalised song using get_last_song(), then repeat 1. with your next segment.
-2c. if SongOptionResult.FINGERPRINT_MISMATCH is returned, split up your segment further and repeat 1.
-2d. if SongOptionResult.SONG_NOT_RECOGNISED is returned, get the finalised song using get_last_song(), then repeat 1. with your next segment.
-TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!
-"""
+# TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!"
 
 # constant for the API key. TODO: allow user to provide API key.
 API_KEY = "b'kDPSCEb4"
@@ -23,11 +15,11 @@ class SongOptionResult(Enum):
     SongOptionResult contains information about the state of the API service.
     """
 
-    SONG_EXTENDED = 0  # analysed song has results matching with the previous song, so the previous song is extended. Happens if a song was split in the middle.
-    SONG_FINISHED = 1  # analysed song has no results matching with the previous song, so the previous song can be retrieved using get_last_song().
+    SONG_EXTENDED = 0  # previous song extended by current song
+    SONG_FINISHED = 1  # previous song finished, new song started
     # commented out for now because AcoustID doesn't support this
-    # FINGERPRINT_MISMATCH = 2 # fingerprints from the start and end of the analysed song have no matching results. Happens if two songs are still together after splitting.
-    SONG_NOT_RECOGNISED = 3  # analysed song has no results from the API. Happens when the song isn't yet in the AcoustID database.
+    # FINGERPRINT_MISMATCH = 2 # not happening ATM
+    SONG_NOT_RECOGNISED = 3  # analysed song has no results from the API.
 
 
 lastSongData = np.array([[], []])
@@ -59,8 +51,8 @@ currentSongMetadataOptions = [
 def get_last_song():
     """
     get a fully analyzed song with all its metadata options.
-    this should be called to provide a user with options after get_song_options returns SongOptionResult.SONG_FINISHED.
-    :returns: a tuple that contains the song's audio data and the song's metadata options.
+    this should be called after a song is finished.
+    :returns: tuple (song audio, song metadata options)
     """
     return lastSongData, lastSongMetadataOptions
 
@@ -116,7 +108,6 @@ def create_fingerprint(songData, samplerate):
     create a fingerprint for the audio data.
     :param songData: the audio data to generate a fingerprint from.
     :param samplerate: the audio data's sample rate.
-    :param fromBeginning: whether to generate the fingerprint from the beginning or end of the audio data.
     :returns: (song duration, fingerprint)
     """
     filename = "TEMP_FILE_FOR_FINGERPRINTING"
@@ -133,7 +124,7 @@ def get_api_song_data(fingerprint, fingerprintLength):
     get data about the provided fingerprint from the AcoustID API.
     :param fingerprint: the fingerprint.
     :param fingerprintLength: duration of the fingerprint in seconds.
-    :returns: list({"id": the id, "score": how well the result matches the fingerprint, "title": song title, "artist": song artist})
+    :returns: [{"id": the id, "score": match score, "title": title, "artist": artist}]
     """
     try:
         result = []
@@ -150,9 +141,11 @@ def get_api_song_data(fingerprint, fingerprintLength):
 
 def store_finished_song(songData=np.array([[], []]), metadataOptions=()):
     """
-    Store the current (finished) song in lastSongData/lastSongMetadataOptions to be retrieved using get_last_song(), store the provided song data as the current song data or reset it.
-    :param songData: The new currently read song's data. Resets to empty array if not specified.
-    :param metadataOptions: The new currently read song's metadata options. Resets to empty list if not specified.
+    Store the current (finished) song in lastSongData/lastSongMetadataOptions
+    Store the provided song data as the current song data.
+    Reset the current song data if none is providded.
+    :param songData: The new currently read song's data.
+    :param metadataOptions: The new currently read song's metadata options.
     """
     global currentSongData
     global currentSongMetadataOptions
