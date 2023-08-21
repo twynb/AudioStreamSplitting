@@ -71,7 +71,7 @@ export default defineConfig({
       '@dialogs': 'src/frontend/components/dialogs',
     },
   },
-
+  envDir: '../../',
   test: {
     environment: 'jsdom',
   },

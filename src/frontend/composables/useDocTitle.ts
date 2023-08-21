@@ -1,4 +1,4 @@
-export function useDocTitle(title: string, prefix = 'Audio Splitter | ') {
+export function useDocTitle(title: string, prefix = `${import.meta.env.VITE_APP_NAME} | `) {
   if (!document)
     return
 
