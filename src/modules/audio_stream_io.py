@@ -3,6 +3,7 @@ import soundfile
 import librosa
 import numpy as np
 
+from itertools import pairwise
 from os import path
 from typing import Tuple,Generator
 
@@ -13,7 +14,7 @@ def readAudiofileToNumPy(audiofile, mono=False)-> Tuple[np.ndarray, float]:
     """
     return librosa.load(audiofile, mono=mono)
 
-def readAudiofileToStream(audiofile,rate=128,mono=False) -> (Generator[np.ndarray, None, None], float, int):
+def readAudiofileToStream(audiofile, block_len=4096, mono=False) -> (Generator[np.ndarray, None, None], float, int):
     """
     :param audiofile: Path to audiofile
     :param rate: block length of stream
@@ -26,7 +27,12 @@ def readAudiofileToStream(audiofile,rate=128,mono=False) -> (Generator[np.ndarra
     frame_length = int(1024 * sr) // default_sr
     hop_length = int(1024 * sr) // default_sr
 
-    return librosa.stream(audiofile, block_length=rate, frame_length=frame_length, hop_length=hop_length, mono=mono), sr, hop_length
+    return librosa.stream(audiofile, block_length=block_len, frame_length=frame_length, hop_length=hop_length, mono=mono), sr, hop_length
+
+def overlappingStream(stream):
+    for curr_block, next_block in pairwise(stream):
+        for ratio in np.linspace(1, 0, 4, endpoint=False):
+            yield np.append(curr_block[:(curr_block.shape[1] * ratio)], next_block[(curr_block.shape[1]*(1-ratio)):])
 
 def saveNumPyAsAudioFile(song:np.ndarray, songname:str, file_path:str, rate=100, tags:dict={}, extention = ".mp3"):
     """

@@ -1,9 +1,11 @@
+import os
 from enum import Enum
 from itertools import pairwise
 from os import path
 
 import numpy as np
 from scipy import signal
+from scipy import ndimage
 import librosa
 from librosa import feature
 import matplotlib.pyplot as plt
@@ -205,13 +207,28 @@ def select_peaks(novelty, peak_threshold=0.2, down_sampling=32):
         :returns: all indexes where the function peaks
     """
 
-    # TODO: Needs more research (maybe adaptive thresholding)
-    # peaks = []
+    # Normalization to [0 - 1.0]
     novelty = (novelty - np.min(novelty)) / (np.max(novelty) - np.min(novelty))
-    #peaks = librosa.util.peak_pick(x=novelty, pre_max=3, post_max=3, pre_avg=3, post_avg=5, delta=0.5, wait=10)
+    # TODO: Needs more research (maybe adaptive thresholding)
+    # Find peaks
+    # peaks = librosa.util.peak_pick(x=novelty, pre_max=3, post_max=3, pre_avg=3, post_avg=5, delta=0.5, wait=10)
     peaks, _ = signal.find_peaks(novelty, prominence=peak_threshold)
-    peaks = np.insert(peaks, 0, 0)
-    peaks = np.append(peaks, len(novelty))
+
+    # Adaptive Thresholding ##################################################
+    # novelty = ndimage.gaussian_filter1d(novelty, sigma=4.0)
+    # novelty = (novelty - np.min(novelty)) / (np.max(novelty) - np.min(novelty))
+    # threshold_local = ndimage.median_filter(novelty, size=16) + novelty.mean() * peak_threshold
+    # peaks = []
+    # for i in range(1, novelty.shape[0] - 1):
+    #     if novelty[i - 1] < novelty[i] and novelty[i] > novelty[i + 1]:
+    #         if novelty[i] > threshold_local[i]:
+    #             peaks.append(i)
+    # peaks = np.array(peaks)
+    ###########################################################################
+
+    # Add start and end of segment
+    # peaks = np.insert(peaks, 0, 0)
+    # peaks = np.append(peaks, len(novelty))
 
 
     plt.plot(novelty)
@@ -220,7 +237,7 @@ def select_peaks(novelty, peak_threshold=0.2, down_sampling=32):
     plt.show()
 
     peaks *= down_sampling
-    peaks[-1] -= 1
+    # peaks[-1] -= 1
 
     return peaks
 
@@ -281,13 +298,16 @@ def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_s
     # TODO: Test more parameters
     ssm, _ = compute_self_similarity(feature_seq, sr, filter_len=filter_len, down_sampling=down_sampling, norm_threshold=0.001)
     nov = compute_novelty_ssm(ssm, n=8, exclude=True)
-    return select_peaks(nov, peak_threshold=0.7, down_sampling=down_sampling)
+    return select_peaks(nov, peak_threshold=0.2, down_sampling=down_sampling)
 
 
 # TODO: Move this elsewhere
 if __name__ == '__main__':
     ####################################################################################################################
     # TODO: Change this
+    for f in os.listdir('../../test_output/'):
+        os.remove(os.path.join('../../test_output/', f))
+
     file_parent_path = path.abspath('../../../../Music/Stuff/')
 
     album = "full_album.mp3"  # 1h 6m 30s    13 songs
@@ -301,11 +321,14 @@ if __name__ == '__main__':
 
     current_track = path.join(file_parent_path, crackle)
     ####################################################################################################################
-    stream, sr, hop_length = readAudiofileToStream(current_track, rate=4096)
+    block_len = 4096
+    stream, sr, hop_length = readAudiofileToStream(current_track, block_len=block_len)
 
-    offset = 0
+    transitions = np.zeros(1)
     for (idx, block) in enumerate(stream):
-        transitions = segment_block(block, sr, hop_length, Feature.CHROMA, down_sampling=16)
+        # TODO: Figure overlapping stream out
+        offset = idx * (hop_length / block_len) * block_len
+        transitions = np.append(transitions, segment_block(block, sr, hop_length, Feature.CHROMA, down_sampling=16, offset=offset))
         for (index, (start, end)) in enumerate(pairwise(transitions)):
             duration = librosa.core.frames_to_time(end - start, sr=sr, hop_length=hop_length, n_fft=2048)
             segment, sr = librosa.load(current_track, mono=False, sr=sr, offset=offset, duration=duration)
