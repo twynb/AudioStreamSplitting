@@ -49,7 +49,7 @@ jobs:
         run: npm run lint:be
 
       - name: Test (Backend)
-        run: pytest
+        run: npm run be:test
 
       - name: Build app
         run: npm run build:app:nocheck
