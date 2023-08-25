@@ -5,19 +5,17 @@ from os import path
 
 import numpy as np
 from scipy import signal
-from scipy import ndimage
 import librosa
 from librosa import feature
 import matplotlib.pyplot as plt
 
-from audio_stream_io import readAudiofileToStream, saveNumPyAsAudioFile
+from audio_stream_io import readAudiofileToStream, saveNumPyAsAudioFile, overlappingStream
 
 
 class Feature(Enum):
     CHROMA = 1
-    TEMPO = 2
-    SPECTRAL = 3
-    MFCC = 4
+    SPECTRAL = 2
+    MFCC = 3
 
 
 def create_checkerboard_kernel(n: int):
@@ -182,10 +180,14 @@ def compute_novelty_ssm(ssm, kernel=None, n=10, var=0.5, exclude=False):
     N = ssm.shape[0]
     M = 2 * n + 1
     nov = np.zeros(N)
-    s_padded = np.pad(ssm, n, mode='constant')
+    s_padded = np.pad(ssm, n, mode='symmetric')
 
     for i in range(N):
         nov[i] = np.sum(s_padded[i:i + M, i:i + M] * kernel)
+
+    # TODO: Try without normalization
+    # Normalize to [0.0 - 1.0]
+    nov = (nov - np.min(nov)) / (np.max(nov) - np.min(nov))
 
     if exclude:
         right = np.min([n, N])
@@ -196,7 +198,7 @@ def compute_novelty_ssm(ssm, kernel=None, n=10, var=0.5, exclude=False):
     return nov
 
 
-def select_peaks(novelty, peak_threshold=0.2, down_sampling=32):
+def select_peaks(novelty, peak_threshold=0.5, down_sampling=32, offset=0):
     """
         Selects the peak of the given function based on the given threshold.
 
@@ -207,8 +209,6 @@ def select_peaks(novelty, peak_threshold=0.2, down_sampling=32):
         :returns: all indexes where the function peaks
     """
 
-    # Normalization to [0 - 1.0]
-    novelty = (novelty - np.min(novelty)) / (np.max(novelty) - np.min(novelty))
     # TODO: Needs more research (maybe adaptive thresholding)
     # Find peaks
     # peaks = librosa.util.peak_pick(x=novelty, pre_max=3, post_max=3, pre_avg=3, post_avg=5, delta=0.5, wait=10)
@@ -238,7 +238,7 @@ def select_peaks(novelty, peak_threshold=0.2, down_sampling=32):
 
     peaks *= down_sampling
     # peaks[-1] -= 1
-
+    peaks += int(offset)
     return peaks
 
 
@@ -247,15 +247,6 @@ def extract_chroma(x, sr, hop_length, fft_window=2048):
     x_mono = librosa.to_mono(x)
     # extract chroma feature
     return librosa.feature.chroma_stft(y=x_mono, sr=sr, hop_length=hop_length, center=False, n_fft=fft_window)
-
-
-def extract_tempo(x, sr, hop_length):
-    # convert to mono
-    x_mono = librosa.to_mono(x)
-    # compute onset envelope
-    onset_env = librosa.onset.onset_strength(y=x_mono, sr=sr)
-    # extract tempo feature
-    return librosa.feature.tempo(onset_envelope=onset_env, sr=sr, hop_length=hop_length, aggregate=None)
 
 
 def extract_spectro(x, sr, hop_length, fft_window=2048):
@@ -272,7 +263,7 @@ def extract_mfcc(x, sr):
     return librosa.feature.mfcc(y=x_mono, sr=sr)
 
 
-def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_sampling=32):
+def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_sampling=32, threshold=0.5, offset=0):
     """
         Segments a data array into segments, where each segment represents a different part in the audio.
 
@@ -286,8 +277,6 @@ def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_s
     # TODO: Test with more features (currently mostly chroma)
     if feature == Feature.CHROMA:
         feature_seq = extract_chroma(block, sr, hop_length, fft_window=2048)
-    elif feature == Feature.TEMPO:
-        feature_seq = extract_tempo(block, sr, hop_length)
     elif feature == Feature.SPECTRAL:
         feature_seq = extract_spectro(block, sr, hop_length, fft_window=2048)
     elif feature == Feature.MFCC:
@@ -298,7 +287,12 @@ def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_s
     # TODO: Test more parameters
     ssm, _ = compute_self_similarity(feature_seq, sr, filter_len=filter_len, down_sampling=down_sampling, norm_threshold=0.001)
     nov = compute_novelty_ssm(ssm, n=8, exclude=True)
-    return select_peaks(nov, peak_threshold=0.2, down_sampling=down_sampling)
+    return select_peaks(nov, peak_threshold=threshold, down_sampling=down_sampling, offset=offset)
+
+
+def filter_peaks(peaks, n=2):
+    unique, counts = np.unique(peaks, return_counts=True)
+    return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
 # TODO: Move this elsewhere
@@ -321,29 +315,39 @@ if __name__ == '__main__':
 
     current_track = path.join(file_parent_path, crackle)
     ####################################################################################################################
-    block_len = 4096
+    block_len = int(4096)
     stream, sr, hop_length = readAudiofileToStream(current_track, block_len=block_len)
 
     transitions = np.zeros(1)
-    for (idx, block) in enumerate(stream):
-        # TODO: Figure overlapping stream out
-        offset = idx * (hop_length / block_len) * block_len
-        transitions = np.append(transitions, segment_block(block, sr, hop_length, Feature.CHROMA, down_sampling=16, offset=offset))
-        for (index, (start, end)) in enumerate(pairwise(transitions)):
-            duration = librosa.core.frames_to_time(end - start, sr=sr, hop_length=hop_length, n_fft=2048)
-            segment, sr = librosa.load(current_track, mono=False, sr=sr, offset=offset, duration=duration)
+    last_frame_in_audiofile = 0
+    for (idx, block) in enumerate(overlappingStream(stream)):
+        if np.unique(block).size == 1:
+            print("skipping")
+            continue
 
-            # probably not how this would work
-            song_name = f'Song{idx}-{index}'
-            # tags = identify(segment)
-            # song_name = tags.name
-            # tag_audio_file(tags)
+        offset = idx * block_len * 0.25
+        transitions = np.append(transitions, segment_block(block, sr, hop_length, Feature.SPECTRAL, down_sampling=16, threshold=0.7, offset=offset))
+        last_frame_in_audiofile = librosa.core.samples_to_frames(block.shape[1], hop_length=hop_length) + offset
 
-            output_path = path.abspath('../../test_output/')
-            saveNumPyAsAudioFile(segment, song_name, output_path, sr)
+    transitions = filter_peaks(transitions, n=3)
+    transitions = np.insert(transitions, 0, 0)
+    transitions = np.append(transitions, last_frame_in_audiofile - 1)
 
-            m, s = divmod(int(duration), 60)
-            print(f'Successfully written {song_name} to {output_path} with a ' +
-                  f'duration of {m:02d}m {s:02d}s.')
+    for (index, (start, end)) in enumerate(pairwise(transitions)):
+        start_time = librosa.core.frames_to_time(start, sr=sr, hop_length=hop_length, n_fft=2048)
+        duration = librosa.core.frames_to_time(end - start, sr=sr, hop_length=hop_length, n_fft=2048)
 
-            offset += duration
+        segment, sr = librosa.load(current_track, mono=False, sr=sr, offset=start_time, duration=duration)
+
+        # probably not how this would work
+        song_name = f'Song_{index}'
+        # tags = identify(segment)
+        # song_name = tags.name
+        # tag_audio_file(tags)
+
+        output_path = path.abspath('../../test_output/')
+        saveNumPyAsAudioFile(segment, song_name, output_path, sr)
+
+        m, s = divmod(int(duration), 60)
+        print(f'Successfully written {song_name} to {output_path} with a ' +
+              f'duration of {m:02d}m {s:02d}s.')
