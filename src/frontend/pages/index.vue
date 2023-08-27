@@ -1,28 +1,14 @@
 <script setup lang="ts">
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 
-const { projects } = storeToRefs(useDBStore())
+const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
-const { toast } = useToastStore()
 
-const { execute, isFetching } = usePost<ProjectResponse>({
-  url: '/info',
+const { execute } = usePost<Project>({
+  url: '/project/create',
   axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
-  onSuccess({ name, description, files }) {
-    projects.value.unshift({
-      id: useUUID(),
-      name,
-      description,
-      files,
-      foundCount: 0,
-      expectedCount: files.length,
-      createAt: useDateFormat(new Date(), 'DD/MM/YYYY'),
-    })
-
-    toast({
-      title: 'Project created',
-      content: `${name} with ${files.length} files is added to dashboard`,
-    })
+  onSuccess(project) {
+    createProject(project)
   },
 })
 
@@ -46,34 +32,35 @@ const { open, close } = useModal({
 })
 
 const router = useRouter()
-function handleEditItem(itemId: string) {
-  router.push(`/project/${itemId}`)
-}
 
-function handleDeleteItem(itemId: string) {
-  projects.value = projects.value.filter(({ id }) => id !== itemId)
+function handleToProject(id: string) {
+  router.push(`/project/${id}`)
 }
 </script>
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
-    <template v-if="projects.length">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-2 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color hover:border-accent-foreground" @click="open">
+    <template v-if="getProjects().length">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
+        <div
+          tabindex="0" class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground" @click="open"
+          @keydown.enter.prevent="open"
+          @keydown.space.prevent="open"
+        >
           <div class="flex flex-col items-center gap-y-1 font-medium">
             {{ t('button.new_project') }}
             <span class="i-carbon-add text-lg" />
           </div>
         </div>
 
-        <DashboardItemSkeleton v-if="isFetching" />
-
         <DashboardItem
-          v-for="project in projects"
+          v-for="project in getProjects()"
           :key="project.id" :project="project"
-          @click="handleEditItem(project.id)"
-          @edit="handleEditItem"
-          @delete="handleDeleteItem"
+          @keydown.enter.prevent="handleToProject(project.id)"
+          @keydown.space.prevent="handleToProject(project.id)"
+          @click="handleToProject(project.id)"
+          @edit="handleToProject(project.id)"
+          @delete="deleteProject"
         />
       </div>
     </template>
@@ -83,7 +70,7 @@ function handleDeleteItem(itemId: string) {
         <span class="i-carbon-3d-mpr-toggle text-xl" />
 
         <p class="mt-4 text-lg font-medium">
-          {{ t('dashboard.no_project') }}
+          {{ t('dashboard.project.no_project') }}
         </p>
 
         <p class="mt-2 text-center text-muted-foreground">

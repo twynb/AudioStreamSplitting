@@ -7,6 +7,7 @@ const emits = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { getProjects } = useDBStore()
 
 const data = ref({
   name: '',
@@ -82,6 +83,9 @@ function handleSubmit() {
   }
 
   errors.value.name = data.value.name ? '' : 'No name is given'
+  if (getProjects().find(p => p.name === data.value.name))
+    errors.value.name = `${data.value.name} is already existed. Please choose an other name.`
+
   errors.value.file = data.value.files.length ? '' : 'No file is uploaded. Please upload at least one file to create project.'
 }
 
@@ -91,17 +95,15 @@ function handleCancle() {
 </script>
 
 <template>
-  <BaseModal :title="t('dialog.create_project.create_new_project')" content-class="w-full max-w-65vw 2xl:max-w-50vw" @close-with-x="emits('close')">
+  <BaseModal :title="t('dialog.create_project.title')" content-class="w-full max-w-65vw 2xl:max-w-50vw">
     <template #body>
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1">
-          <BaseLabel for="name" :class="{ 'text-destructive': errors.name }">
+          <BaseLabel for="name" :has-error="!!errors.name">
             {{ t('dialog.create_project.project_name') }}
           </BaseLabel>
           <BaseInput id="name" v-model="data.name" name="name" />
-          <p v-if="errors.name" class="text-sm text-destructive">
-            {{ errors.name }}
-          </p>
+          <BaseError :error="errors.name" />
         </div>
 
         <div class="space-y-1">
@@ -112,14 +114,17 @@ function handleCancle() {
         </div>
 
         <div class="col-span-2 space-y-1">
-          <BaseLabel :class="{ 'text-destructive': errors.file }" @click="open()">
+          <BaseLabel :has-error="!!errors.file" @click="open()">
             {{ t('dialog.create_project.project_upload') }}
           </BaseLabel>
 
           <div
+            tabindex="0"
             class="group h-150px flex flex-center flex-col cursor-pointer border-2 rounded-md border-dashed transition-border-color"
             :class="[isDragOver ? 'border-accent-foreground/70' : 'border-border hover:border-accent-foreground/70']"
             @click="open()"
+            @keydown.enter.prevent="open()"
+            @keydown.space.prevent="open()"
             @dragenter="isDragOver = true"
             @dragover="isDragOver = true"
             @dragleave="isDragOver = false"
@@ -144,9 +149,7 @@ function handleCancle() {
             </p>
           </div>
 
-          <p v-if="errors.file" class="text-sm text-destructive">
-            {{ errors.file }}
-          </p>
+          <BaseError :error="errors.file" />
         </div>
 
         <div class="overflow col-span-2 space-y-1">
