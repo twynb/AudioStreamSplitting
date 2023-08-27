@@ -1,7 +1,7 @@
 import numpy as np
 from enum import Enum
 import acoustid
-from ..io.io import saveNumPyAsAudioFile
+from ..modules.audio_stream_io import saveNumPyAsAudioFile
 import os
 
 # TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!"

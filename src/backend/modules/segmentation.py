@@ -375,10 +375,10 @@ def segment_file(path, down_sampling=Downsampling.NORMAL):
 if __name__ == '__main__':
     # TODO: This whole segment is only for testing purposes and should be refactored
     ####################################################################################################################
-    for f in os.listdir('../../test_output/'):
-        os.remove(os.path.join('../../test_output/', f))
+    for f in os.listdir('../../../test_output/'):
+        os.remove(os.path.join('../../../test_output/', f))
 
-    file_parent_path = path.abspath('../../../../Music/Stuff/')
+    file_parent_path = path.abspath('../../../../../Music/Stuff/')
 
     album = "full_album.mp3"      # 1h 6m 30s    13 songs
     hiphop = "hiphop.mp3"         # 15m 30s      4 songs
@@ -399,7 +399,7 @@ if __name__ == '__main__':
         # song_name = tags.name
         # tag_audio_file(tags)
 
-        output_path = path.abspath('../../test_output/')
+        output_path = path.abspath('../../../test_output/')
         saveNumPyAsAudioFile(segment, song_name, output_path, int(sr))
 
         print(f'Successfully written {song_name} to {output_path} with a ' +
