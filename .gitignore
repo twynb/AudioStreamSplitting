@@ -159,6 +159,8 @@ dist-ssr
 gui
 
 # audio files
+test_files/
+test_output/
 *.wav
 *.mp3
 !build.spec
