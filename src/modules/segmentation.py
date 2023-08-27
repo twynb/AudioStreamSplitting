@@ -210,7 +210,7 @@ def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
 
 
 # TODO: Needs more research (maybe adaptive thresholding)
-def select_peaks(novelty, peak_threshold=0.5, down_sampling=32, offset=0):
+def select_peaks(novelty, peak_threshold=0.5, down_sampling=32, offset=0.0):
     """
         Selects the peak of the given function based on the given threshold.
 
@@ -294,7 +294,7 @@ def extract_mfcc(x, sr):
     return librosa.feature.mfcc(y=x_mono, sr=sr)
 
 
-def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_sampling=8, threshold=0.7, offset=0):
+def segment_block(block, sr, hop_length, feature: Feature, filter_len=41, down_sampling=8, threshold=0.7, offset=0.0):
     """
         Segments a data array into segments, where each segment represents a different part in the audio.
 
@@ -333,11 +333,11 @@ def filter_peaks(peaks, n=3):
     return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
-def segment_file(path: path, down_sampling=Downsampling.NORMAL):
+def segment_file(path, down_sampling=Downsampling.NORMAL):
     """
     Segments a given file into a generator.
 
-    :param path: THe Path to the File
+    :param path: The path to the File
     :param down_sampling: The down-sampling rate for the SSM see: :class:`Downsampling`
 
     :return: A generator that iterates over the found segments, the start time and duration for the original file
@@ -400,7 +400,7 @@ if __name__ == '__main__':
         # tag_audio_file(tags)
 
         output_path = path.abspath('../../test_output/')
-        saveNumPyAsAudioFile(segment, song_name, output_path, sr)
+        saveNumPyAsAudioFile(segment, song_name, output_path, int(sr))
 
         print(f'Successfully written {song_name} to {output_path} with a ' +
               f'duration of {m:02d}m {s:02d}s.')
