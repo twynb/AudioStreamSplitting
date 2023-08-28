@@ -28,8 +28,3 @@ def get():
     data = request.json
     audio_path = data["audioPath"]
     return send_file(audio_path)
-
-
-@audio_bp.route("/foo")
-def foo():
-    return "ok"

@@ -3,11 +3,11 @@ from enum import Enum
 import acoustid
 from ..io.io import saveNumPyAsAudioFile
 import os
+from utils.env import get_env
 
 # TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!"
 
-# constant for the API key. TODO: allow user to provide API key.
-API_KEY = "b'kDPSCEb4"
+API_KEY = get_env("SERVICE_API_KEY")
 
 
 class SongOptionResult(Enum):
