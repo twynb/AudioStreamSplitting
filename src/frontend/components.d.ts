@@ -29,6 +29,7 @@ declare module 'vue' {
     ProjectItem: typeof import('./components/ProjectItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingsAdvanced: typeof import('./components/SettingsAdvanced.vue')['default']
     SettingsClear: typeof import('./components/SettingsClear.vue')['default']
     SideBar: typeof import('./components/SideBar.vue')['default']
     SideBarRow: typeof import('./components/SideBarRow.vue')['default']

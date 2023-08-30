@@ -11,6 +11,7 @@
     "fe:test:unit": "vitest -c src/frontend/vite.config.ts",
     "be": "python3 src/backend/main.py --alone",
     "be:debug": "python3 src/backend/main.py --alone --debug",
+    "be:test": "pytest src/backend/tests",
     "view:app": "npm run build:fe && python3 src/backend/main.py",
     "view:app:debug": "npm run build:fe:dev && python3 src/backend/main.py --debug",
     "build:fe": "npm run typecheck && npm run vite build",

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const APP_NAME = import.meta.env.VITE_APP_NAME
 const { t } = useI18n()
 const { isSidebarMinimized } = storeToRefs(useGlobalStyleStore())
 const { getProjects } = useDBStore()
@@ -22,7 +23,7 @@ const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) =>
         v-if="!isSidebarMinimized"
         class="shrink-0 text-lg font-medium"
       >
-        Audio Splitter
+        {{ APP_NAME }}
       </div>
     </div>
 

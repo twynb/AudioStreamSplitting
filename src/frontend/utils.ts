@@ -1,5 +1,6 @@
 export function handleAppInit() {
   useDarkToggle()
+  loadEnv()
 
   if (import.meta.env.MODE === 'production') {
     disableContextMenu()
@@ -47,5 +48,11 @@ export function handleAppInit() {
       )
         e.preventDefault()
     })
+  }
+
+  function loadEnv() {
+    const env = JSON.parse(localStorage.getItem('env') ?? '{}') as Record<string, string>
+    for (const [key, value] of Object.entries(env))
+      axios.post('/env/set', { key, value })
   }
 }

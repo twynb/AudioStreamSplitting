@@ -4,12 +4,7 @@ import { LangMap } from '../constants'
 const { t } = useI18n()
 const { currentLocal } = useLocale()
 
-const localOpts = Object.entries(LangMap).map(([key, value]) => {
-  return {
-    label: value,
-    value: key,
-  }
-})
+const localOpts = Object.entries(LangMap).map(([key, value]) => ({ label: value, value: key }))
 
 const { isDark, toggle } = useDarkToggle()
 
@@ -69,6 +64,8 @@ function handleToggleDark() {
           </div>
         </div>
       </div>
+
+      <SettingsAdvanced />
     </div>
   </ContentLayout>
 </template>
