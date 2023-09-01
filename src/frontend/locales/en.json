@@ -11,7 +11,8 @@
     "confirm": "Confirm",
     "next": "Next",
     "done": "Done",
-    "previous": "Previous"
+    "previous": "Previous",
+    "create_new_project": "Create new project"
   },
   "placeholder": {},
   "sidebar": {

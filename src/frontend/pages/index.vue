@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 import { useEventListener } from '@vueuse/core'
-import { DASHBOARD_DRIVER_STEPS } from '../includes/driver'
+import { DASHBOARD_STEPS } from '../includes/driver'
 
 const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
@@ -44,7 +44,7 @@ setConfig({
 
     driver.value.movePrevious()
   },
-  steps: DASHBOARD_DRIVER_STEPS,
+  steps: DASHBOARD_STEPS,
 })
 
 useEventListener('keydown', e => e.key === 'Escape' && !driver.value.isActive() && close())
@@ -59,13 +59,13 @@ function handleToProject(id: string) {
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
     <template #header>
-      <div class="flex items-center gap-x-5">
+      <div class="flex items-center gap-x-3">
         <h1 class="text-4xl">
           {{ t('sidebar.dashboard') }}
         </h1>
 
         <BaseButton icon-only variant="ghost" title="Help" @click="driver.drive()">
-          <span class="i-carbon:help-filled text-xl" />
+          <span class="i-carbon:help-filled text-lg" />
         </BaseButton>
       </div>
     </template>

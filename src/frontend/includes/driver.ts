@@ -1,4 +1,6 @@
-export const DASHBOARD_DRIVER_STEPS = [
+import type { DriveStep } from 'driver.js'
+
+export const DASHBOARD_STEPS: DriveStep[] = [
   {
     element: '#new_project_btn',
     popover: {
@@ -39,6 +41,51 @@ export const DASHBOARD_DRIVER_STEPS = [
     popover: {
       title: 'Create Project',
       description: 'Click this button to create your project with the provided details.',
+    },
+  },
+]
+
+export const RECORD_STEPS: DriveStep[] = [
+  {
+    element: '#start_record_btn',
+    popover: {
+      title: 'Start Recording',
+      description: 'Click this button to begin recording your media.',
+    },
+  },
+  {
+    element: '#stop_record_btn',
+    popover: {
+      title: 'Stop Recording',
+      description: 'Click this button to stop recording your media.',
+    },
+  },
+  {
+    element: '#download_record_btn',
+    popover: {
+      title: 'Download Recorded Media',
+      description: 'Click here to download the media you have recorded.',
+    },
+  },
+  {
+    element: '#media_control_btns',
+    popover: {
+      title: 'Media Control Buttons',
+      description: 'Use these buttons to control your media playback.',
+    },
+  },
+  {
+    element: '#delete_record_btn',
+    popover: {
+      title: 'Delete Recorded Media',
+      description: 'Click this button to delete the recorded media file.',
+    },
+  },
+  {
+    element: '#create_project_form',
+    popover: {
+      title: 'create',
+      description: '',
     },
   },
 ]

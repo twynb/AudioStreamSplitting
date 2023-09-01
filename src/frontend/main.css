@@ -35,10 +35,6 @@ body {
   @apply !border !border-solid !border-accent-foreground !bg-primary-foreground !text-primary;
 }
 
-.driver-popover-close-btn {
-  display: none !important;
-}
-
 .driver-popover-arrow {
   @apply !border-8px border-l-accent-foreground;
 }
