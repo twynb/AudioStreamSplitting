@@ -8,10 +8,12 @@
     "upload": "Upload",
     "back_to_dashboard": "Back to Dashboard",
     "new": "New",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "next": "Next",
+    "done": "Done",
+    "previous": "Previous"
   },
-  "placeholder": {
-  },
+  "placeholder": {},
   "sidebar": {
     "dashboard": "Dashboard",
     "notifications": "Notifications",

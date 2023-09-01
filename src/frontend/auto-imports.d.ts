@@ -82,6 +82,7 @@ declare global {
   const useDarkToggle: typeof import('./composables/useDarkToggle')['useDarkToggle']
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
+  const useDriver: typeof import('./composables/useDriver')['useDriver']
   const useDriverStore: typeof import('./stores/useDriverStore')['useDriverStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
@@ -89,13 +90,11 @@ declare global {
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
-  const useNotificationStore: typeof import('./stores/useToastStore')['useNotificationStore']
   const usePost: typeof import('./composables/usePost')['usePost']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
   const useToastStore: typeof import('./stores/useToastStore')['useToastStore']
-  const useUUID: typeof import('./composables/useUUID')['useUUID']
   const vi: typeof import('vitest')['vi']
   const vitest: typeof import('vitest')['vitest']
   const watch: typeof import('vue')['watch']
@@ -189,7 +188,7 @@ declare module 'vue' {
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
-    readonly useDriverStore: UnwrapRef<typeof import('./stores/useDriverStore')['useDriverStore']>
+    readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -288,7 +287,7 @@ declare module '@vue/runtime-core' {
     readonly useDarkToggle: UnwrapRef<typeof import('./composables/useDarkToggle')['useDarkToggle']>
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
-    readonly useDriverStore: UnwrapRef<typeof import('./stores/useDriverStore')['useDriverStore']>
+    readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>

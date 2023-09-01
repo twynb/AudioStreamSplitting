@@ -8,7 +8,7 @@ const emits = defineEmits<{
 
 const { t } = useI18n()
 const { getProjects } = useDBStore()
-const { driver } = storeToRefs(useDriverStore())
+const { driver } = useDriver()
 onMounted(() => {
   const input = document.querySelector('form#create_project_form')?.querySelector('input#name') as HTMLInputElement
   input && input.focus()

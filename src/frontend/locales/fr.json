@@ -8,7 +8,10 @@
     "new": "Nouveau",
     "new_project": "Nouveau projet",
     "upload": "Télécharger",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "done": "Fait",
+    "next": "Suivant",
+    "previous": "Précédent"
   },
   "dashboard": {
     "project": {

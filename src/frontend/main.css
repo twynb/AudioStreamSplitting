@@ -31,6 +31,7 @@ body {
 }
 
 .driver-popover {
+  font-family: 'Open Sans', sans-serif;
   @apply !border !border-solid !border-accent-foreground !bg-primary-foreground !text-primary;
 }
 
@@ -48,5 +49,5 @@ body {
 }
 
 .driver-overlay path {
-  @apply dark: !fill-white/40;
+  @apply dark:!fill-white/25;
 }

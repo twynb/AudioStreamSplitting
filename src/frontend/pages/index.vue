@@ -30,9 +30,8 @@ const { open, close } = useModal({
     },
   },
 })
-
-const { driver } = storeToRefs(useDriverStore())
-driver.value.setConfig({
+const { driver, setConfig } = useDriver()
+setConfig({
   async onNextClick() {
     if (driver.value.isFirstStep())
       await open()
@@ -45,8 +44,6 @@ driver.value.setConfig({
 
     driver.value.movePrevious()
   },
-  stagePadding: 10,
-  stageRadius: 14,
   steps: DASHBOARD_DRIVER_STEPS,
 })
 

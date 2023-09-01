@@ -6,7 +6,7 @@ defineProps<{
   contentClass?: string
 }>()
 
-const { driver } = storeToRefs(useDriverStore())
+const { driver } = useDriver()
 </script>
 
 <template>
