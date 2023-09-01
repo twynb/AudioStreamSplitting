@@ -84,8 +84,8 @@ export const RECORD_STEPS: DriveStep[] = [
   {
     element: '#create_project_form',
     popover: {
-      title: 'create',
-      description: '',
+      title: 'Create Project Form',
+      description: 'Fill out this form to create a new project with the provided details.',
     },
   },
 ]
