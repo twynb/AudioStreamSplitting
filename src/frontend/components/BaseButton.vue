@@ -17,7 +17,7 @@ const variantClass = computed(() => {
     case 'destructive':
       return 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
     case 'outline':
-      return 'border border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:outline-none'
+      return 'border border-input bg-primary-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none'
     case 'ghost':
       return 'hover:bg-accent hover:text-accent-foreground focus-visible:outline-none'
   }

@@ -8,7 +8,7 @@ const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) =>
 
 <template>
   <nav
-    class="h-full flex flex-col gap-y-10 bg-background p-6 transition-width duration-150 ease-in"
+    class="h-full flex flex-col gap-y-10 bg-primary-foreground p-6 transition-width duration-150 ease-in"
     :class="[isSidebarMinimized ? 'w-105px' : 'w-[280px]']"
   >
     <div

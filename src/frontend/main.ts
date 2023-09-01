@@ -6,6 +6,7 @@ import App from './App.vue'
 import './main.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
+import 'driver.js/dist/driver.css'
 
 axios.defaults.baseURL = 'http://localhost:55555/api'
 

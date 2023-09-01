@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DEFAULT_TOAST_DURATION } from '../constants'
+import { DEFAULT_TOAST_DURATION } from '../includes/constants'
 
 const props = defineProps<{
   toast: Toast
@@ -19,7 +19,7 @@ const interval = setInterval(() => {
   <li
     class="group relative min-w-350px overflow-hidden border rounded-md p-6 pr-10"
     :class="{
-      'border-border bg-background': toast.variant === 'default',
+      'border-border bg-primary-foreground': toast.variant === 'default',
       'border-destructive bg-destructive text-destructive-foreground': toast.variant === 'destructive',
     }"
   >

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ModalsContainer } from 'vue-final-modal'
-import { handleAppInit } from './utils'
+import { handleAppInit } from './includes/utils'
 
 handleAppInit()
 </script>
@@ -11,7 +11,7 @@ handleAppInit()
       <SideBar class="shrink-0" />
 
       <Suspense>
-        <div class="wh-full overflow-x-hidden overflow-y-scroll bg-background p-6 pb-8">
+        <div class="wh-full overflow-x-hidden overflow-y-scroll bg-primary-foreground p-6 pb-8">
           <RouterView />
         </div>
       </Suspense>

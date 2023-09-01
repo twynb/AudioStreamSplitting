@@ -28,6 +28,7 @@
   "dependencies": {
     "@vueuse/core": "^10.3.0",
     "axios": "^1.4.0",
+    "driver.js": "^1.2.1",
     "lint-staged": "^14.0.0",
     "pinia": "^2.1.6",
     "simple-git-hooks": "^2.9.0",

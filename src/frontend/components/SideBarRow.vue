@@ -16,7 +16,7 @@ const route = useRoute()
   <li
     class="relative min-h-3.5rem flex cursor-pointer items-center border-primary rounded-md p-4 text-primary transition-colors space-x-4 hover:bg-accent"
     tabindex="0"
-    :class="route.path === props.link ? 'bg-accent' : 'bg-background'"
+    :class="route.path === props.link ? 'bg-accent' : 'bg-primary-foreground'"
     :title="text"
     @click="link && push({ path: link })"
     @keydown.enter.prevent="link && push({ path: link })"
