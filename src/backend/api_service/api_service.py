@@ -7,7 +7,8 @@ from utils.env import get_env
 
 # TODO: Decide how to behave if SONG_NOT_RECOGNISED happens!"
 
-API_KEY = get_env("SERVICE_API_KEY")
+ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
+SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
 
 
 class SongOptionResult(Enum):
@@ -129,7 +130,7 @@ def get_api_song_data(fingerprint, fingerprintLength):
     try:
         result = []
         for score, recording_id, title, artist in acoustid.parse_lookup_result(
-            acoustid.lookup(API_KEY, fingerprint, fingerprintLength)
+            acoustid.lookup(ACOUSTID_API_KEY, fingerprint, fingerprintLength)
         ):
             result.append(
                 {"score": score, "id": recording_id, "title": title, "artist": artist}

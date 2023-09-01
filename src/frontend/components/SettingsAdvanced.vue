@@ -4,26 +4,26 @@ import { useLocalStorage } from '@vueuse/core'
 const env = useLocalStorage(
   'env',
   {
-    SERVICE_API_KEY: '',
+    SERVICE_ACOUSTID_API_KEY: '',
   })
 
 onMounted(() => getApiKey())
 const { toast } = useToastStore()
 
 async function getApiKey() {
-  if (env.value.SERVICE_API_KEY)
+  if (env.value.SERVICE_ACOUSTID_API_KEY)
     return
-  const { data } = await axios.get<{ value: string }>('/env/get', { params: { key: 'SERVICE_API_KEY' } })
-  env.value.SERVICE_API_KEY = data.value
+  const { data } = await axios.get<{ value: string }>('/env/get', { params: { key: 'SERVICE_ACOUSTID_API_KEY' } })
+  env.value.SERVICE_ACOUSTID_API_KEY = data.value
 }
 
 async function setApiKey() {
-  if (!env.value.SERVICE_API_KEY)
+  if (!env.value.SERVICE_ACOUSTID_API_KEY)
     return
 
   await axios.post('/env/set', {
-    key: 'SERVICE_API_KEY',
-    value: env.value.SERVICE_API_KEY,
+    key: 'SERVICE_ACOUSTID_API_KEY',
+    value: env.value.SERVICE_ACOUSTID_API_KEY,
   })
 }
 
@@ -54,7 +54,7 @@ async function handleSetApiKey() {
         </h3>
 
         <div class="max-w-11rem flex">
-          <BaseInput v-model="env.SERVICE_API_KEY" class="rounded-br-none rounded-tr-none" />
+          <BaseInput v-model="env.SERVICE_ACOUSTID_API_KEY" class="rounded-br-none rounded-tr-none" />
           <BaseButton icon-only class="rounded-bl-none rounded-tl-none" @click="handleSetApiKey">
             Set
           </BaseButton>
