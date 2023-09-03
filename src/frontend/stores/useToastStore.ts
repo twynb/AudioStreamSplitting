@@ -1,4 +1,4 @@
-import { DEFAULT_TOAST_DURATION } from '../constants'
+import { DEFAULT_TOAST_DURATION } from '../includes/constants'
 
 export const useToastStore = defineStore('toast', () => {
   const toasts = ref<Toast[]>([])

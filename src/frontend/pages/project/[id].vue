@@ -24,7 +24,7 @@ function updateFileProperty<TKey extends keyof Project['files'][0]>(filePath: st
 <template>
   <ContentLayout v-if="project" :header="project.name">
     <template #header>
-      <div class="flex items-center justify-between gap-x-3">
+      <div class="flex items-center justify-between">
         <h1 class="text-4xl">
           {{ project.name }}
         </h1>

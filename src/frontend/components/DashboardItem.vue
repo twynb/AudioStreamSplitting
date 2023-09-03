@@ -44,7 +44,7 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           enter-from-class="opacity-0 scale-90"
           leave-to-class="opacity-0 scale-90"
         >
-          <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-background py-1">
+          <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-primary-foreground py-1">
             <ul>
               <li class="px-1">
                 <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('edit', project.id)">

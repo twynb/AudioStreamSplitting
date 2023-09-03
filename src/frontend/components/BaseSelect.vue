@@ -55,7 +55,7 @@ function handleChooseOption(v: string) {
     >
       <ul
         v-if="isExpanded"
-        class="absolute right-0 top-full z-2 mt-1 w-full border border-input rounded-md bg-background p-1 text-sm ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
+        class="absolute right-0 top-full z-2 mt-1 w-full border border-input rounded-md bg-primary-foreground p-1 text-sm ring-offset-background disabled:cursor-not-allowed disabled:opacity-50"
         @mouseover="isMouseOverOpts = true"
         @mouseleave="isMouseOverOpts = false"
       >
@@ -63,7 +63,7 @@ function handleChooseOption(v: string) {
           v-for="{ label, value } in options" :key="label"
           tabindex="0"
           class="flex items-center gap-x-2 rounded-md px-3 py-2 hover:(bg-secondary text-secondary-foreground)"
-          :class="[!isMouseOverOpts && modelValue === value ? 'bg-secondary text-secondary-foreground' : 'bg-background']"
+          :class="[!isMouseOverOpts && modelValue === value ? 'bg-secondary text-secondary-foreground' : 'bg-primary-foreground']"
           role="button"
           @click="handleChooseOption(value)"
           @keydown.enter.prevent="handleChooseOption(value)"

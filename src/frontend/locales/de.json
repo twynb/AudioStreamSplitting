@@ -8,7 +8,10 @@
     "new": "Neu",
     "new_project": "Neues Projekt",
     "upload": "Hochladen",
-    "confirm": "Bestätigen"
+    "confirm": "Bestätigen",
+    "done": "Erledigt",
+    "next": "Nächste",
+    "previous": "Vorherige"
   },
   "dashboard": {
     "project": {
