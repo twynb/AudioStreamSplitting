@@ -11,27 +11,27 @@ LOOKUP_OFFSET_INCREMENT = 10
 
 
 # TODO-CR figure out what happens when API limit is reached
-def lookup(songData: np.ndarray, apikey: str, fromStart: bool = True):
+def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
     """
     Look up a song using the Shazam API.
-    :param songData: The song data. Must be at a sample rate of 44.100 Hz.
+    :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param apikey: The Shazam API key.
-    :param fromStart: Whether to take a sample from the start or end of the song.
+    :param from_start: Whether to take a sample from the start or end of the song.
     :returns: the retrieved metadata, or None if no matches are found.
     """
-    offset = 0 if fromStart else -(LOOKUP_SEGMENTS_DURATION * 44100)
+    offset = 0 if from_start else -(LOOKUP_SEGMENTS_DURATION * 44100)
 
-    songData = format_song_data(songData)
-    length = len(songData)
-    matches, track = lookup_segment_with_offset(songData, apikey, offset)
+    song_data = _format_song_data(song_data)
+    length = len(song_data)
+    matches, track = _lookup_segment_with_offset(song_data, apikey, offset)
     while len(matches) == 0:
-        offset += (LOOKUP_OFFSET_INCREMENT * 44100) * (1 if fromStart else -1)
-        if (fromStart and offset > length) or (not fromStart and offset < -length):
+        offset += (LOOKUP_OFFSET_INCREMENT * 44100) * (1 if from_start else -1)
+        if (from_start and offset > length) or (not from_start and offset < -length):
             break
-        matches, track = lookup_segment_with_offset(songData, apikey, offset)
+        matches, track = _lookup_segment_with_offset(song_data, apikey, offset)
     if len(matches) != 0:
-        album = extract_value_from_metadata(track, "Album")
-        year = extract_value_from_metadata(track, "Released")
+        album = _extract_value_from_metadata(track, "Album")
+        year = _extract_value_from_metadata(track, "Released")
         return {
             "title": track["title"],
             "artist": track["subtitle"],
@@ -41,55 +41,57 @@ def lookup(songData: np.ndarray, apikey: str, fromStart: bool = True):
     return None
 
 
-def lookup_segment_with_offset(songData: np.ndarray, apikey: str, offset: int):
+def _lookup_segment_with_offset(song_data: np.ndarray, apikey: str, offset: int):
     """
     Look up a song segment at the given offset.
-    :param songData: The song data. Must be at a sample rate of 44.100 Hz.
+    :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param apikey: The Shazam API key.
     :param offset: The offset to look up from.
     :returns: the retrieved metadata.
     """
-    songDataSegment = get_song_data_segment(songData, offset)
-    payload = create_payload_from_song_data(songDataSegment)
-    response = send_lookup_request(payload, apikey).json()
-    return (response["matches"], response["track"])
+    song_data_segment = _get_song_data_segment(song_data, offset)
+    payload = _create_payload_from_song_data(song_data_segment)
+    response = _send_lookup_request(payload, apikey).json()
+    if "track" in response and "matches" in response:
+        return (response["matches"], response["track"])
+    return ([], [])
 
 
-def format_song_data(songData):
+def _format_song_data(song_data):
     """
     Format the song data as a mono int16 array.
-    :param songData: The song data.
+    :param song_data: The song data.
     :returns: The formatted song data.
     """
-    return (librosa.to_mono(songData) * 32767).astype("<i2")
+    return (librosa.to_mono(song_data) * 32767).astype("<i2")
 
 
-def get_song_data_segment(songData: np.ndarray, offset: int):
+def _get_song_data_segment(song_data: np.ndarray, offset: int):
     """
     Get a segment of the song data, either from the start or end of the data.
-    :param songData: The song data. Must be at a sample rate of 44.100 Hz.
+    :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param offset: The offset to take the data from.
     :returns: The song data segment.
     """
-    endIndex = offset + (44100 * LOOKUP_SEGMENTS_DURATION)
-    if endIndex == 0:
-        return songData[offset:]
-    return songData[offset:endIndex]
+    end_index = offset + (44100 * LOOKUP_SEGMENTS_DURATION)
+    if end_index == 0:
+        return song_data[offset:]
+    return song_data[offset:end_index]
 
 
-def create_payload_from_song_data(songData: np.ndarray):
+def _create_payload_from_song_data(song_data: np.ndarray):
     """
     Create the payload in the API's data format (base64-encoded byte array).
-    :param songData: The song data.
+    :param song_data: The song data.
     :returns: The payload.
     """
-    return base64.b64encode(songData.tobytes())
+    return base64.b64encode(song_data.tobytes())
 
 
-def send_lookup_request(payload: str, apikey: str):
+def _send_lookup_request(payload: str, apikey: str):
     """
     Send the actual lookup request to the shazam API.
-    :param payload: The payload (generate with create_payload_from_song_data)
+    :param payload: The payload (generate with _create_payload_from_song_data)
     :param apikey: The Shazam API key.
     :returns: The request response.
     """
@@ -101,7 +103,7 @@ def send_lookup_request(payload: str, apikey: str):
     return requests.post(SHAZAM_URL_DETECT_V2, data=payload, headers=headers)
 
 
-def extract_value_from_metadata(track, key: str):
+def _extract_value_from_metadata(track, key: str):
     """
     Extract a value from the response's "Metadata" section.
     :param track: The response's "track" element
