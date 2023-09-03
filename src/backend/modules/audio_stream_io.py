@@ -1,27 +1,25 @@
-import music_tag
-import soundfile
-import librosa
-import numpy as np
-
 from itertools import pairwise
 from os import path
-from typing import Tuple, Generator
+from typing import Generator, Tuple
+
+import librosa
+import music_tag
+import numpy as np
+import soundfile
 
 
-def readAudiofileToNumPy(audiofile, mono=False) -> Tuple[np.ndarray, float]:
-    """
-    :param mono: loads file as mono audio if true
+def read_audio_file_to_numpy(audiofile, mono=False) -> Tuple[np.ndarray, float]:
+    """:param mono: loads file as mono audio if true
     :param audiofile: Path to audiofile
     :returns: Tuple[np.ndarray,float] array of sounddata
     """
     return librosa.load(audiofile, mono=mono)
 
 
-def readAudiofileToStream(
+def read_audio_file_to_stream(
     audiofile, block_len=4096, mono=False
 ) -> (Generator[np.ndarray, None, None], float, int):
-    """
-    :param audiofile: Path to audiofile
+    """:param audiofile: Path to audiofile
     :param block_len: block length of stream
     :param mono: loads file as mono audio if true
     :returns: Audiostream
@@ -46,7 +44,7 @@ def readAudiofileToStream(
     )
 
 
-def overlappingStream(stream):
+def overlapping_stream(stream):
     for curr_block, next_block in pairwise(stream):
         for ratio in np.linspace(1, 0, 4, endpoint=False):
             curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
@@ -58,7 +56,7 @@ def overlappingStream(stream):
             yield next_block
 
 
-def saveNumPyAsAudioFile(
+def save_numpy_as_audio_file(
     song: np.ndarray,
     songname: str,
     file_path: str,
@@ -66,8 +64,7 @@ def saveNumPyAsAudioFile(
     tags: dict = {},
     extension=".mp3",
 ):
-    """
-    :param song: np.ndarray of the song
+    """:param song: np.ndarray of the song
     :param songname: name of the song
     :param file_path: path to file (without filename)
     :param rate: samplerate of the song {Default: 100}
@@ -77,12 +74,11 @@ def saveNumPyAsAudioFile(
     """
     savename = path.join(file_path, songname + extension)
     soundfile.write(savename, song.T, rate)
-    tagAudiofile(savename, songname, tags)
+    tag_audio_file(savename, songname, tags)
 
 
-def tagAudiofile(savename: str, songname: str, tags: dict):
-    """
-    :param savename: path to savefile
+def tag_audio_file(savename: str, songname: str, tags: dict):
+    """:param savename: path to savefile
     :param songname: name of the song
     :param tags:
         album
