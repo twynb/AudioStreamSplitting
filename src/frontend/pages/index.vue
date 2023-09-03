@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
+import { useEventListener } from '@vueuse/core'
+import { DASHBOARD_STEPS } from '../includes/driver'
 
 const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
@@ -21,15 +23,31 @@ const { open, close } = useModal({
 
       formData.append('name', name)
       formData.append('description', description)
-      files.forEach((file) => {
-        formData.append('file', file)
-      })
+      files.forEach(file => formData.append('file', file))
 
       execute(formData)
       close()
     },
   },
 })
+const { driver, setConfig } = useDriver()
+setConfig({
+  async onNextClick() {
+    if (driver.value.isFirstStep())
+      await open()
+
+    driver.value.moveNext()
+  },
+  async onPrevClick() {
+    if (driver.value.getActiveIndex() === 1)
+      await close()
+
+    driver.value.movePrevious()
+  },
+  steps: DASHBOARD_STEPS,
+})
+
+useEventListener('keydown', e => e.key === 'Escape' && !driver.value.isActive() && close())
 
 const router = useRouter()
 
@@ -40,48 +58,65 @@ function handleToProject(id: string) {
 
 <template>
   <ContentLayout :header="t('sidebar.dashboard')">
-    <template v-if="getProjects().length">
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
-        <div
-          tabindex="0" class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground" @click="open"
-          @keydown.enter.prevent="open"
-          @keydown.space.prevent="open"
-        >
-          <div class="flex flex-col items-center gap-y-1 font-medium">
-            {{ t('button.new_project') }}
-            <span class="i-carbon-add text-lg" />
-          </div>
-        </div>
+    <template #header>
+      <div class="flex items-center gap-x-3">
+        <h1 class="text-4xl">
+          {{ t('sidebar.dashboard') }}
+        </h1>
 
-        <DashboardItem
-          v-for="project in getProjects()"
-          :key="project.id" :project="project"
-          @keydown.enter.prevent="handleToProject(project.id)"
-          @keydown.space.prevent="handleToProject(project.id)"
-          @click="handleToProject(project.id)"
-          @edit="handleToProject(project.id)"
-          @delete="deleteProject"
-        />
+        <BaseButton icon-only variant="ghost" title="Help" @click="driver.drive()">
+          <span class="i-carbon:help-filled text-lg" />
+        </BaseButton>
       </div>
     </template>
 
-    <template v-else>
-      <div class="justify- h-full flex flex-center flex-col -mt-10%">
-        <span class="i-carbon-3d-mpr-toggle text-xl" />
+    <template #default>
+      <template v-if="getProjects().length">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
+          <div
+            id="new_project_btn"
+            tabindex="0"
+            class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground"
+            @click="open"
+            @keydown.enter.prevent="open"
+            @keydown.space.prevent="open"
+          >
+            <div class="flex flex-col items-center gap-y-1 font-medium">
+              {{ t('button.new_project') }}
+              <span class="i-carbon-add text-lg" />
+            </div>
+          </div>
 
-        <p class="mt-4 text-lg font-medium">
-          {{ t('dashboard.project.no_project') }}
-        </p>
+          <DashboardItem
+            v-for="project in getProjects()"
+            :key="project.id" :project="project"
+            @keydown.enter.prevent="handleToProject(project.id)"
+            @keydown.space.prevent="handleToProject(project.id)"
+            @click="handleToProject(project.id)"
+            @edit="handleToProject(project.id)"
+            @delete="deleteProject"
+          />
+        </div>
+      </template>
 
-        <p class="mt-2 text-center text-muted-foreground">
-          Add a new project and let our app automatically detect and <br> split songs in audio files.
-        </p>
+      <template v-else>
+        <div class="justify- h-full flex flex-center flex-col -mt-20% lg:-mt-10%">
+          <span class="i-carbon-3d-mpr-toggle text-xl" />
 
-        <BaseButton class="mt-4 gap-1" @click="open">
-          <span class="i-carbon-add" />
-          {{ t('button.new') }}
-        </BaseButton>
-      </div>
+          <p class="mt-4 text-lg font-medium">
+            {{ t('dashboard.project.no_project') }}
+          </p>
+
+          <p class="mt-2 text-center text-muted-foreground">
+            Add a new project and let our app automatically detect and <br> split songs in audio files.
+          </p>
+
+          <BaseButton id="new_project_btn" class="mt-4 gap-1" @click="async () => await open() && driver.moveNext()">
+            <span class="i-carbon-add" />
+            {{ t('button.new') }}
+          </BaseButton>
+        </div>
+      </template>
     </template>
   </ContentLayout>
 </template>

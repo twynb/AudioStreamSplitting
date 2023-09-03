@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const props = defineProps<{
-  header?: string
+  header: string
 }>()
 
-useDocTitle(props.header ?? '')
+useDocTitle(props.header)
 </script>
 
 <template>

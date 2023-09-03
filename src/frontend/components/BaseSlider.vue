@@ -60,7 +60,7 @@ useEventListener(document, 'mousemove', (e) => {
         aria-orientation="horizontal"
         data-orientation="horizontal"
         tabindex="0"
-        class="h-5 w-5 border-2 border-primary rounded-full bg-background ring-offset-background transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
+        class="h-5 w-5 border-2 border-primary rounded-full bg-primary-foreground ring-offset-background transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
         :aria-valuenow="value"
         @mousedown="isDragging = true"
       />

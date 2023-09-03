@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LangMap } from '../constants'
+import { LangMap } from '../includes/constants'
 
 const { t } = useI18n()
 const { currentLocal } = useLocale()

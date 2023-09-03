@@ -8,6 +8,11 @@ const emits = defineEmits<{
 
 const { t } = useI18n()
 const { getProjects } = useDBStore()
+const { driver } = useDriver()
+onMounted(() => {
+  const input = document.querySelector('form#create_project_form')?.querySelector('input#name') as HTMLInputElement
+  input && input.focus()
+})
 
 const data = ref({
   name: '',
@@ -85,35 +90,39 @@ function handleSubmit() {
   errors.value.name = data.value.name ? '' : 'No name is given'
   if (getProjects().find(p => p.name === data.value.name))
     errors.value.name = `${data.value.name} is already existed. Please choose an other name.`
+  if (errors.value.name && driver.value.isActive()) {
+    driver.value.moveTo(1)
+    return
+  }
 
   errors.value.file = data.value.files.length ? '' : 'No file is uploaded. Please upload at least one file to create project.'
-}
-
-function handleCancle() {
-  emits('close')
+  if (errors.value.file && driver.value.isActive())
+    driver.value.moveTo(3)
 }
 </script>
 
 <template>
   <BaseModal :title="t('dialog.create_project.title')" content-class="w-full max-w-65vw 2xl:max-w-50vw">
     <template #body>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-1">
-          <BaseLabel for="name" :has-error="!!errors.name">
-            {{ t('dialog.create_project.project_name') }}
-          </BaseLabel>
-          <BaseInput id="name" v-model="data.name" name="name" />
-          <BaseError :error="errors.name" />
+      <form id="create_project_form" class="space-y-4" @submit.prevent="handleSubmit">
+        <div class="flex gap-x-4">
+          <div id="create_project_name" class="grow space-y-1">
+            <BaseLabel for="name" :has-error="!!errors.name">
+              {{ t('dialog.create_project.project_name') }}
+            </BaseLabel>
+            <BaseInput id="name" v-model="data.name" name="name" />
+            <BaseError :error="errors.name" />
+          </div>
+
+          <div id="create_project_description" class="grow space-y-1">
+            <BaseLabel for="description">
+              {{ t('dialog.create_project.project_description') }}
+            </BaseLabel>
+            <BaseInput id="description" v-model="data.description" name="description" />
+          </div>
         </div>
 
-        <div class="space-y-1">
-          <BaseLabel for="description">
-            {{ t('dialog.create_project.project_description') }}
-          </BaseLabel>
-          <BaseInput id="description" v-model="data.description" name="description" />
-        </div>
-
-        <div class="col-span-2 space-y-1">
+        <div id="create_project_files" class="space-y-1">
           <BaseLabel :has-error="!!errors.file" @click="open()">
             {{ t('dialog.create_project.project_upload') }}
           </BaseLabel>
@@ -152,59 +161,57 @@ function handleCancle() {
           <BaseError :error="errors.file" />
         </div>
 
-        <div class="overflow col-span-2 space-y-1">
-          <table class="w-full caption-bottom text-sm">
-            <caption class="mt-4 text-sm text-muted-foreground">
-              {{ t('dialog.create_project.list_uploaded_file') }}
-            </caption>
-            <thead>
-              <tr class="border-b border-b-border">
-                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('dialog.create_project.project_description') }}
-                </th>
+        <table id="create_project_files_list" class="w-full caption-bottom text-sm">
+          <caption class="mt-4 text-sm text-muted-foreground">
+            {{ t('dialog.create_project.list_uploaded_file') }}
+          </caption>
+          <thead>
+            <tr class="border-b border-b-border">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                {{ t('dialog.create_project.project_description') }}
+              </th>
 
-                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('dialog.create_project.file_size') }}
-                </th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                {{ t('dialog.create_project.file_size') }}
+              </th>
 
-                <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                  {{ t('dialog.create_project.file_last_modified') }}
-                </th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+                {{ t('dialog.create_project.file_last_modified') }}
+              </th>
 
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="{ name, size, lastModified } in data.files" :key="name" class="border-b border-b-border">
-                <td class="p-4 align-middle font-medium">
-                  {{ name }}
-                </td>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="{ name, size, lastModified } in data.files" :key="name" class="border-b border-b-border">
+              <td class="p-4 align-middle font-medium">
+                {{ name }}
+              </td>
 
-                <td class="p-4 align-middle">
-                  {{ (size / 1_000_000).toPrecision(3) }} MB
-                </td>
+              <td class="p-4 align-middle">
+                {{ (size / 1_000_000).toPrecision(3) }} MB
+              </td>
 
-                <td class="p-4 text-left align-middle">
-                  {{ useDateFormat(lastModified, 'DD/MM/YYYY') }}
-                </td>
+              <td class="p-4 text-left align-middle">
+                {{ useDateFormat(lastModified, 'DD/MM/YYYY') }}
+              </td>
 
-                <td class="cursor-pointer pr-4 text-right align-middle transition-color hover:text-destructive" @click="handleDeleteUploadedFile(name)">
-                  <span class="i-carbon-close -mb-1" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+              <td class="cursor-pointer pr-4 text-right align-middle transition-color hover:text-destructive" @click="handleDeleteUploadedFile(name)">
+                <span class="i-carbon-close -mb-1" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
     </template>
 
     <template #footer>
       <div class="flex justify-end gap-x-2">
-        <BaseButton variant="secondary" @click="handleCancle">
+        <BaseButton variant="secondary" @click="emits('close')">
           {{ t('button.cancel') }}
         </BaseButton>
 
-        <BaseButton @click="handleSubmit">
+        <BaseButton id="create_project_create_btn" type="submit" form="create_project_form">
           {{ t('button.create') }}
         </BaseButton>
       </div>

@@ -1,7 +1,7 @@
 import numpy as np
 from enum import Enum
 import acoustid
-from ..io.io import saveNumPyAsAudioFile
+from ..modules.audio_stream_io import saveNumPyAsAudioFile
 import os
 from utils.env import get_env
 import shazam
