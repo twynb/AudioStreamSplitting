@@ -70,14 +70,15 @@ def get_song_options(song_data, samplerate):
     :returns: SongOptionResult
     """
     # first check using acoustID
-    duration, fingerprint = _create_fingerprint(song_data, samplerate)
-    metadata = _get_api_song_data_acoustid(fingerprint, duration)
-    if len(metadata) != 0:
-        return _check_song_extended_or_finished(song_data, metadata)
+    if ACOUSTID_API_KEY is not None:
+        duration, fingerprint = _create_fingerprint(song_data, samplerate)
+        metadata = _get_api_song_data_acoustid(fingerprint, duration)
+        if len(metadata) != 0:
+            return _check_song_extended_or_finished(song_data, metadata)
 
     # if acoustID doesn't find anything, try shazam
     # shazam only works if the sample rate is 44100Hz though!
-    if samplerate == 44100:
+    if SHAZAM_API_KEY is not None and samplerate == 44100:
         metadata_start = shazam.lookup(song_data, SHAZAM_API_KEY, True)
         metadata_end = shazam.lookup(song_data, SHAZAM_API_KEY, False)
         metadata_start = [metadata_start] if metadata_start is not None else []
