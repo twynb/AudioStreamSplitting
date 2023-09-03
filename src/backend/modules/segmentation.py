@@ -3,27 +3,22 @@ from enum import Enum
 from itertools import pairwise
 from os import path
 
-import numpy as np
-from scipy import signal
 import librosa
-
-# warnings without this for some reason
-from librosa import feature
-
+import numpy as np
 from audio_stream_io import (
-    readAudiofileToStream,
-    saveNumPyAsAudioFile,
-    overlappingStream,
+    overlapping_stream,
+    read_audio_file_to_stream,
+    save_numpy_as_audio_file,
 )
 
+# warnings without this for some reason
+from scipy import signal
 
 # TODO: Implement debugging mode (plots, prints) ?
 
 
 class FeatureType(Enum):
-    """
-    This enum represent the different features we can extract and use for splitting.
-    """
+    """This enum represent the different features we can extract and use for splitting."""
 
     CHROMA = 1
     SPECTRAL = 2
@@ -32,9 +27,7 @@ class FeatureType(Enum):
 
 # TODO: (Optional) Rework this to Preset and set more values than down-sampling
 class Downsampling(Enum):
-    """
-    This enum represent the Downsampling for the SSM.
-    """
+    """This enum represent the Downsampling for the SSM."""
 
     STRICT = 4
     NORMAL = 8
@@ -44,8 +37,7 @@ class Downsampling(Enum):
 
 
 def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
-    """
-    Computes a gaussian checkerboard kernel to smooth and detect edges and
+    """Computes a gaussian checkerboard kernel to smooth and detect edges and
     corners in a matrix.
     This is a combination of a basic checkerboard kernel and a gauss filter kernel.
     :param n: length of one quadrant in the resulting kernel
@@ -53,9 +45,8 @@ def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
                 (default: 1.0)
     :param normalize: whether the resulting kernel should be normalized or not
                       (default: True)
-    :returns: gaussian checkerboard kernel of length 2 * n + 1
+    :returns: gaussian checkerboard kernel of length 2 * n + 1.
     """
-
     taper = np.sqrt(0.5) / (n * var)
     axis = np.arange(-n, n + 1)
     gaussian_1d = np.exp(-(taper**2) * (axis**2))
@@ -70,16 +61,14 @@ def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
 
 
 def smooth_downsample_feature_sequence(feature, samplerate, filter_len, downsampling):
-    """
-    Smooths and down-samples a given feature-sequence and its samplerate.
+    """Smooths and down-samples a given feature-sequence and its samplerate.
     :param feature: the feature sequence to smooth and down-sample
     :param samplerate: the samplerate of the feature sequence
     :param filter_len: length of the smoothing filter
     :param downsampling: down-sampling rate
     :returns: the smoothed and down-sampled feature sequence,
-              the down-sampled samplerate
+              the down-sampled samplerate.
     """
-
     filter_kernel = np.expand_dims(signal.get_window("boxcar", filter_len), axis=0)
     feature_smooth = signal.convolve(feature, filter_kernel, mode="same") / filter_len
     feature_smooth = feature_smooth[:, ::downsampling]
@@ -89,17 +78,15 @@ def smooth_downsample_feature_sequence(feature, samplerate, filter_len, downsamp
 
 
 def median_downsample_feature_sequence(feature, samplerate, filter_len, downsampling):
-    """
-    Smooths and down-samples a given feature-sequence and its samplerate
+    """Smooths and down-samples a given feature-sequence and its samplerate
     using a median filter.
     :param feature: the feature sequence to smooth and down-sample
     :param samplerate: the samplerate of the feature sequence
     :param filter_len: length of the median filter
     :param downsampling: down-sampling rate
     :returns: the smoothed and down-sampled feature sequence,
-              the down-sampled samplerate
+              the down-sampled samplerate.
     """
-
     if filter_len % 2 != 1:
         filter_len = filter_len + 1
 
@@ -112,12 +99,10 @@ def median_downsample_feature_sequence(feature, samplerate, filter_len, downsamp
 
 
 def normalize_feature_sequence(feature):
-    """
-    Normalized a given feature sequence.
+    """Normalized a given feature sequence.
     :param feature: the feature sequence to normalize
-    :returns: the normalized feature sequence
+    :returns: the normalized feature sequence.
     """
-
     n, m = feature.shape
     feature_norm = np.zeros((n, m))
 
@@ -133,17 +118,15 @@ def normalize_feature_sequence(feature):
 
 
 def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
-    """
-    Computes the self similarity matrix for a given feature sequence.
+    """Computes the self similarity matrix for a given feature sequence.
     Stacks the feature sequence with delay, smooths and down-samples
     it and finally normalizes the sequence before calculating the ssm.
     :param feature: the feature sequence
     :param samplerate: the sample-rate
     :param filter_len: length for the filter kernel, needs to be odd ()
     :param downsampling: down-sampling rate for feature sequence (default: 32)
-    :returns: the self similarity matrix, the resulting sample-rate
+    :returns: the self similarity matrix, the resulting sample-rate.
     """
-
     # stack feature on top of itself, with a delay
     chroma = librosa.feature.stack_memory(feature, n_steps=4, delay=8)
     # feature smoothing
@@ -165,8 +148,7 @@ def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
 
 
 def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
-    """
-    Computes the novelty function for the given self similarity matrix.
+    """Computes the novelty function for the given self similarity matrix.
     :param ssm: the self similarity matrix
     :param kernel: the kernel for edge / corner detection
                    (default: gaussian checkerboard)
@@ -178,7 +160,6 @@ def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
     :returns: the resulting novelty function.
               Peaks indicate edges / corners (transitions).
     """
-
     if kernel is None:
         kernel = create_gaussian_checkerboard_kernel(n, var=var)
 
@@ -204,15 +185,13 @@ def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
 
 # TODO: Needs more research (maybe adaptive thresholding)
 def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
-    """
-    Selects the peak of the given function based on the given threshold.
+    """Selects the peak of the given function based on the given threshold.
     :param novelty: the function to find peaks in
     :param peak_threshold: the threshold to filter with
     :param downsampling: the down-sampling-rate used for the feature sequence
     :param offset: offset of the original signal in frames
-    :returns: all indexes where the function peaks
+    :returns: all indexes where the function peaks.
     """
-
     # Find peaks
     # peaks = librosa.util.peak_pick(x=novelty, pre_max=3, post_max=3,
     #                               pre_avg=3, post_avg=5, delta=0.5, wait=10)
@@ -247,8 +226,7 @@ def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
 
 
 def extract_chroma(feature, samplerate, hop_length, fft_window=2048):
-    """
-    Extracts the chroma feature vector from the given sequence.
+    """Extracts the chroma feature vector from the given sequence.
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
     :param hop_length: The hop-length of the sequence.
@@ -256,7 +234,6 @@ def extract_chroma(feature, samplerate, hop_length, fft_window=2048):
                        (default: 2048)
     :return: The chroma feature vector.
     """
-
     # convert to mono
     feature_mono = librosa.to_mono(feature)
     # extract chroma feature
@@ -270,8 +247,7 @@ def extract_chroma(feature, samplerate, hop_length, fft_window=2048):
 
 
 def extract_spectro(feature, samplerate, hop_length, fft_window=2048):
-    """
-    Extracts the mel-spectrogram feature vector from the given sequence.
+    """Extracts the mel-spectrogram feature vector from the given sequence.
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
     :param hop_length: The hop-length of the sequence.
@@ -279,7 +255,6 @@ def extract_spectro(feature, samplerate, hop_length, fft_window=2048):
                        (default: 2048)
     :return: The mel-spectrogram feature vector.
     """
-
     # convert to mono
     feature_mono = librosa.to_mono(feature)
     # extract mel-spectrogram
@@ -294,8 +269,7 @@ def extract_spectro(feature, samplerate, hop_length, fft_window=2048):
 
 # TODO: Reevaluate this; didn't seem to work well
 def extract_mfcc(feature, samplerate):
-    """
-    :param feature: The sequence to work on.
+    """:param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
     :return: The mel-frequency coefficient feature vector
     """
@@ -315,15 +289,13 @@ def segment_block(
     threshold=0.7,
     offset=0.0,
 ):
-    """
-    Segments a data array into segments, where each segment represents
+    """Segments a data array into segments, where each segment represents
     a different part in the audio.
     :param block: the current block of the audio stream
     :param samplerate: sample rate of the audio stream
     :param hop_length: hop length of the audio stream
-    :returns: a list of indexes, where transitions should be
+    :returns: a list of indexes, where transitions should be.
     """
-
     # Spectral worked best so far
     if feature == FeatureType.CHROMA:
         feature_seq = extract_chroma(block, samplerate, hop_length, fft_window=2048)
@@ -344,32 +316,30 @@ def segment_block(
 
 
 def filter_peaks(peaks, n=3):
-    """
-    Filters a given vector to values that appear at least n times.
+    """Filters a given vector to values that appear at least n times.
     :param peaks: The given vector
     :param n: The minimum number of times a value has to appear
-    :return: The filtered vector
+    :return: The filtered vector.
     """
-
     unique, counts = np.unique(peaks, return_counts=True)
     return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
 def segment_file(path, downsampling=Downsampling.NORMAL):
-    """
-    Segments a given file into a generator.
+    """Segments a given file into a generator.
     :param path: The path to the File
     :param downsampling: The down-sampling rate for the SSM see: :class:`Downsampling`
     :return: A generator that iterates over the found segments,
-             the start time and duration for the original file
+             the start time and duration for the original file.
     """
-
     block_len = 4096
-    stream, samplerate, hop_length = readAudiofileToStream(path, block_len=block_len)
+    stream, samplerate, hop_length = read_audio_file_to_stream(
+        path, block_len=block_len
+    )
 
     transitions = np.zeros(1)
     last_frame_in_audiofile = 0
-    for idx, block in enumerate(overlappingStream(stream)):
+    for idx, block in enumerate(overlapping_stream(stream)):
         if np.unique(block).size == 1:
             continue
 
@@ -445,7 +415,7 @@ if __name__ == "__main__":
         # tag_audio_file(tags)
 
         output_path = path.abspath("../../../test_output/")
-        saveNumPyAsAudioFile(segment, song_name, output_path, int(samplerate))
+        save_numpy_as_audio_file(segment, song_name, output_path, int(samplerate))
 
         print(
             f"Successfully written {song_name} to {output_path} "

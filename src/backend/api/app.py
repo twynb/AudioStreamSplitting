@@ -1,8 +1,8 @@
 import os
 
 from api.audio import audio_bp
-from api.project import project_bp
 from api.env import env_bp
+from api.project import project_bp
 from flask import (
     Flask,
     render_template,

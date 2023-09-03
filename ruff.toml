@@ -1,0 +1,8 @@
+line-length = 100
+select = [
+  "E",    # default
+  "F",    # default
+  "I",    # sort import
+  "N802"  # function name should follow snake_case
+  ]
+target-version = "py310"
