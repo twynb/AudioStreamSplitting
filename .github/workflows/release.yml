@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - Realease_Workflow
+      - Release_Workflow
 
 permissions:
   contents: write
