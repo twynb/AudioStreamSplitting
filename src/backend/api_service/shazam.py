@@ -1,7 +1,8 @@
-import requests
-import numpy as np
 import base64
+
 import librosa
+import numpy as np
+import requests
 
 SHAZAM_URL_DETECT_V2 = "https://shazam.p.rapidapi.com/songs/v2/detect"
 # duration of segments taken from the song data to be sent to the API, in seconds
