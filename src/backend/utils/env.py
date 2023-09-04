@@ -1,13 +1,17 @@
 import os
 from typing import Optional
 
+from utils.path import get_abs_src_dir_in_built_app
+
 
 def load_env():
     """Load environment variables from a file into os.environ.
     This will be called immediately.
     """
-    filename = ".env"
-    file_path = os.path.join(os.getcwd(), filename)
+    file_path = os.path.join(os.getcwd(), ".env")
+    if not os.path.exists(file_path):
+        file_path = os.path.join(get_abs_src_dir_in_built_app(), ".env")
+
     with open(file_path, "r") as file:
         for line in file:
             line = line.strip()
