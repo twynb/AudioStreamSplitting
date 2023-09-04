@@ -36,6 +36,9 @@ jobs:
       - name: Build app
         run: npm run build:app:nocheck
 
+      - name: Delete existing Release and Tag
+        run: git push --delete origin Release || true
+
       - name: Upload release
         uses: softprops/action-gh-release@v1
         env:
