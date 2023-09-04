@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - Realease_Workflow
 
 permissions:
   contents: write
@@ -38,6 +38,9 @@ jobs:
 
       - name: Upload release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
         with:
           files: ./dist/app
+          tag_name: Release
