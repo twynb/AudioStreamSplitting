@@ -3,9 +3,8 @@ from typing import Optional
 
 
 def load_env():
-    """
-    Load environment variables from a file into os.environ.
-    This will be called immediately
+    """Load environment variables from a file into os.environ.
+    This will be called immediately.
     """
     filename = ".env"
     file_path = os.path.join(os.getcwd(), filename)
@@ -21,8 +20,7 @@ load_env()
 
 
 def get_env(key: str, default: Optional[str] = None):
-    """
-    Get the value of an environment variable.
+    """Get the value of an environment variable.
 
     :param key: The name of the environment variable.
     :param default: The default value to return if the variable is not found.

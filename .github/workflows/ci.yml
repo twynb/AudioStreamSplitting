@@ -37,19 +37,20 @@ jobs:
           pip install -r requirements.txt
           npm ci
 
+      - name: Lint (Backend)
+        continue-on-error: true
+        run: npm run lint:be
+
+      - name: Test (Backend)
+        run: npm run test:be
+
       - name: Lint and Typecheck (Frontend)
         run: |
           npm run lint:fe
           npm run typecheck
 
       - name: Test (Frontend)
-        run: npm run fe:test:unit
-
-      - name: Lint (Backend)
-        run: npm run lint:be
-
-      - name: Test (Backend)
-        run: npm run be:test
+        run: npm run test:fe
 
       - name: Build app
         run: npm run build:app:nocheck

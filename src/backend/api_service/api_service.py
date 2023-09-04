@@ -1,10 +1,12 @@
-import numpy as np
-from enum import Enum
-import acoustid
-from ..modules.audio_stream_io import saveNumPyAsAudioFile
 import os
-from utils.env import get_env
+from enum import Enum
+
+import acoustid
+import numpy as np
 import shazam
+from utils.env import get_env
+
+from ..modules.audio_stream_io import save_numpy_as_audio_file
 
 """
 TODO: Decide how to behave if SONG_NOT_RECOGNISED happens! Options:
@@ -20,9 +22,7 @@ SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
 
 
 class SongOptionResult(Enum):
-    """
-    SongOptionResult contains information about the state of the API service.
-    """
+    """SongOptionResult contains information about the state of the API service."""
 
     SONG_EXTENDED = 0  # previous song extended by current song
     SONG_FINISHED = 1  # previous song finished, new song started
@@ -55,19 +55,17 @@ current_song_metadata_options = [
 
 
 def get_last_song():
-    """
-    get a fully analyzed song with all its metadata options.
+    """Get a fully analyzed song with all its metadata options.
     this should be called after a song is finished.
-    :returns: tuple (song audio, song metadata options)
+    :returns: tuple (song audio, song metadata options).
     """
     return last_song_data, last_song_metadata_options
 
 
 def get_song_options(song_data, samplerate):
-    """
-    load the song metadata options for the provided song audio data.
+    """Load the song metadata options for the provided song audio data.
     :param song_data: the audio data to analyze.
-    :returns: SongOptionResult
+    :returns: SongOptionResult.
     """
     # first check using acoustID
     if ACOUSTID_API_KEY is not None:
@@ -121,8 +119,7 @@ def _check_song_extended_or_finished(song_data, metadata_options):
 
 
 def _get_overlapping_metadata_values(metadata1, metadata2):
-    """
-    get all values from metadata1 and metadata2 that are the same.
+    """Get all values from metadata1 and metadata2 that are the same.
     :param metadata1: first set of metadata to compare.
     :param metadata2: second set of metadata to compare.
     :returns: a set of metadata containing all matches.
@@ -141,15 +138,14 @@ def _get_overlapping_metadata_values(metadata1, metadata2):
 
 
 def _create_fingerprint(song_data, samplerate):
-    """
-    create a fingerprint for the audio data.
+    """Create a fingerprint for the audio data.
     :param song_data: the audio data to generate a fingerprint from.
     :param samplerate: the audio data's sample rate.
-    :returns: (song duration, fingerprint)
+    :returns: (song duration, fingerprint).
     """
     filename = "TEMP_FILE_FOR_FINGERPRINTING"
+    save_numpy_as_audio_file(song_data, os.path.abspath(filename), "", rate=samplerate)
 
-    saveNumPyAsAudioFile(song_data, os.path.abspath(filename), "", rate=samplerate)
     filename_with_path = os.path.abspath(filename + ".mp3")
     fingerprint_duration, fingerprint = acoustid.fingerprint_file(filename_with_path)
     os.remove(filename_with_path)
@@ -157,8 +153,7 @@ def _create_fingerprint(song_data, samplerate):
 
 
 def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
-    """
-    get data about the provided fingerprint from the AcoustID API.
+    """Get data about the provided fingerprint from the AcoustID API.
     :param fingerprint: the fingerprint.
     :param fingerprint_duration: duration of the fingerprint in seconds.
     :returns: [{"score": match score, "title": title, "artist": artist}]
@@ -175,8 +170,7 @@ def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
 
 
 def _store_finished_song(song_data=np.array([[], []]), metadata_options=()):
-    """
-    Store the current (finished) song in last_song_data/last_song_metadata_options
+    """Store the current (finished) song in last_song_data/last_song_metadata_options
     Store the provided song data as the current song data.
     Reset the current song data if none is provided.
     :param song_data: The new currently read song's data.
