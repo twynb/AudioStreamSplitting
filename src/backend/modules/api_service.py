@@ -2,10 +2,10 @@ import os
 from enum import Enum
 
 import acoustid
-import shazam
+import apis.shazam as shazam
 from utils.env import get_env
 
-from ..modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
+from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 
 """
 TODO: Decide how to behave if SONG_NOT_RECOGNISED happens! Options:
