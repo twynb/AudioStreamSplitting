@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+from typing import Generator
 
 import acoustid
 import apis.shazam as shazam
@@ -48,6 +49,32 @@ current_song_duration = 0
 current_song_metadata_options = EMPTY_METADATA_OPTIONS
 
 
+def identify_all_from_generator(
+    generator: Generator[tuple, float, float], file_path: str
+):
+    """Identify all segments from the segment generator in the given file.
+    :param generator: A generator, usually from segment_file in segmentation.py.
+    :param file_path: The file path.
+    :returns: The segments, or None if a song mismatch occurred.
+    """
+    reset_service_state()
+    is_first_segment = True
+    segments = []
+    for (segment, samplerate), start, duration in generator:
+        result = get_song_options(start, duration, file_path)
+        if (
+            result
+            in [SongOptionResult.SONG_FINISHED, SongOptionResult.SONG_NOT_RECOGNISED]
+        ) and not is_first_segment:
+            segments.append(get_last_song())
+        elif result == SongOptionResult.SONG_MISMATCH:
+            return None
+        if result != SongOptionResult.SONG_EXTENDED:
+            is_first_segment = False
+    segments.append(get_final_song())
+    return segments
+
+
 def reset_service_state():
     """Reset the service state."""
     global last_song_offset
@@ -66,10 +93,35 @@ def reset_service_state():
 
 def get_last_song():
     """Get a fully analyzed song with all its metadata options.
-    this should be called after a song is finished.
-    :returns: tuple (start timestamp, duration, song metadata options).
+    This should be called after a song is finished.
+    :returns: dict
     """
-    return last_song_offset, last_song_duration, last_song_metadata_options
+    return _song_export(
+        last_song_offset, last_song_duration, last_song_metadata_options
+    )
+
+
+def get_final_song():
+    """Get the final fully analyzed song with all its metadata options.
+    Reset the stored data after.
+    This should be called once the last segment was iterated over.
+    :returns: dict
+    """
+    result = _song_export(
+        current_song_offset, current_song_duration, current_song_metadata_options
+    )
+    reset_service_state()
+    return result
+
+
+def _song_export(offset, duration, metadata_options):
+    """Get the export as returned by get_last_song.
+    :param offset: Start of the segment, in seconds.
+    :param duration: Duration of the segment, in seconds.
+    :param metadata_options: Metadata options as a dict.
+    :returns: dict
+    """
+    return {"offset": offset, "duration": duration, "metadataOptions": metadata_options}
 
 
 def get_song_options(offset: float, duration: float, file_path: str):
@@ -80,7 +132,7 @@ def get_song_options(offset: float, duration: float, file_path: str):
     :returns: SongOptionResult.
     """
     sample_rate = SAMPLE_RATE_STANDARD
-    song_data = read_audio_file_to_numpy(
+    song_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=sample_rate
     )
     # first check using acoustID
@@ -91,7 +143,8 @@ def get_song_options(offset: float, duration: float, file_path: str):
             return _check_song_extended_or_finished(song_data, metadata)
 
     # if acoustID doesn't find anything, try shazam
-    if SHAZAM_API_KEY is not None:
+    # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
+    if SHAZAM_API_KEY is not None and sample_rate == SAMPLE_RATE_STANDARD:
         metadata_start = shazam.lookup(song_data, SHAZAM_API_KEY, True)
         metadata_end = shazam.lookup(song_data, SHAZAM_API_KEY, False)
         metadata_start = [metadata_start] if metadata_start is not None else []

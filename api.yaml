@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: AudioStreamSplitting API
+
+paths:
+  /audio/split:
+    post:
+      summary: Split the file at the given file location.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+      responses:
+        "200":
+          description: The segments of the file and potential metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  segments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        offset:
+                          type: float
+                        duration:
+                          type: float
+                        metadataOptions:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Metadata"
+                  success:
+                    type: boolean
+  /audio/get-segment:
+    post:
+      summary: Get the given segment for the given file.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                offset:
+                  type: float
+                duration:
+                  type: float
+      responses:
+        "200":
+          description: The segment as a wav file.
+          content:
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+  /audio/store:
+    post:
+      summary: Store the given segment for the given file in the target file.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                targetFilePath:
+                  type: string
+                offset:
+                  type: float
+                duration:
+                  type: float
+                metadata:
+                  $ref: "#/components/schemas/Metadata"
+      responses:
+        "200":
+          description: Store the segment in the target file.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        title:
+          type: string
+        album:
+          type: string
+        artist:
+          type: string
+        year:
+          type: string
+      required:
+        - title
+        - artist
