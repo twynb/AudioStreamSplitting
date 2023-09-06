@@ -77,6 +77,5 @@ jobs:
             app_window.exe/app_window.exe
           draft: false
           tag_name: v1.0.0
-          body_path: This is newest release
 
 
