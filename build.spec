@@ -1,4 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
+import platform
+
+current_os = platform.system()
+
+if current_os == "Linux":
+    app_name = "app_linux"
+elif current_os == "Darwin":
+    app_name = "app_macos"
+elif current_os == "Windows":
+    app_name = "app_window.exe"
+else:
+    raise Exception(f"Unsupported operating system: {current_os}")
 
 a = Analysis(  # noqa F821
     ["src/backend/main.py"],
@@ -38,7 +50,7 @@ exe = EXE(  # noqa F821
     a.zipfiles,
     a.datas,
     [],
-    name="app",
+    name=app_name,
     icon="src/frontend/public/logo.ico",
     debug=False,
     bootloader_ignore_signals=False,
