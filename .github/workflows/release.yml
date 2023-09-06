@@ -64,6 +64,7 @@ jobs:
 
       - run: ls
       - run: cd app_linux && ls
+      - run: cd app_window.exe && ls
 
       - name: Release
         uses: softprops/action-gh-release@v1
