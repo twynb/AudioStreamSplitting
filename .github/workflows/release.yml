@@ -81,7 +81,7 @@ jobs:
           GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
         with:
           files: |
-            app_linux
+            /home/runner/work/AudioStreamSplitting/AudioStreamSplitting/app_linux
             app_window.exe
           draft: false
 
