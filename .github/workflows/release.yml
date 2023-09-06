@@ -18,23 +18,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.17.1
-          cache: npm
+      # - name: Setup Node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18.17.1
+      #     cache: npm
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-          cache: pip
+      # - name: Setup Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: 3.11
+      #     cache: pip
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
-          pip install -r requirements.txt
-          npm ci
+      # - name: Install Dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip setuptools wheel
+      #     pip install -r requirements.txt
+      #     npm ci
 
       # - name: Build App
       #   run: npm run build:app:nocheck
