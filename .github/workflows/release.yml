@@ -3,13 +3,19 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - Release
 
 jobs:
   release:
     permissions:
       contents: write
-    runs-on: ubuntu-latest
+
+    strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
