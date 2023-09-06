@@ -50,16 +50,17 @@ current_song_metadata_options = EMPTY_METADATA_OPTIONS
 
 
 def identify_all_from_generator(
-    generator: Generator[tuple, float, float], file_path: str
+    generator: Generator[tuple, float, float], file_path: (str, str)
 ):
     """Identify all segments from the segment generator in the given file.
     :param generator: A generator, usually from segment_file in segmentation.py.
     :param file_path: The file path.
-    :returns: The segments, or None if a song mismatch occurred.
+    :returns: (segments, mismatches)
     """
     reset_service_state()
     is_first_segment = True
     segments = []
+    mismatch_offsets = []
     for (segment, samplerate), start, duration in generator:
         result = get_song_options(start, duration, file_path)
         if (
@@ -68,11 +69,12 @@ def identify_all_from_generator(
         ) and not is_first_segment:
             segments.append(get_last_song())
         elif result == SongOptionResult.SONG_MISMATCH:
-            return None
+            segments.append(get_last_song())
+            mismatch_offsets.append(start)
         if result != SongOptionResult.SONG_EXTENDED:
             is_first_segment = False
     segments.append(get_final_song())
-    return segments
+    return (segments, mismatch_offsets)
 
 
 def reset_service_state():
@@ -156,6 +158,7 @@ def get_song_options(offset: float, duration: float, file_path: str):
         if len(shazam_metadata_options) != 0:
             return _check_song_extended_or_finished(song_data, shazam_metadata_options)
         elif len(metadata_start) != 0 and len(metadata_end) != 0:
+            _store_finished_song(offset, duration, ())
             return SongOptionResult.SONG_MISMATCH
 
     # if neither finds anything, song not recognised.

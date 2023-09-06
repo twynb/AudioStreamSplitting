@@ -1,4 +1,5 @@
 import io
+import os.path
 import wave
 
 import librosa
@@ -17,12 +18,14 @@ audio_bp = Blueprint("audio", __name__)
 def split():
     data = request.json
     file_path = data["filePath"]
+    if not os.path.exists(file_path):
+        return "File does not exist!", 400
     generator = segment_file(file_path)
-    segments = identify_all_from_generator(generator, file_path)
+    segments, mismatch_offsets = identify_all_from_generator(generator, file_path)
 
     result = {
-        "segments": segments if segments is not None else [],
-        "success": segments is not None,
+        "segments": segments,
+        "mismatchOffsets": mismatch_offsets,
     }
 
     return jsonify(result)
@@ -32,8 +35,14 @@ def split():
 def get_segment():
     data = request.json
     file_path = data["filePath"]
+    if not os.path.exists(file_path):
+        return "File does not exist!", 400
+
     offset = data["offset"]
     duration = data["duration"]
+
+    if offset <= 0 or duration <= 0:
+        return "Invalid offset or duration!", 400
 
     audio_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=None
@@ -69,23 +78,36 @@ def get_segment():
 def store():
     data = request.json
     file_path = data["filePath"]
-    target_file_path = data["targetFilePath"]
+    if not os.path.exists(file_path):
+        return "File does not exist!", 400
+    target_directory = data["targetDirectory"]
+    if not os.path.exists(target_directory):
+        return "Target directory does not exist!", 400
+
     metadata = data["metadata"]
     offset = data["offset"]
     duration = data["duration"]
+    if offset <= 0 or duration <= 0:
+        return "Invalid offset or duration!", 400
+
     audio_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=None
     )
     save_numpy_as_audio_file(
-        audio_data, metadata["title"], target_file_path, sample_rate, tags=metadata
+        audio_data, metadata["title"], target_directory, sample_rate, tags=metadata
     )
     return jsonify({"success": True})
+
+
+# TODO decide whether to remove the routes below this comment
 
 
 @audio_bp.route("/process", methods=["POST"])
 def process():
     data = request.json
     file_path = data["filePath"]
+    if not os.path.exists(file_path):
+        return "File does not exist!", 400
     audio_data, sample_rate = librosa.load(file_path, sr=None)
     duration = librosa.get_duration(y=audio_data, sr=sample_rate)
     num_channels = audio_data.shape[0]
@@ -105,4 +127,6 @@ def process():
 def get():
     data = request.json
     audio_path = data["audioPath"]
+    if not os.path.exists(audio_path):
+        return "File does not exist!", 400
     return send_file(audio_path)

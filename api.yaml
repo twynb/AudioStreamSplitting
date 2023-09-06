@@ -36,8 +36,13 @@ paths:
                           type: array
                           items:
                             $ref: "#/components/schemas/Metadata"
-                  success:
-                    type: boolean
+                  mismatchOffsets:
+                    type: array
+                    description: Offsets where the segment afterward had a song mismatch.
+                    items:
+                      type: float
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file.
   /audio/get-segment:
     post:
       summary: Get the given segment for the given file.
@@ -62,9 +67,11 @@ paths:
               schema:
                 type: string
                 format: binary
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file, or offset/duration are invalid.
   /audio/store:
     post:
-      summary: Store the given segment for the given file in the target file.
+      summary: Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
       requestBody:
         required: true
         content:
@@ -74,7 +81,7 @@ paths:
               properties:
                 filePath:
                   type: string
-                targetFilePath:
+                targetDirectory:
                   type: string
                 offset:
                   type: float
@@ -92,6 +99,8 @@ paths:
                 properties:
                   success:
                     type: boolean
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file, the target directory doesn't exist, or offset/duration are invalid.
 
 components:
   schemas:
