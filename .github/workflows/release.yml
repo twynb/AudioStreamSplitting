@@ -36,8 +36,8 @@ jobs:
           pip install -r requirements.txt
           npm ci
 
-      - name: Build App
-        run: npm run build:app:nocheck
+      # - name: Build App
+      #   run: npm run build:app:nocheck
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -45,7 +45,8 @@ jobs:
             APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'app_linux' || matrix.os == 'windows-latest' && 'app_window.exe' || matrix.os == 'macos-latest' && 'app_macos'}}
         with:
           name: ${{env.APP_NAME}}
-          path: ./dist/${{env.APP_NAME}}
+          # path: ./dist/${{env.APP_NAME}}
+          path: README.MD
           if-no-files-found: 'warn'
           retention-days: 1
 
@@ -81,6 +82,7 @@ jobs:
           GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
         with:
           files: |
+            README.MD
             /home/runner/work/AudioStreamSplitting/AudioStreamSplitting/app_linux
             app_window.exe
           draft: false
