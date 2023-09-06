@@ -9,8 +9,7 @@ jobs:
   build:
     strategy:
         matrix:
-          os: [windows-latest]
-          # os: [ubuntu-latest, windows-latest]
+          os: [ubuntu-latest]
           # os: [ubuntu-latest, windows-latest,  macos-latest]
 
     runs-on: ${{ matrix.os }}
@@ -64,6 +63,7 @@ jobs:
       #     tag_name: Release
 
   release:
+    needs: build
     permissions:
       contents: write
 
@@ -84,4 +84,5 @@ jobs:
             app_linux
             app_window.exe
           draft: false
+
 
