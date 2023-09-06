@@ -10,7 +10,6 @@ jobs:
     strategy:
         matrix:
           os: [ubuntu-latest, windows-latest]
-          # os: [ubuntu-latest, windows-latest,  macos-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -49,19 +48,6 @@ jobs:
           if-no-files-found: 'warn'
           retention-days: 1
 
-      # - name: Delete existing Release and Tag
-      #   run: git push --delete origin Release || true
-
-      # - name: Upload release
-      #   uses: softprops/action-gh-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
-      #     APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'app_linux' || matrix.os == 'windows-latest' && 'app_window.exe' || matrix.os == 'macos-latest' && 'app_macos'}}
-      #   with:
-      #     files: ./dist/${{env.APP_NAME}}
-      #     tag_name: Release
-
   release:
     needs: build
     permissions:
@@ -87,7 +73,7 @@ jobs:
         with:
           files: |
             app_linux/app_linux
-            app_window.exe
+            app_window.exe/app_window.exe
           draft: false
           tag_name: v1.0.0
           body_path: This is newest release
