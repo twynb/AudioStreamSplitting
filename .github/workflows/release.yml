@@ -12,23 +12,12 @@ jobs:
 
     strategy:
         matrix:
-          os: [ubuntu-latest, macos-latest, windows-latest]
+          os: [ubuntu-latest, windows-latest]
+          # os: [ubuntu-latest, windows-latest,  macos-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Determine filename
-        id: set-filename
-        run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            echo "::set-output name=filename::app_linux"
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            echo "::set-output name=filename::app_macos"
-          else
-            echo "::set-output name=filename::app_window.exe"
-          fi
-        shell: bash
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -53,14 +42,22 @@ jobs:
       - name: Build app
         run: npm run build:app:nocheck
 
-      - name: Delete existing Release and Tag
-        run: git push --delete origin Release || true
-
-      - name: Upload release
-        uses: softprops/action-gh-release@v1
+      - uses: actions/upload-artifact@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
+            APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'app_linux' || matrix.os == 'windows-latest' && 'app_window.exe' || matrix.os == 'macos-latest' && 'app_macos'}}
         with:
-          files: ./dist/${{steps.set-filename.outputs.filename}}
-          tag_name: Release
+          name: ${{env.APP_NAME}}
+          path: ./dist/${{env.APP_NAME}}
+
+      # - name: Delete existing Release and Tag
+      #   run: git push --delete origin Release || true
+
+      # - name: Upload release
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
+      #     APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'app_linux' || matrix.os == 'windows-latest' && 'app_window.exe' || matrix.os == 'macos-latest' && 'app_macos'}}
+      #   with:
+      #     files: ./dist/${{env.APP_NAME}}
+      #     tag_name: Release
