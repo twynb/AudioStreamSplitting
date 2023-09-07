@@ -3,7 +3,8 @@ name: Release
 on:
   push:
     branches:
-      - Release_Workflow
+      - main
+      - Release_Workflow # for test
 
 jobs:
   build:
