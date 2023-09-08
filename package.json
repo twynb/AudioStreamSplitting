@@ -22,6 +22,7 @@
     "format:be": "black src/backend",
     "vite": "vite -c src/frontend/vite.config.ts",
     "typecheck": "vue-tsc -p src/frontend --noEmit",
+    "orval": "orval --config src/frontend/orval.config.ts",
     "up": "taze major -I"
   },
   "dependencies": {
@@ -50,6 +51,7 @@
     "@vue/test-utils": "^2.4.1",
     "eslint": "^8.48.0",
     "jsdom": "^22.1.0",
+    "orval": "^6.17.0",
     "taze": "^0.11.2",
     "typescript": "^5.1.3",
     "unocss": "^0.55.4",

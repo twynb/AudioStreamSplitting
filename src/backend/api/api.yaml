@@ -1,0 +1,121 @@
+openapi: 3.0.0
+info:
+  title: AudioStreamSplitting API
+  version: 1.0.0
+
+paths:
+  /audio/split:
+    post:
+      summary: Split the file at the given file location.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+      responses:
+        "200":
+          description: The segments of the file and potential metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  segments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        offset:
+                          type: number
+                        duration:
+                          type: number
+                        metadataOptions:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/Metadata"
+                  mismatchOffsets:
+                    type: array
+                    description: Offsets where the segment afterward had a song mismatch.
+                    items:
+                      type: number
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file.
+  /audio/get-segment:
+    post:
+      summary: Get the given segment for the given file.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                offset:
+                  type: number
+                duration:
+                  type: number
+      responses:
+        "200":
+          description: The segment as a wav file.
+          content:
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file, or offset/duration are invalid.
+  /audio/store:
+    post:
+      summary: Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filePath:
+                  type: string
+                targetDirectory:
+                  type: string
+                offset:
+                  type: number
+                duration:
+                  type: number
+                metadata:
+                  $ref: "#/components/schemas/Metadata"
+      responses:
+        "200":
+          description: Store the segment in the target file.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        "400":
+          description: Bad request. Usually means that filePath doesn't point to a valid file, the target directory doesn't exist, or offset/duration are invalid.
+
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        title:
+          type: string
+        album:
+          type: string
+        artist:
+          type: string
+        year:
+          type: string
+      required:
+        - title
+        - artist

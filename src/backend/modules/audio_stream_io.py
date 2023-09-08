@@ -8,12 +8,20 @@ import numpy as np
 import soundfile
 
 
-def read_audio_file_to_numpy(audiofile, mono=False) -> Tuple[np.ndarray, float]:
+def read_audio_file_to_numpy(
+    audiofile, mono=False, offset=0, duration=None, sample_rate=22050
+) -> Tuple[np.ndarray, float]:
     """:param mono: loads file as mono audio if true
     :param audiofile: Path to audiofile
+    :param mono: If true, convert to mono.
+    :param offset: Start of the segment to read, in seconds.
+    :param duration: Duration of the segment to read, in seconds.
+    :param sample_rate: Sample rate, defaults to Librosa standard 22050 Hz.
     :returns: Tuple[np.ndarray,float] array of sounddata
     """
-    return librosa.load(audiofile, mono=mono)
+    return librosa.load(
+        audiofile, mono=mono, offset=offset, duration=duration, sr=sample_rate
+    )
 
 
 def read_audio_file_to_stream(

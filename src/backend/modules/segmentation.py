@@ -375,6 +375,7 @@ def segment_file(path, downsampling=Downsampling.NORMAL):
             end - start, sr=samplerate, hop_length=hop_length, n_fft=2048
         )
 
+        # TODO decide whether to remove librosa.load() call for memory efficiency
         yield librosa.load(
             current_track,
             mono=False,
