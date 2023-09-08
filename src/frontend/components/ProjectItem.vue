@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WaveSurfer from 'wavesurfer.js'
+import { getAudioStreamSplittingAPI } from '../models/api'
 
 const props = defineProps<{
   file: Project['files'][0]
@@ -10,6 +11,8 @@ const emits = defineEmits<{
   (e: 'updatePeaks', v: { filePath: string; peaks: number[][] }): void
 
 }>()
+
+const { postAudioSplit } = getAudioStreamSplittingAPI()
 
 const { data } = await axios.post('/audio/get', { audioPath: props.file.filePath }, { responseType: 'blob' })
 const url = URL.createObjectURL(data)
@@ -38,12 +41,20 @@ function handleLoadWaveform() {
   })
 }
 
-const { execute, isFetching } = usePost<ProcessAudioFile>({
-  url: '/audio/process',
-  onSuccess(data) {
-    emits('succeedProcess', data)
-  },
-})
+const isFetching = ref(false)
+async function handleProcess() {
+  isFetching.value = true
+  try {
+    const { data } = await postAudioSplit({ filePath: props.file.filePath })
+    console.log(data)
+  }
+  catch (e) {
+    console.log(e)
+  }
+  finally {
+    isFetching.value = false
+  }
+}
 
 onMounted(() => {
   if (props.file.peaks)
@@ -83,7 +94,7 @@ onMounted(() => {
 
     <BaseButton
       :disabled="file.fileType === 'webm' || isFetching"
-      @click="execute({ filePath: file.filePath })"
+      @click="handleProcess"
     >
       <BaseLoader
         v-if="isFetching"

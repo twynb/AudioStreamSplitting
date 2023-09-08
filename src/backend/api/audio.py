@@ -20,6 +20,9 @@ def split():
     if not os.path.exists(file_path):
         return "File does not exist!", 400
     generator = segment_file(file_path)
+    print("==========================================")
+    print("alo")
+    print("==========================================")
     segments, mismatch_offsets = identify_all_from_generator(generator, file_path)
 
     result = {
