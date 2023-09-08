@@ -1,6 +1,7 @@
 openapi: 3.0.0
 info:
   title: AudioStreamSplitting API
+  version: 1.0.0
 
 paths:
   /audio/split:
@@ -29,9 +30,9 @@ paths:
                       type: object
                       properties:
                         offset:
-                          type: float
+                          type: number
                         duration:
-                          type: float
+                          type: number
                         metadataOptions:
                           type: array
                           items:
@@ -40,7 +41,7 @@ paths:
                     type: array
                     description: Offsets where the segment afterward had a song mismatch.
                     items:
-                      type: float
+                      type: number
         "400":
           description: Bad request. Usually means that filePath doesn't point to a valid file.
   /audio/get-segment:
@@ -56,9 +57,9 @@ paths:
                 filePath:
                   type: string
                 offset:
-                  type: float
+                  type: number
                 duration:
-                  type: float
+                  type: number
       responses:
         "200":
           description: The segment as a wav file.
@@ -84,9 +85,9 @@ paths:
                 targetDirectory:
                   type: string
                 offset:
-                  type: float
+                  type: number
                 duration:
-                  type: float
+                  type: number
                 metadata:
                   $ref: "#/components/schemas/Metadata"
       responses:
