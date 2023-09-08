@@ -142,7 +142,7 @@ def get_song_options(offset: float, duration: float, file_path: str):
         duration, fingerprint = _create_fingerprint(song_data, sample_rate)
         metadata = _get_api_song_data_acoustid(fingerprint, duration)
         if len(metadata) != 0:
-            return _check_song_extended_or_finished(song_data, metadata)
+            return _check_song_extended_or_finished(offset, duration, metadata)
 
     # if acoustID doesn't find anything, try shazam
     # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
@@ -156,7 +156,9 @@ def get_song_options(offset: float, duration: float, file_path: str):
             metadata_start, metadata_end
         )
         if len(shazam_metadata_options) != 0:
-            return _check_song_extended_or_finished(song_data, shazam_metadata_options)
+            return _check_song_extended_or_finished(
+                offset, duration, shazam_metadata_options
+            )
         elif len(metadata_start) != 0 and len(metadata_end) != 0:
             _store_finished_song(offset, duration, ())
             return SongOptionResult.SONG_MISMATCH
@@ -189,7 +191,6 @@ def _check_song_extended_or_finished(offset: float, duration: float, metadata_op
         return SongOptionResult.SONG_FINISHED
     else:
         current_song_metadata_options = match_metadata_options
-        # current_song_data = np.concatenate((current_song_data, song_data), axis=1)
         current_song_duration += duration
         return SongOptionResult.SONG_EXTENDED
 
@@ -224,7 +225,9 @@ def _create_fingerprint(song_data, samplerate):
     save_numpy_as_audio_file(song_data, os.path.abspath(filename), "", rate=samplerate)
 
     filename_with_path = os.path.abspath(filename + ".mp3")
-    fingerprint_duration, fingerprint = acoustid.fingerprint_file(filename_with_path)
+    fingerprint_duration, fingerprint = acoustid.fingerprint_file(
+        filename_with_path, force_fpcalc=True
+    )
     os.remove(filename_with_path)
     return (fingerprint_duration, fingerprint)
 
