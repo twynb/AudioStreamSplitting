@@ -233,7 +233,7 @@ def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
     """Get data about the provided fingerprint from the AcoustID API.
     :param fingerprint: the fingerprint.
     :param fingerprint_duration: duration of the fingerprint in seconds.
-    :returns: [{"score": match score, "title": title, "artist": artist}]
+    :returns: [{""title": title, "artist": artist}]
     """
     try:
         result = []
