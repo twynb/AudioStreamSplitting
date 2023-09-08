@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Generator
 
 import acoustid
-import apis.shazam as shazam
+import modules.apis.shazam as shazam
 from utils.env import get_env
 
 from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
