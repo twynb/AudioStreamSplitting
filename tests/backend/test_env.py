@@ -1,6 +1,6 @@
 import os
 
-from utils.env import get_env, set_env
+from src.backend.utils.env import get_env, set_env
 
 
 def fake_env():

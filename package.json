@@ -8,10 +8,10 @@
   },
   "scripts": {
     "dev:fe": "npm run vite",
-    "test:fe": "vitest -c src/frontend/vite.config.ts",
+    "test:fe": "vitest -c tests/frontend/vite.config.ts",
     "dev:be": "python3 src/backend/main.py --alone",
     "dev:be:debug": "python3 src/backend/main.py --alone --debug",
-    "test:be": "pytest src/backend/tests",
+    "test:be": "pytest tests/backend/",
     "view:app": "npm run build:fe && python3 src/backend/main.py",
     "build:fe": "npm run typecheck && npm run vite build",
     "build:app": "npm run build:fe && pyinstaller build.spec",

@@ -1,4 +1,4 @@
-from modules.api_service import ApiService, SongOptionResult
+from src.backend.modules.api_service import ApiService, SongOptionResult
 
 # main API functions can't be tested because they depend on external APIs. test utils though.
 
