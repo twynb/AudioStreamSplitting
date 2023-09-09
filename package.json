@@ -15,7 +15,6 @@
     "build:fe": "npm run typecheck && npm run vite build",
     "build:app": "npm run build:fe && pyinstaller build.spec",
     "build:app:nocheck": "npm run vite build && pyinstaller build.spec",
-    "preview": "dist/app",
     "lint:fe": "eslint src/frontend --fix",
     "lint:be": "ruff check --format=github --fix src/backend/",
     "format:be": "black src/backend",

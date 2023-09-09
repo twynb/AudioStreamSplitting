@@ -11,7 +11,7 @@ def get_abs_src_dir_in_built_app(lvl=2):
     absolute_path = os.path.abspath(__file__)
     splitted_absolute_path = absolute_path.split("/")
     for _ in range(lvl):
-        splitted_absolute_path.pop()
+        len(splitted_absolute_path) != 0 and splitted_absolute_path.pop()
     return os.path.join("/".join(splitted_absolute_path))
 
 
