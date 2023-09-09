@@ -99,49 +99,6 @@ CURRENT_METADATA_OPTIONS_NO_OVERLAP = [
     {"title": "long long song", "artist": "long long john", "year": 2000}
 ]
 
-
-def test_reset_service_state():
-    global last_song_offset
-    global last_song_duration
-    global last_song_metadata_options
-    global current_song_offset
-    global current_song_duration
-    global current_song_metadata_options
-    reset_service_state()
-    assert get_last_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    assert get_final_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    last_song_offset = 30.2
-    last_song_duration = 517
-    last_song_metadata_options = [
-        {"title": "My cool song", "artist": "Me"},
-        {"title": "Thunderstruck", "artist": "AC/DC", "album": "The Razor's Edge"},
-    ]
-    current_song_offset = 75.5
-    current_song_duration = 89
-    current_song_metadata_options = [
-        {"title": "The Testing Song", "artist": "TeStArTiSt"},
-    ]
-    reset_service_state()
-    assert get_last_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    assert get_final_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-
-
 @patch("modules.api_service.last_song_offset", LAST_OFFSET)
 @patch("modules.api_service.current_song_offset", CURRENT_OFFSET)
 @patch("modules.api_service.last_song_duration", LAST_DURATION)

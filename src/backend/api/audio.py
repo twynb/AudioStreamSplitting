@@ -5,7 +5,7 @@ import wave
 import librosa
 from flask import Blueprint, Response, jsonify, request, send_file
 
-from ..modules.api_service import identify_all_from_generator
+from ..modules.api_service import ApiService
 from ..modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from ..modules.segmentation import segment_file
 
@@ -21,7 +21,7 @@ def split():
     if not os.path.exists(file_path):
         return "File does not exist!", 400
     generator = segment_file(file_path)
-    segments, mismatch_offsets = identify_all_from_generator(generator, file_path)
+    segments, mismatch_offsets = ApiService().identify_all_from_generator(generator, file_path)
 
     result = {
         "segments": segments,
