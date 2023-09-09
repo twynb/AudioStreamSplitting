@@ -1,9 +1,4 @@
-from unittest.mock import patch
-
-from modules.api_service import (
-    SongOptionResult,
-    ApiService
-)
+from modules.api_service import ApiService, SongOptionResult
 
 # main API functions can't be tested because they depend on external APIs. test utils though.
 
@@ -299,7 +294,9 @@ def test_get_overlapping_metadata_values_two_overlaps():
 def test_get_overlapping_metadata_values_one_empty():
     service = ApiService()
     assert (
-        service._get_overlapping_metadata_values([], CURRENT_METADATA_OPTIONS_NO_OVERLAP)
+        service._get_overlapping_metadata_values(
+            [], CURRENT_METADATA_OPTIONS_NO_OVERLAP
+        )
         == CURRENT_METADATA_OPTIONS_NO_OVERLAP
     )
     assert (
@@ -313,7 +310,6 @@ def test_get_overlapping_metadata_values_both_empty():
     assert service._get_overlapping_metadata_values([], []) == []
 
 
-# TODO: test _store_finished_song()
 def test_store_finished_song():
     service = ApiService()
     service.last_song_offset = LAST_OFFSET
@@ -327,7 +323,9 @@ def test_store_finished_song():
         "duration": LAST_DURATION,
         "metadataOptions": LAST_METADATA_OPTIONS_NO_OVERLAP,
     }
-    service._store_finished_song(140.0, 503.0, [{"title": "mytest", "artist": "notyourtest"}])
+    service._store_finished_song(
+        140.0, 503.0, [{"title": "mytest", "artist": "notyourtest"}]
+    )
     assert service.get_last_song() == {
         "offset": CURRENT_OFFSET,
         "duration": CURRENT_DURATION,
