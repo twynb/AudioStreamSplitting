@@ -101,7 +101,7 @@ class ApiService():
         return result
 
 
-    def _song_export(offset, duration, metadata_options):
+    def _song_export(self, offset, duration, metadata_options):
         """Get the export as returned by get_last_song.
         :param offset: Start of the segment, in seconds.
         :param duration: Duration of the segment, in seconds.
@@ -153,7 +153,7 @@ class ApiService():
         return SongOptionResult.SONG_NOT_RECOGNISED
 
 
-    def _check_song_extended_or_finished(self,offset: float, duration: float, metadata_options):
+    def _check_song_extended_or_finished(self, offset: float, duration: float, metadata_options):
         """
         Check if the song with the given metadata_options matches the current song.
         Store the finished song if applicable.
@@ -177,7 +177,7 @@ class ApiService():
             return SongOptionResult.SONG_EXTENDED
 
 
-    def _get_overlapping_metadata_values(metadata1, metadata2):
+    def _get_overlapping_metadata_values(self, metadata1, metadata2):
         """Get all values from metadata1 and metadata2 that are the same.
         :param metadata1: first set of metadata to compare.
         :param metadata2: second set of metadata to compare.
@@ -197,7 +197,7 @@ class ApiService():
             return overlapping_metadata
 
 
-    def _create_fingerprint(song_data, samplerate):
+    def _create_fingerprint(self, song_data, samplerate):
         """Create a fingerprint for the audio data.
         :param song_data: the audio data to generate a fingerprint from.
         :param samplerate: the audio data's sample rate.
@@ -214,7 +214,7 @@ class ApiService():
         return (fingerprint_duration, fingerprint)
 
 
-    def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
+    def _get_api_song_data_acoustid(self, fingerprint, fingerprint_duration):
         """Get data about the provided fingerprint from the AcoustID API.
         :param fingerprint: the fingerprint.
         :param fingerprint_duration: duration of the fingerprint in seconds.
@@ -231,7 +231,7 @@ class ApiService():
             return []
 
 
-    def _store_finished_song(self,offset: float, duration: float, metadata_options):
+    def _store_finished_song(self, offset: float, duration: float, metadata_options):
         """Store the current (finished) data in the last_song_* variables.
         Store the provided data in the current_song_* variables.
         :param offset: The new currently read song's offset, in seconds.
