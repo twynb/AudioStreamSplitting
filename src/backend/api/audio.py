@@ -8,6 +8,8 @@ from flask import Blueprint, Response, jsonify, request, send_file
 from ..modules.api_service import identify_all_from_generator
 from ..modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from ..modules.segmentation import segment_file
+from ..utils.env import get_env
+from ..utils.file_name_formatter import format_file_name
 
 audio_bp = Blueprint("audio", __name__)
 
@@ -85,6 +87,21 @@ def store():
         return "Target directory does not exist!", 400
 
     metadata = data["metadata"]
+
+    file_type = "." + (data["fileType"] if "fileType" in data else "mp3")
+    file_name_template = (
+        data["nameTemplate"]
+        if "nameTemplate" in data
+        else get_env("OUTPUT_FILE_NAME_TEMPLATE")
+    )
+    target_file_name = format_file_name(
+        file_name_template,
+        metadata["title"] if "title" in metadata else "",
+        metadata["artist"] if "artist" in metadata else "",
+        metadata["album"] if "album" in metadata else "",
+        str(metadata["year"]) if "year" in metadata else "",
+    )
+
     offset = data["offset"]
     duration = data["duration"]
     if offset <= 0 or duration <= 0:
@@ -94,7 +111,12 @@ def store():
         file_path, mono=False, offset=offset, duration=duration, sample_rate=None
     )
     save_numpy_as_audio_file(
-        audio_data, metadata["title"], target_directory, sample_rate, tags=metadata
+        audio_data,
+        target_file_name,
+        target_directory,
+        sample_rate,
+        tags=metadata,
+        extension=file_type,
     )
     return jsonify({"success": True})
 
