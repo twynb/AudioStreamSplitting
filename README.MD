@@ -1,29 +1,42 @@
-# Audio Stream Splitting
+# AudioStreamSplitting
 
 - [Audio Stream Splitting](#audio-stream-splitting)
-  - [Requirements](#requirements)
-  - [Installation](#installation)
-    - [Manual setup](#manual-setup)
-    - [Docker](#docker)
-      - [Without extension:](#without-extension)
-      - [With extension:](#with-extension)
-  - [Usage](#usage)
-    - [Availables commands](#availables-commands)
+  - [Using AudioStreamSplitting](#using-audiostreamsplitting)
+    - [Setup](#setup)
+  - [Development](#development)
+    - [System Requirements](#system-requirements)
+    - [Installation](#installation)
+      - [Manual setup](#manual-setup)
+      - [Docker](#docker)
+        - [Without extension:](#without-extension)
+        - [With extension:](#with-extension)
+    - [Usage](#usage)
+      - [Available commands](#available-commands)
 
 ---
 
-## Requirements
+## Using AudioStreamSplitting
+
+### Setup
+
+1. Generate a valid API key for the [AcoustID](https://acoustid.org/) and/or [Shazam](https://rapidapi.com/apidojo/api/shazam) song recognition APIs. While this program can work if you only provide one of the two, it is highly recommended to have both. More song recognition APIs may be supported in the future.
+2. Download the latest release of [fpcalc](https://acoustid.org/chromaprint) for your system from [the AcoustID website](https://acoustid.org/chromaprint) if you want to use the AcoustID API. Put it in a location of your choosing and add it to your system PATH. You will probably need to restart your system before first using AudioStreamSplitting.
+3. Download the latest release of AudioStreamSplitting from the "Releases" section of this site and run it.
+
+## Development
+
+### System Requirements
 
 - Python 3.10 or later: [Download here](https://www.python.org/downloads/)
 - pip: [Download here](https://pip.pypa.io/en/stable/cli/pip_download/)
 - pyinstaller: [Download here](https://pypi.org/project/pyinstaller/)
 - Node.js 18.17.1 or later: [Download here](https://nodejs.org/en/download)
 
-## Installation
+### Installation
 
 You can choose between manual setup or using Docker for simplicity.
 
-### Manual setup
+#### Manual setup
 
 1. Clone the repository to your local machine.
 
@@ -33,33 +46,33 @@ You can choose between manual setup or using Docker for simplicity.
 
 4. Setup `lint-staged` and `simple-git-hooks` using the command `npx simple-git-hooks`
 
-5. Install the fpcalc tool by including the relevant subdirectory of ``libraries/chromaprint`` in your system PATH or, preferably, copy the fpcalc executable in that subdirectory to a different place on your machine and adding that to your system PATH.
+5. Download the latest release of [fpcalc](https://acoustid.org/chromaprint) for your system from [the AcoustID website](https://acoustid.org/chromaprint) if you want to use the AcoustID API. Put it in a location of your choosing and add it to your system PATH. You will probably need to restart your system before first using AudioStreamSplitting.
 
-### Docker
+#### Docker
 
 If you are using VSCode as your code editor, it is recommended to set up a container with the appropriate extension.
 
-#### Without extension:
+##### Without extension
 
-1. Build the Docker image using the command:
+Build the Docker image using the command:
 
 ```bash
 docker build -t ass .
 ```
 
-2. Run the container using the command:
+Run the container using the command:
 
 ```bash
 docker run -v ${pwd}/workspaces/AudioStreamSplitting ass -it bash
 ```
 
-#### With extension:
+##### With extension
 
 1. Download the VSCode Remote - Containers extension from [here](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 2. Press `Ctrl + Shift + P` to open the command palette, then select `Dev Container: Reopen in container`.
 
-## Usage
+### Usage
 
 For normal development, use the following commands in 2 different terminals:
 
@@ -71,7 +84,7 @@ npm run fe
 npm run be:debug
 ```
 
-### Availables commands
+#### Available commands
 
 | Command                  | Description                      |
 | ------------------------ | -------------------------------- |

@@ -1,5 +1,6 @@
 import os
 import tempfile
+from pathlib import Path
 
 
 def mkdir(path):
@@ -8,14 +9,14 @@ def mkdir(path):
 
 
 def get_abs_src_dir_in_built_app(lvl=2):
-    absolute_path = os.path.abspath(__file__)
-    splitted_absolute_path = absolute_path.split("/")
+    path = Path(os.path.abspath(__file__))
     for _ in range(lvl):
-        splitted_absolute_path.pop()
-    return os.path.join("/".join(splitted_absolute_path))
+        path = path.parent
+    print(str(path))
+    return str(path)
 
 
 # TODO temp folder is used only in dev
 profile_dir = os.path.join(tempfile.gettempdir(), "audiosplitter")
 
-audios_dir = profile_dir + "/audios"
+audios_dir = os.path.join(profile_dir, "audios")

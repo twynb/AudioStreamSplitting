@@ -4,16 +4,13 @@ import wave
 
 import librosa
 from flask import Blueprint, Response, jsonify, request, send_file
-
-from ..modules.api_service import identify_all_from_generator
-from ..modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
-from ..modules.segmentation import segment_file
-from ..utils.env import get_env
-from ..utils.file_name_formatter import format_file_name
+from modules.api_service import identify_all_from_generator
+from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
+from modules.segmentation import segment_file
+from utils.env import get_env
+from utils.file_name_formatter import format_file_name
 
 audio_bp = Blueprint("audio", __name__)
-
-# TODO error handling!
 
 
 @audio_bp.route("/split", methods=["POST"])

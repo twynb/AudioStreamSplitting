@@ -13,8 +13,7 @@ LOOKUP_OFFSET_INCREMENT = 10
 
 # TODO-CR figure out what happens when API limit is reached
 def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
-    """
-    Look up a song using the Shazam API.
+    """Look up a song using the Shazam API.
     :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param apikey: The Shazam API key.
     :param from_start: Whether to take a sample from the start or end of the song.
@@ -43,8 +42,7 @@ def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
 
 
 def _lookup_segment_with_offset(song_data: np.ndarray, apikey: str, offset: int):
-    """
-    Look up a song segment at the given offset.
+    """Look up a song segment at the given offset.
     :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param apikey: The Shazam API key.
     :param offset: The offset to look up from.
@@ -59,8 +57,7 @@ def _lookup_segment_with_offset(song_data: np.ndarray, apikey: str, offset: int)
 
 
 def _format_song_data(song_data):
-    """
-    Format the song data as a mono int16 array.
+    """Format the song data as a mono int16 array.
     :param song_data: The song data.
     :returns: The formatted song data.
     """
@@ -68,8 +65,7 @@ def _format_song_data(song_data):
 
 
 def _get_song_data_segment(song_data: np.ndarray, offset: int):
-    """
-    Get a segment of the song data, either from the start or end of the data.
+    """Get a segment of the song data at the given offset.
     :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
     :param offset: The offset to take the data from.
     :returns: The song data segment.
@@ -81,8 +77,7 @@ def _get_song_data_segment(song_data: np.ndarray, offset: int):
 
 
 def _create_payload_from_song_data(song_data: np.ndarray):
-    """
-    Create the payload in the API's data format (base64-encoded byte array).
+    """Create the payload in the API's data format (base64-encoded byte array).
     :param song_data: The song data.
     :returns: The payload.
     """
@@ -90,8 +85,7 @@ def _create_payload_from_song_data(song_data: np.ndarray):
 
 
 def _send_lookup_request(payload: str, apikey: str):
-    """
-    Send the actual lookup request to the shazam API.
+    """Send the actual lookup request to the shazam API.
     :param payload: The payload (generate with _create_payload_from_song_data)
     :param apikey: The Shazam API key.
     :returns: The request response.
@@ -105,13 +99,13 @@ def _send_lookup_request(payload: str, apikey: str):
 
 
 def _extract_value_from_metadata(track, key: str):
-    """
-    Extract a value from the response's "Metadata" section.
+    """Extract a value from the response's "Metadata" section.
     :param track: The response's "track" element
     :param key: The metadata type to search
-    :returns: The value.
+    :returns: The value, or an empty string if it doesn't exist.
     """
     for item in [
         x["text"] for x in track["sections"][0]["metadata"] if x["title"] == key
     ]:
         return item
+    return ""
