@@ -206,12 +206,12 @@ def _get_overlapping_metadata_values(metadata1, metadata2):
     elif len(metadata2) == 0:
         return metadata1
     else:
-        overlapping_metadata = {}
+        overlapping_metadata = []
         titles2 = map(lambda d: d["title"], metadata2)
         artists2 = map(lambda d: d["artist"], metadata2)
         for metadata in metadata1:
             if metadata["title"] in titles2 and metadata["artist"] in artists2:
-                overlapping_metadata.add(metadata)
+                overlapping_metadata.append(metadata)
         return overlapping_metadata
 
 
