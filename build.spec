@@ -23,9 +23,7 @@ a = Analysis(  # noqa F821
     runtime_hooks=[],
     excludes=[
         "altgraph",
-        "certifi",
         "black",
-        "idna",
         "iniconfig",
         "Jinja2",
         "MarkupSafe",
