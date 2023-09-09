@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - Release_Workflow # for test
 
 jobs:
   build:
@@ -42,7 +41,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         env:
-            APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'app_linux' || matrix.os == 'windows-latest' && 'app_window.exe' || matrix.os == 'macos-latest' && 'app_macos'}}
+            APP_NAME: ${{ matrix.os == 'ubuntu-latest' && 'audio_splitter_linux' || matrix.os == 'windows-latest' && 'audio_splitter_window.exe' || matrix.os == 'macos-latest' && 'audio_splitter_macos'}}
         with:
           name: ${{env.APP_NAME}}
           path: ./dist/${{env.APP_NAME}}
@@ -67,8 +66,8 @@ jobs:
           GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
         with:
           files: |
-            app_linux/app_linux
-            app_window.exe/app_window.exe
+            audio_splitter_linux/audio_splitter_linux
+            audio_splitter_window.exe/audio_splitter_window.exe
           draft: false
           tag_name: v1.0.0
 

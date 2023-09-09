@@ -4,11 +4,11 @@ import platform
 current_os = platform.system()
 
 if current_os == "Linux":
-    app_name = "app_linux"
+    app_name = "audio_splitter_linux"
 elif current_os == "Darwin":
-    app_name = "app_macos"
+    app_name = "audio_splitter_macos"
 elif current_os == "Windows":
-    app_name = "app_window.exe"
+    app_name = "audio_splitter_window.exe"
 else:
     raise Exception(f"Unsupported operating system: {current_os}")
 
