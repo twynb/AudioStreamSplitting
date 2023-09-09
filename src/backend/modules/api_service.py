@@ -41,7 +41,8 @@ EMPTY_METADATA_OPTIONS = [
 
 SAMPLE_RATE_STANDARD = 44100
 
-class ApiService():
+
+class ApiService:
     """Used to identify the Data via a api"""
 
     last_song_offset = 0
@@ -51,9 +52,8 @@ class ApiService():
     current_song_duration = 0
     current_song_metadata_options = EMPTY_METADATA_OPTIONS
 
-
-    def identify_all_from_generator(self,
-        generator: Generator[tuple, float, float], file_path: (str, str)
+    def identify_all_from_generator(
+        self, generator: Generator[tuple, float, float], file_path: (str, str)
     ):
         """Identify all segments from the segment generator in the given file.
         :param generator: A generator, usually from segment_file in segmentation.py.
@@ -67,7 +67,10 @@ class ApiService():
             result = self.get_song_options(start, duration, file_path)
             if (
                 result
-                in [SongOptionResult.SONG_FINISHED, SongOptionResult.SONG_NOT_RECOGNISED]
+                in [
+                    SongOptionResult.SONG_FINISHED,
+                    SongOptionResult.SONG_NOT_RECOGNISED,
+                ]
             ) and not is_first_segment:
                 segments.append(self.get_last_song())
             elif result == SongOptionResult.SONG_MISMATCH:
@@ -78,16 +81,16 @@ class ApiService():
         segments.append(self.get_final_song())
         return (segments, mismatch_offsets)
 
-
     def get_last_song(self):
         """Get a fully analyzed song with all its metadata options.
         This should be called after a song is finished.
         :returns: dict
         """
         return self._song_export(
-            self.last_song_offset, self.last_song_duration, self.last_song_metadata_options
+            self.last_song_offset,
+            self.last_song_duration,
+            self.last_song_metadata_options,
         )
-
 
     def get_final_song(self):
         """Get the final fully analyzed song with all its metadata options.
@@ -96,10 +99,11 @@ class ApiService():
         :returns: dict
         """
         result = self._song_export(
-            self.current_song_offset, self.current_song_duration, self.current_song_metadata_options
+            self.current_song_offset,
+            self.current_song_duration,
+            self.current_song_metadata_options,
         )
         return result
-
 
     def _song_export(self, offset, duration, metadata_options):
         """Get the export as returned by get_last_song.
@@ -108,8 +112,11 @@ class ApiService():
         :param metadata_options: Metadata options as a dict.
         :returns: dict
         """
-        return {"offset": offset, "duration": duration, "metadataOptions": metadata_options}
-
+        return {
+            "offset": offset,
+            "duration": duration,
+            "metadataOptions": metadata_options,
+        }
 
     def get_song_options(self, offset: float, duration: float, file_path: str):
         """Load the song metadata options for the provided song audio data.
@@ -120,7 +127,11 @@ class ApiService():
         """
         sample_rate = SAMPLE_RATE_STANDARD
         song_data, sample_rate = read_audio_file_to_numpy(
-            file_path, mono=False, offset=offset, duration=duration, sample_rate=sample_rate
+            file_path,
+            mono=False,
+            offset=offset,
+            duration=duration,
+            sample_rate=sample_rate,
         )
         # first check using acoustID
         if ACOUSTID_API_KEY is not None:
@@ -152,8 +163,9 @@ class ApiService():
         self._store_finished_song(offset, duration, ())
         return SongOptionResult.SONG_NOT_RECOGNISED
 
-
-    def _check_song_extended_or_finished(self, offset: float, duration: float, metadata_options):
+    def _check_song_extended_or_finished(
+        self, offset: float, duration: float, metadata_options
+    ):
         """
         Check if the song with the given metadata_options matches the current song.
         Store the finished song if applicable.
@@ -176,7 +188,6 @@ class ApiService():
             self.current_song_duration += duration
             return SongOptionResult.SONG_EXTENDED
 
-
     def _get_overlapping_metadata_values(self, metadata1, metadata2):
         """Get all values from metadata1 and metadata2 that are the same.
         :param metadata1: first set of metadata to compare.
@@ -196,7 +207,6 @@ class ApiService():
                     overlapping_metadata.append(metadata)
             return overlapping_metadata
 
-
     def _create_fingerprint(self, song_data, samplerate):
         """Create a fingerprint for the audio data.
         :param song_data: the audio data to generate a fingerprint from.
@@ -204,7 +214,9 @@ class ApiService():
         :returns: (song duration, fingerprint).
         """
         filename = "TEMP_FILE_FOR_FINGERPRINTING"
-        save_numpy_as_audio_file(song_data, os.path.abspath(filename), "", rate=samplerate)
+        save_numpy_as_audio_file(
+            song_data, os.path.abspath(filename), "", rate=samplerate
+        )
 
         filename_with_path = os.path.abspath(filename + ".mp3")
         fingerprint_duration, fingerprint = acoustid.fingerprint_file(
@@ -212,7 +224,6 @@ class ApiService():
         )
         os.remove(filename_with_path)
         return (fingerprint_duration, fingerprint)
-
 
     def _get_api_song_data_acoustid(self, fingerprint, fingerprint_duration):
         """Get data about the provided fingerprint from the AcoustID API.
@@ -229,7 +240,6 @@ class ApiService():
             return result
         except acoustid.WebServiceError:
             return []
-
 
     def _store_finished_song(self, offset: float, duration: float, metadata_options):
         """Store the current (finished) data in the last_song_* variables.
