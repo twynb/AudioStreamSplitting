@@ -53,28 +53,46 @@ class Preset(
     # Custom = 0, 0, 0
 
 
-def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
-    """Computes a gaussian checkerboard kernel to smooth and detect edges and
-    corners in a matrix.
-    This is a combination of a basic checkerboard kernel and a gauss filter kernel.
-    :param n: length of one quadrant in the resulting kernel
-    :param var: the variance of the resulting kernel
-                (default: 1.0)
-    :param normalize: whether the resulting kernel should be normalized or not
-                      (default: True)
-    :returns: gaussian checkerboard kernel of length 2 * n + 1.
+def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
+    """Extracts the chroma feature vector from the given sequence.
+    :param feature: The sequence to work on.
+    :param samplerate: The sample-rate of the sequence
+    :param hop_length: The hop-length of the sequence.
+    :param fft_window: The Window size for the fast-fourier-transformation
+                       (default: 2048)
+    :return: The chroma feature vector.
     """
-    taper = np.sqrt(0.5) / (n * var)
-    axis = np.arange(-n, n + 1)
-    gaussian_1d = np.exp(-(taper**2) * (axis**2))
-    gaussian_2d = np.outer(gaussian_1d, gaussian_1d)
-    kernel_box = np.outer(np.sign(axis), np.sign(axis))
+    # convert to mono
+    feature_mono = librosa.to_mono(feature)
+    # extract chroma feature
+    return librosa.feature.chroma_stft(
+        y=feature_mono,
+        sr=samplerate,
+        hop_length=hop_length,
+        center=False,
+        n_fft=fft_window,
+    )
 
-    kernel = kernel_box * gaussian_2d
-    if normalize:
-        kernel = kernel / np.sum(np.abs(kernel))
 
-    return kernel
+def extract_spectro(feature, samplerate, hop_length: int, fft_window=2048):
+    """Extracts the mel-spectrogram feature vector from the given sequence.
+    :param feature: The sequence to work on.
+    :param samplerate: The sample-rate of the sequence
+    :param hop_length: The hop-length of the sequence.
+    :param fft_window: The Window size for the fast-fourier-transformation
+                       (default: 2048)
+    :return: The mel-spectrogram feature vector.
+    """
+    # convert to mono
+    feature_mono = librosa.to_mono(feature)
+    # extract mel-spectrogram
+    return librosa.feature.melspectrogram(
+        y=feature_mono,
+        sr=samplerate,
+        hop_length=hop_length,
+        center=False,
+        n_fft=fft_window,
+    )
 
 
 def smooth_downsample_feature_sequence(
@@ -139,6 +157,30 @@ def normalize_feature_sequence(feature):
             feature_norm[:, i] = v
 
     return feature_norm
+
+
+def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
+    """Computes a gaussian checkerboard kernel to smooth and detect edges and
+    corners in a matrix.
+    This is a combination of a basic checkerboard kernel and a gauss filter kernel.
+    :param n: length of one quadrant in the resulting kernel
+    :param var: the variance of the resulting kernel
+                (default: 1.0)
+    :param normalize: whether the resulting kernel should be normalized or not
+                      (default: True)
+    :returns: gaussian checkerboard kernel of length 2 * n + 1.
+    """
+    taper = np.sqrt(0.5) / (n * var)
+    axis = np.arange(-n, n + 1)
+    gaussian_1d = np.exp(-(taper**2) * (axis**2))
+    gaussian_2d = np.outer(gaussian_1d, gaussian_1d)
+    kernel_box = np.outer(np.sign(axis), np.sign(axis))
+
+    kernel = kernel_box * gaussian_2d
+    if normalize:
+        kernel = kernel / np.sum(np.abs(kernel))
+
+    return kernel
 
 
 def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
@@ -240,46 +282,14 @@ def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
     return peaks
 
 
-def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
-    """Extracts the chroma feature vector from the given sequence.
-    :param feature: The sequence to work on.
-    :param samplerate: The sample-rate of the sequence
-    :param hop_length: The hop-length of the sequence.
-    :param fft_window: The Window size for the fast-fourier-transformation
-                       (default: 2048)
-    :return: The chroma feature vector.
+def filter_peaks(peaks, n=3):
+    """Filters a given vector to values that appear at least n times.
+    :param peaks: The given vector
+    :param n: The minimum number of times a value has to appear
+    :return: The filtered vector.
     """
-    # convert to mono
-    feature_mono = librosa.to_mono(feature)
-    # extract chroma feature
-    return librosa.feature.chroma_stft(
-        y=feature_mono,
-        sr=samplerate,
-        hop_length=hop_length,
-        center=False,
-        n_fft=fft_window,
-    )
-
-
-def extract_spectro(feature, samplerate, hop_length: int, fft_window=2048):
-    """Extracts the mel-spectrogram feature vector from the given sequence.
-    :param feature: The sequence to work on.
-    :param samplerate: The sample-rate of the sequence
-    :param hop_length: The hop-length of the sequence.
-    :param fft_window: The Window size for the fast-fourier-transformation
-                       (default: 2048)
-    :return: The mel-spectrogram feature vector.
-    """
-    # convert to mono
-    feature_mono = librosa.to_mono(feature)
-    # extract mel-spectrogram
-    return librosa.feature.melspectrogram(
-        y=feature_mono,
-        sr=samplerate,
-        hop_length=hop_length,
-        center=False,
-        n_fft=fft_window,
-    )
+    unique, counts = np.unique(peaks, return_counts=True)
+    return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
 def segment_block(
@@ -319,16 +329,6 @@ def segment_block(
     return select_peaks(
         nov, peak_threshold=threshold, downsampling=downsampling, offset=offset
     )
-
-
-def filter_peaks(peaks, n=3):
-    """Filters a given vector to values that appear at least n times.
-    :param peaks: The given vector
-    :param n: The minimum number of times a value has to appear
-    :return: The filtered vector.
-    """
-    unique, counts = np.unique(peaks, return_counts=True)
-    return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
 def segment_file(path, preset=Preset.NORMAL):
