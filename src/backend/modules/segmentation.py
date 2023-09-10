@@ -285,18 +285,6 @@ def extract_spectro(feature, samplerate, hop_length: int, fft_window=2048):
     )
 
 
-# TODO: Reevaluate this; didn't seem to work well
-def extract_mfcc(feature, samplerate):
-    """:param feature: The sequence to work on.
-    :param samplerate: The sample-rate of the sequence
-    :return: The mel-frequency coefficient feature vector
-    """
-    # convert to mono
-    feature_mono = librosa.to_mono(feature)
-    # extract mffc
-    return librosa.feature.mfcc(y=feature_mono, sr=samplerate)
-
-
 def segment_block(
     block,
     samplerate,
@@ -324,8 +312,6 @@ def segment_block(
         feature_seq = extract_chroma(block, samplerate, hop_length, fft_window=2048)
     elif feature == FeatureType.SPECTRAL:
         feature_seq = extract_spectro(block, samplerate, hop_length, fft_window=2048)
-    elif feature == FeatureType.MFCC:
-        feature_seq = extract_mfcc(block, samplerate)
     else:
         raise TypeError("Illegal Feature Value.")
 
