@@ -1,6 +1,14 @@
 def format_file_name(
     template: str, title: str = "", artist: str = "", album: str = "", year: str = ""
 ):
+    """Format a file name with the given template and parameters.
+    Templates may contain "{{TITLE}}", "{{ARTIST}}", "{{ALBUM}}" and "{{YEAR}}" as placeholders.
+    :param template: The name template.
+    :param title: The song title.
+    :param artist: The artist.
+    :param album: The album.
+    :param year: The year.
+    """
     return replace_all(
         template,
         {
