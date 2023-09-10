@@ -7,6 +7,7 @@ from flask import Blueprint, Response, jsonify, request, send_file
 from modules.api_service import identify_all_from_generator
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from modules.segmentation import segment_file
+from pathvalidate import sanitize_filename
 from utils.env import get_env
 from utils.file_name_formatter import format_file_name
 
@@ -91,12 +92,14 @@ def store():
         if "nameTemplate" in data
         else get_env("OUTPUT_FILE_NAME_TEMPLATE")
     )
-    target_file_name = format_file_name(
-        file_name_template,
-        metadata["title"] if "title" in metadata else "",
-        metadata["artist"] if "artist" in metadata else "",
-        metadata["album"] if "album" in metadata else "",
-        str(metadata["year"]) if "year" in metadata else "",
+    target_file_name = sanitize_filename(
+        format_file_name(
+            file_name_template,
+            metadata["title"] if "title" in metadata else "",
+            metadata["artist"] if "artist" in metadata else "",
+            metadata["album"] if "album" in metadata else "",
+            str(metadata["year"]) if "year" in metadata else "",
+        )
     )
 
     offset = data["offset"]
