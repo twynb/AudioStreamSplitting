@@ -5,14 +5,15 @@ from os import path
 
 import librosa
 import numpy as np
-from audio_stream_io import (
+
+# warnings without this for some reason
+from scipy import signal
+
+from .audio_stream_io import (
     overlapping_stream,
     read_audio_file_to_stream,
     save_numpy_as_audio_file,
 )
-
-# warnings without this for some reason
-from scipy import signal
 
 # TODO: Implement debugging mode (plots, prints) ?
 
