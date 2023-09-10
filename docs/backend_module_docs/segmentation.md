@@ -66,14 +66,14 @@ LENIENT and EXTRA_LENIENT may not only result in more segments but also in fault
 
 Computes a chromagram feature vector on the given sequence.
 
-#### Arguments
+#### extract_chroma:Arguments
 
 - ``feature``: The feature sequence
 - ``samplerate``: The samplerate of the audio
 - ``hop_length: int``: The amount of samples advanced between each frame in the audio
 - ``fft_window: int``: The window size used for fast-fourier-transformation
 
-#### Returns
+#### extract_chroma:Returns
 
 A chroma feature vector.
 
@@ -82,30 +82,30 @@ A chroma feature vector.
 
 Computes a mel-scaled spectrogram feature vector on the given sequence.
 
-#### Arguments
+#### extract_spectro:Arguments
 
 - ``feature``: The feature sequence
 - ``samplerate``: The samplerate of the audio
 - ``hop_length: int``: The amount of samples advanced between each frame in the audio
 - ``fft_window: int``: The window size used for fast-fourier-transformation
 
-#### Returns
+#### extract_spectro:Returns
 
 A mel-scaled spectrogram feature vector.
 
 
 ### smooth_downsample_feature_sequence
 
-Blurr the given feature sequence and downsamples it by the given factor.
+Blur the given feature sequence and downsamples it by the given factor.
 
-#### Arguments
+#### smooth_downsample_feature_sequence:Arguments
 
 - ``feature``: The feature sequence
 - ``samplerate``: The samplerate of the feature sequence
 - ``filter_len: int``: The length of the smoothing filter. Has to be odd (if even will be incremented).
 - ``downsampling: int``: The downsampling factor.
 
-#### Returns
+#### smooth_downsample_feature_sequence:Returns
 
 The downsampled and smoothed feature sequence.
 
@@ -115,14 +115,14 @@ The downsampled and smoothed feature sequence.
 Compute a 2D median filter on the given feature sequence and downsample it by the given
 factor.
 
-#### Arguments
+#### median_downsample_feature_sequence:Arguments
 
 - ``feature``: The feature sequence
 - ``samplerate``: The samplerate of the feature sequence
 - ``filter_len: int``: The length of the median filter. Has to be odd (if even will be incremented).
 - ``downsampling: int``: The downsampling factor.
 
-#### Returns
+#### median_downsample_feature_sequence:Returns
 
 The downsampled and smoothed feature sequence.
 
@@ -131,11 +131,11 @@ The downsampled and smoothed feature sequence.
 
 Normalize a given feature sequence using a L2-norm to a range of [0.0 - 1.0].
 
-#### Arguments
+#### normalize_feature_sequence:Arguments
 
 - ``feature``: The feature sequence to normalize.
 
-#### Returns
+#### normalize_feature_sequence:Returns
 
 The normalized feature sequence.
 
@@ -145,13 +145,13 @@ The normalized feature sequence.
 Computes a checkerboard kernel convolved with a 2D gaussian.
 Used to detect corners on the blurred self similarity matrix.
 
-#### Arguments
+#### create_gaussian_checkerboard_kernel:Arguments
 
 - ``n: int``: The resulting kernel length will be 2 * n + 1
 - ``var: float``: The variance of the gaussian kernel
 - ``normalize: bool``: Whether to normalize the kernel
 
-#### Returns
+#### create_gaussian_checkerboard_kernel:Returns
 
 A 2D gaussian Kernel of length 2 * n + 1.
 
@@ -163,14 +163,14 @@ This function will utilize [``smooth_downsample_feature_sequence``](#smooth_down
 and [``normalize_feature_sequence``](#normalize_feature_sequence) before the actual computation.
 Edges and corners in the SSM represent transitions between segments.
 
-#### Arguments
+#### compute_self_similarity:Arguments
 
 - ``feature``: The feature sequence
 - ``samplerate``: The samplerate of the feature sequence
 - ``filter_len: int``: The length of the filter used for smoothing. Has to be odd (if even will be incremented).
 - ``downsampling: int``: The downsampling factor.
 
-#### Returns
+#### compute_self_similarity:Returns
 
 An SSM (Self similarity matrix) for the given feature vector.
 
@@ -185,7 +185,7 @@ the SSM for the convolution. These inaccurate parts may be excluded and set to 0
 This will result in a 1D representation of the SSM where peaks represent
 transitions between segments.
 
-#### Arguments
+#### compute_novelty_ssm:Arguments
 
 - ``ssm``: The self similarity matrix to work with
 - ``kernel``: The corner detection kernel to compute a novelty function with.
@@ -195,7 +195,7 @@ If None is specified, will default to [create_gaussian_checkerboard_kernel](#cre
 - ``exclude: bool``: Whether to exclude the first and last 2 * n + 1 values.
 The edges of the ssm will be padded by reflection, which will result in inaccuracies.
 
-#### Returns
+#### compute_novelty_ssm:Returns
 
 A novelty function of the given SSM
 
@@ -207,7 +207,7 @@ which represent transitions.
 Indices are in audio frames and will be upsampled (if previously downsampled)
 and incremented by a given offset.
 
-#### Arguments
+#### select_peaks:Arguments
 
 - ``novelty``: The novelty function
 - ``peak_threshold: float``: The threshold by which peaks are selected.
@@ -216,7 +216,7 @@ See [Librosa Docs](https://librosa.org/doc/latest/generated/librosa.util.peak_pi
 - ``offset: float``: An offset to increment resulting peaks by. This is useful for streamed audio, since each block of
 the stream starts at 0
 
-#### Returns
+#### select_peaks:Returns
 
 A list of peak indices (indices are audio frames, not samples).
 
@@ -227,12 +227,12 @@ Filters a given vector to only include values that occur more than n (by default
 times. This may be necessary when working with overlapping block in a stream, where
 the same peaks may appear multiple times.
 
-#### Arguments
+#### filter_peaks:Arguments
 
 - ``peaks``: The list of peak indices
 - ``n: int``: The number of times a values has to appear, for it to be relevant.
 
-#### Returns
+#### filter_peaks:Returns
 
 The filtered list of peak indices.
 
@@ -243,7 +243,7 @@ Segments a block (see: [Librosa Docs](https://librosa.org/doc/latest/generated/l
 This will extract a specified [``FeatureType``](#FeatureType) compute the SSM and Novelty Function
 and finally search for Peaks.
 
-#### Arguments
+#### segment_block:Arguments
 
 - ``block``: A block of the streamed audio
 - ``samplerate``: The samplerate of the audio
@@ -254,7 +254,7 @@ and finally search for Peaks.
 - ``threshold: float``: The peak threshold. See [``select_peaks``](#select_peaks)
 - ``offset: float``: The offset by which peaks are incremented. See [``select_peaks``](#select_peaks)
 
-#### Returns
+#### segment_block:Returns
 
 All peak indices found for the given block.
 
@@ -265,12 +265,12 @@ Creates a generator, where each step results in a start_time and duration, repre
 This will stream over the audio in overlapping blocks and segment each block individually.
 The resulting peaks will be filtered, to make sure the peaks are not just local maximums, before being pairwise iterated.
 
-#### Arguments
+#### segment_file:Arguments
 
 - ``path``: The path to the audio file.
 - ``preset: Preset``: The preset of values used in segmentation.
 
-#### Returns
+#### segment_file:Returns
 
 A generator over each segment of the audio file.
 Each segment consists of start_time, duration and samplerate.
