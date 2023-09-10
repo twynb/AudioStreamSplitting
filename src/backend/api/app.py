@@ -10,6 +10,7 @@ from flask import (
     send_from_directory,
 )
 from flask_cors import CORS
+from utils.logger import log_error
 from utils.path import get_abs_src_dir_in_built_app
 
 mimetypes.add_type("application/javascript", ".js")
@@ -34,3 +35,15 @@ def index():
 @app.route("/<path:filename>")
 def serve_static(filename):
     return send_from_directory(gui_dir, filename)
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    log_error(error, "500 internal error")
+    return "500 internal server error"
+
+
+@app.errorhandler(404)
+def not_found(error):
+    log_error(error, "404 not found error")
+    return "404 not found"

@@ -4,6 +4,7 @@ from typing import Generator
 
 import acoustid
 from utils.env import get_env
+from utils.logger import log_error
 
 from .apis.shazam import lookup as shazam_lookup
 from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
@@ -61,19 +62,25 @@ def identify_all_from_generator(
     is_first_segment = True
     segments = []
     mismatch_offsets = []
-    for (segment, samplerate), start, duration in generator:
-        result = get_song_options(start, duration, file_path)
-        if (
-            result
-            in [SongOptionResult.SONG_FINISHED, SongOptionResult.SONG_NOT_RECOGNISED]
-        ) and not is_first_segment:
-            segments.append(get_last_song())
-        elif result == SongOptionResult.SONG_MISMATCH:
-            segments.append(get_last_song())
-            mismatch_offsets.append(start)
-        if result != SongOptionResult.SONG_EXTENDED:
-            is_first_segment = False
-    segments.append(get_final_song())
+    try:
+        for (segment, samplerate), start, duration in generator:
+            result = get_song_options(start, duration, file_path)
+            if (
+                result
+                in [
+                    SongOptionResult.SONG_FINISHED,
+                    SongOptionResult.SONG_NOT_RECOGNISED,
+                ]
+            ) and not is_first_segment:
+                segments.append(get_last_song())
+            elif result == SongOptionResult.SONG_MISMATCH:
+                segments.append(get_last_song())
+                mismatch_offsets.append(start)
+            if result != SongOptionResult.SONG_EXTENDED:
+                is_first_segment = False
+        segments.append(get_final_song())
+    except Exception as ex:
+        log_error(ex, "Splitting from generator")
     return (segments, mismatch_offsets)
 
 
@@ -139,29 +146,35 @@ def get_song_options(offset: float, duration: float, file_path: str):
     )
     # first check using acoustID
     if ACOUSTID_API_KEY is not None:
-        duration, fingerprint = _create_fingerprint(song_data, sample_rate)
-        metadata = _get_api_song_data_acoustid(fingerprint, duration)
-        if len(metadata) != 0:
-            return _check_song_extended_or_finished(offset, duration, metadata)
+        try:
+            duration, fingerprint = _create_fingerprint(song_data, sample_rate)
+            metadata = _get_api_song_data_acoustid(fingerprint, duration)
+            if len(metadata) != 0:
+                return _check_song_extended_or_finished(offset, duration, metadata)
+        except Exception as ex:
+            log_error(ex, "AcoustID segment identification")
 
     # if acoustID doesn't find anything, try shazam
     # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
     if SHAZAM_API_KEY is not None and sample_rate == SAMPLE_RATE_STANDARD:
-        metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
-        metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
-        metadata_start = [metadata_start] if metadata_start is not None else []
-        metadata_end = [metadata_end] if metadata_end is not None else []
+        try:
+            metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
+            metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
+            metadata_start = [metadata_start] if metadata_start is not None else []
+            metadata_end = [metadata_end] if metadata_end is not None else []
 
-        shazam_metadata_options = _get_overlapping_metadata_values(
-            metadata_start, metadata_end
-        )
-        if len(shazam_metadata_options) != 0:
-            return _check_song_extended_or_finished(
-                offset, duration, shazam_metadata_options
+            shazam_metadata_options = _get_overlapping_metadata_values(
+                metadata_start, metadata_end
             )
-        elif len(metadata_start) != 0 and len(metadata_end) != 0:
-            _store_finished_song(offset, duration, ())
-            return SongOptionResult.SONG_MISMATCH
+            if len(shazam_metadata_options) != 0:
+                return _check_song_extended_or_finished(
+                    offset, duration, shazam_metadata_options
+                )
+            elif len(metadata_start) != 0 and len(metadata_end) != 0:
+                _store_finished_song(offset, duration, ())
+                return SongOptionResult.SONG_MISMATCH
+        except Exception as ex:
+            log_error(ex, "Shazam segment identification")
 
     # if neither finds anything, song not recognised.
     _store_finished_song(offset, duration, ())
