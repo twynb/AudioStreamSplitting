@@ -1,20 +1,20 @@
 import os
 from enum import Enum
+from collections import namedtuple
 from itertools import pairwise
 from os import path
 
-import librosa
 import numpy as np
-from audio_stream_io import (
+from scipy import signal
+import librosa
+
+from .audio_stream_io import (
     overlapping_stream,
     read_audio_file_to_stream,
     save_numpy_as_audio_file,
 )
 
-# warnings without this for some reason
-from scipy import signal
-
-# TODO: Implement debugging mode (plots, prints) ?
+# TODO: Implement debugging mode (plots, prints) -> needs UI as well
 
 
 class FeatureType(Enum):
@@ -22,18 +22,38 @@ class FeatureType(Enum):
 
     CHROMA = 1
     SPECTRAL = 2
-    MFCC = 3
 
 
-# TODO: (Optional) Rework this to Preset and set more values than down-sampling
-class Downsampling(Enum):
-    """This enum represent the Downsampling for the SSM."""
+class Preset(
+    namedtuple("Preset", "name filter_length downsampling peak_threshold"), Enum
+):
+    """This enum represents a preset of values used for splitting.
 
-    STRICT = 4
-    NORMAL = 8
-    LENIENT = 16
-    EXTRA_LENIENT = 32
-    # CUSTOM = 0 this should be specified by the user
+    The values set in these presets are:
+
+    - filter_length: the size of the median filter used for downsampling
+    - downsampling: the factor to downsample the ssm
+    - peak_threshold: a threshold by which peaks in the novelty function are selected
+
+    Presets are:
+
+                      filter_length,      downsampling,       peak_threshold
+    - EXTRA_STRICT:     73,                 2,                0.6
+    - STRICT:           57,                 4,                0.55
+    - NORMAL:           41,                 8,                0.5
+    - LENIENT:          25,                 16,               0.45
+    - EXTRA_LENIENT:    9,                  32,               0.4
+
+    Normal is the recommended preset, strict may result in too little segments and lenient may result in increasingly
+    too many but inaccurate segments.
+    """
+
+    EXTRA_STRICT = "extra strict", 57, 2, 0.6
+    STRICT = "strict", 49, 4, 0.55
+    NORMAL = "normal", 41, 8, 0.5
+    LENIENT = "lenient", 33, 16, 0.45
+    EXTRA_LENIENT = "extra lenient", 25, 32, 0.4
+    # Custom = 0, 0, 0
 
 
 def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
@@ -60,7 +80,9 @@ def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
     return kernel
 
 
-def smooth_downsample_feature_sequence(feature, samplerate, filter_len, downsampling):
+def smooth_downsample_feature_sequence(
+    feature, samplerate, filter_len: int, downsampling: int
+):
     """Smooths and down-samples a given feature-sequence and its samplerate.
     :param feature: the feature sequence to smooth and down-sample
     :param samplerate: the samplerate of the feature sequence
@@ -69,6 +91,9 @@ def smooth_downsample_feature_sequence(feature, samplerate, filter_len, downsamp
     :returns: the smoothed and down-sampled feature sequence,
               the down-sampled samplerate.
     """
+    if filter_len % 2 != 1:
+        filter_len = filter_len + 1
+
     filter_kernel = np.expand_dims(signal.get_window("boxcar", filter_len), axis=0)
     feature_smooth = signal.convolve(feature, filter_kernel, mode="same") / filter_len
     feature_smooth = feature_smooth[:, ::downsampling]
@@ -77,7 +102,9 @@ def smooth_downsample_feature_sequence(feature, samplerate, filter_len, downsamp
     return feature_smooth, sr_feature
 
 
-def median_downsample_feature_sequence(feature, samplerate, filter_len, downsampling):
+def median_downsample_feature_sequence(
+    feature, samplerate, filter_len: int, downsampling: int
+):
     """Smooths and down-samples a given feature-sequence and its samplerate
     using a median filter.
     :param feature: the feature sequence to smooth and down-sample
@@ -99,7 +126,7 @@ def median_downsample_feature_sequence(feature, samplerate, filter_len, downsamp
 
 
 def normalize_feature_sequence(feature):
-    """Normalized a given feature sequence.
+    """Normalize a given feature sequence.
     :param feature: the feature sequence to normalize
     :returns: the normalized feature sequence.
     """
@@ -119,11 +146,11 @@ def normalize_feature_sequence(feature):
 
 def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
     """Computes the self similarity matrix for a given feature sequence.
-    Stacks the feature sequence with delay, smooths and down-samples
-    it and finally normalizes the sequence before calculating the ssm.
+    Stacks the feature sequence with delay, smooths, down-samples
+    and finally normalizes the sequence before calculating the ssm.
     :param feature: the feature sequence
     :param samplerate: the sample-rate
-    :param filter_len: length for the filter kernel, needs to be odd ()
+    :param filter_len: length for the filter kernel, needs to be odd (incremented by one if even)
     :param downsampling: down-sampling rate for feature sequence (default: 32)
     :returns: the self similarity matrix, the resulting sample-rate.
     """
@@ -183,7 +210,6 @@ def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
     return nov
 
 
-# TODO: Needs more research (maybe adaptive thresholding)
 def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
     """Selects the peak of the given function based on the given threshold.
     :param novelty: the function to find peaks in
@@ -193,39 +219,31 @@ def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
     :returns: all indexes where the function peaks.
     """
     # Find peaks
-    # peaks = librosa.util.peak_pick(x=novelty, pre_max=3, post_max=3,
-    #                               pre_avg=3, post_avg=5, delta=0.5, wait=10)
-    peaks, _ = signal.find_peaks(novelty, prominence=peak_threshold)
-
-    # Adaptive Thresholding ##################################################
-    # novelty = ndimage.gaussian_filter1d(novelty, sigma=4.0)
-    # novelty = (novelty - np.min(novelty)) / (np.max(novelty) - np.min(novelty))
-    # threshold_local = ndimage.median_filter(novelty, size=16)
-    #                   + novelty.mean() * peak_threshold
-    # peaks = []
-    # for i in range(1, novelty.shape[0] - 1):
-    #     if novelty[i - 1] < novelty[i] and novelty[i] > novelty[i + 1]:
-    #         if novelty[i] > threshold_local[i]:
-    #             peaks.append(i)
-    # peaks = np.array(peaks)
-    ###########################################################################
-
-    # Add start and end of segment
-    # peaks = np.insert(peaks, 0, 0)
-    # peaks = np.append(peaks, len(novelty))
+    wait = int(novelty.shape[0] / 10)
+    peaks = librosa.util.peak_pick(
+        x=novelty,
+        pre_max=10,
+        post_max=10,
+        pre_avg=10,
+        post_avg=10,
+        delta=peak_threshold,
+        wait=wait,
+    )
 
     # Debug plotting
     # plt.plot(novelty)
+    # # Plot vertical lines where detected peaks are
     # for x in peaks:
     #     plt.vlines(x, ymin=0, ymax=0.01, colors='red', label=f'Peak: {x}')
     # plt.show()
 
+    # upsampling
     peaks *= downsampling
     peaks += int(offset)
     return peaks
 
 
-def extract_chroma(feature, samplerate, hop_length, fft_window=2048):
+def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
     """Extracts the chroma feature vector from the given sequence.
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
@@ -246,7 +264,7 @@ def extract_chroma(feature, samplerate, hop_length, fft_window=2048):
     )
 
 
-def extract_spectro(feature, samplerate, hop_length, fft_window=2048):
+def extract_spectro(feature, samplerate, hop_length: int, fft_window=2048):
     """Extracts the mel-spectrogram feature vector from the given sequence.
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
@@ -286,7 +304,7 @@ def segment_block(
     feature: FeatureType,
     filter_len=41,
     downsampling=8,
-    threshold=0.7,
+    threshold=0.5,
     offset=0.0,
 ):
     """Segments a data array into segments, where each segment represents
@@ -294,9 +312,14 @@ def segment_block(
     :param block: the current block of the audio stream
     :param samplerate: sample rate of the audio stream
     :param hop_length: hop length of the audio stream
+    :param feature: the feature type to use, see: :class:`Downsampling`
+    :param filter_len: the length of the median filter
+    :param downsampling: the downsampling factor to use
+    :param threshold: the threshold for peak selection
+    :param offset: an offset (in audio frames) to calculate indices for consecutive
+                   calls correctly
     :returns: a list of indexes, where transitions should be.
     """
-    # Spectral worked best so far
     if feature == FeatureType.CHROMA:
         feature_seq = extract_chroma(block, samplerate, hop_length, fft_window=2048)
     elif feature == FeatureType.SPECTRAL:
@@ -325,10 +348,10 @@ def filter_peaks(peaks, n=3):
     return np.sort([k for k, v in dict(zip(unique, counts)).items() if v >= n])
 
 
-def segment_file(path, downsampling=Downsampling.NORMAL):
+def segment_file(path, preset=Preset.NORMAL):
     """Segments a given file into a generator.
     :param path: The path to the File
-    :param downsampling: The down-sampling rate for the SSM see: :class:`Downsampling`
+    :param preset: The down-sampling rate for the SSM see: :class:`Preset`
     :return: A generator that iterates over the found segments,
              the start time and duration for the original file.
     """
@@ -340,6 +363,7 @@ def segment_file(path, downsampling=Downsampling.NORMAL):
     transitions = np.zeros(1)
     last_frame_in_audiofile = 0
     for idx, block in enumerate(overlapping_stream(stream)):
+        # if the block is constant, we won't find anything, so skip
         if np.unique(block).size == 1:
             continue
 
@@ -351,8 +375,9 @@ def segment_file(path, downsampling=Downsampling.NORMAL):
                 samplerate,
                 hop_length,
                 FeatureType.SPECTRAL,
-                downsampling=downsampling.value,
-                threshold=0.7,
+                filter_len=preset.filter_length,
+                downsampling=preset.downsampling,
+                threshold=preset.peak_threshold,
                 offset=offset,
             ),
         )
@@ -367,6 +392,7 @@ def segment_file(path, downsampling=Downsampling.NORMAL):
     transitions = np.insert(transitions, 0, 0)
     transitions = np.append(transitions, last_frame_in_audiofile - 1)
 
+    # Generate the segments consisting of start_time and duration
     for start, end in pairwise(transitions):
         start_time = librosa.core.frames_to_time(
             start, sr=samplerate, hop_length=hop_length, n_fft=2048
