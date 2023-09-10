@@ -1,8 +1,6 @@
-import os
 from enum import Enum
 from collections import namedtuple
 from itertools import pairwise
-from os import path
 
 import numpy as np
 from scipy import signal
@@ -11,7 +9,6 @@ import librosa
 from .audio_stream_io import (
     overlapping_stream,
     read_audio_file_to_stream,
-    save_numpy_as_audio_file,
 )
 
 # TODO: Implement debugging mode (plots, prints) -> needs UI as well
@@ -389,48 +386,9 @@ def segment_file(path, preset=Preset.NORMAL):
 
         # TODO decide whether to remove librosa.load() call for memory efficiency
         yield librosa.load(
-            current_track,
+            path,
             mono=False,
             sr=samplerate,
             offset=start_time,
             duration=duration,
         ), start_time, duration
-
-
-# TODO: Move this elsewhere
-if __name__ == "__main__":
-    # TODO: This whole segment is only for testing purposes and should be refactored
-    ####################################################################################################################
-    for f in os.listdir("../../../test_output/"):
-        os.remove(os.path.join("../../../test_output/", f))
-
-    file_parent_path = path.abspath("../../../../../Music/Stuff/")
-
-    album = "full_album.mp3"  # 1h 6m 30s    13 songs
-    hiphop = "hiphop.mp3"  # 15m 30s      4 songs
-    edm = "modern_edm.mp3"  # 20m 40s      5 songs
-    pop = "old_pop.mp3"  # 19m 45s      5 songs
-    rock = "rock.mp3"  # 15m 40s      4 songs
-    crackle = "with_crackle.mp3"  # 12m          3 songs
-
-    current_track = path.join(file_parent_path, crackle)
-    ####################################################################################################################
-
-    for (segment, samplerate), start, duration in segment_file(
-        current_track, Downsampling.NORMAL
-    ):
-        start_m, start_s = divmod(int(start), 60)
-        m, s = divmod(int(duration), 60)
-        song_name = f"Song_{start_m:02d}m{start_s:02d}s_{m:02d}m{s:02d}s"
-        # probably not how this would work
-        # tags = identify(segment)
-        # song_name = tags.name
-        # tag_audio_file(tags)
-
-        output_path = path.abspath("../../../test_output/")
-        save_numpy_as_audio_file(segment, song_name, output_path, int(samplerate))
-
-        print(
-            f"Successfully written {song_name} to {output_path} "
-            f"with a duration of {m:02d}m {s:02d}s."
-        )
