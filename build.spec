@@ -3,12 +3,15 @@ import platform
 
 current_os = platform.system()
 
+do_strip = True
+
 if current_os == "Linux":
     app_name = "audio_splitter_linux"
 elif current_os == "Darwin":
     app_name = "audio_splitter_macos"
 elif current_os == "Windows":
     app_name = "audio_splitter_window.exe"
+    do_strip = False
 else:
     raise Exception(f"Unsupported operating system: {current_os}")
 
@@ -52,7 +55,7 @@ exe = EXE(  # noqa F821
     icon="src/frontend/public/logo.ico",
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
+    strip=do_strip,
     runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
