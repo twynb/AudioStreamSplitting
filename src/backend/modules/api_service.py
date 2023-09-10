@@ -3,9 +3,9 @@ from enum import Enum
 from typing import Generator
 
 import acoustid
-import apis.shazam as shazam
 from utils.env import get_env
 
+from .apis.shazam import lookup as shazam_lookup
 from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 
 """
@@ -147,8 +147,8 @@ def get_song_options(offset: float, duration: float, file_path: str):
     # if acoustID doesn't find anything, try shazam
     # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
     if SHAZAM_API_KEY is not None and sample_rate == SAMPLE_RATE_STANDARD:
-        metadata_start = shazam.lookup(song_data, SHAZAM_API_KEY, True)
-        metadata_end = shazam.lookup(song_data, SHAZAM_API_KEY, False)
+        metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
+        metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
         metadata_start = [metadata_start] if metadata_start is not None else []
         metadata_end = [metadata_end] if metadata_end is not None else []
 
@@ -206,12 +206,12 @@ def _get_overlapping_metadata_values(metadata1, metadata2):
     elif len(metadata2) == 0:
         return metadata1
     else:
-        overlapping_metadata = {}
-        titles2 = map(lambda d: d["title"], metadata2)
-        artists2 = map(lambda d: d["artist"], metadata2)
+        overlapping_metadata = []
+        titles2 = [d["title"] for d in metadata2]
+        artists2 = [d["artist"] for d in metadata2]
         for metadata in metadata1:
             if metadata["title"] in titles2 and metadata["artist"] in artists2:
-                overlapping_metadata.add(metadata)
+                overlapping_metadata.append(metadata)
         return overlapping_metadata
 
 
@@ -236,7 +236,7 @@ def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
     """Get data about the provided fingerprint from the AcoustID API.
     :param fingerprint: the fingerprint.
     :param fingerprint_duration: duration of the fingerprint in seconds.
-    :returns: [{"score": match score, "title": title, "artist": artist}]
+    :returns: [{""title": title, "artist": artist}]
     """
     try:
         result = []
