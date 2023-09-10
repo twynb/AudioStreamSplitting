@@ -12,7 +12,8 @@
     "next": "Next",
     "done": "Done",
     "previous": "Previous",
-    "create_new_project": "Create new project"
+    "create_new_project": "Create new project",
+    "save": "Save"
   },
   "placeholder": {},
   "sidebar": {
@@ -53,5 +54,12 @@
     "confirm": {
       "title": "Are you sure ?"
     }
+  },
+  "song": {
+    "title": "Title",
+    "artist": "Artist",
+    "album": "Album",
+    "year": "Year",
+    "duration": "Duration"
   }
 }

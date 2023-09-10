@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Project } from 'models/types'
+
 const props = defineProps<{ id: string }>()
 
 const { getProjectById } = useDBStore()
@@ -40,8 +42,8 @@ function updateFileProperty<TKey extends keyof Project['files'][0]>(filePath: st
         <ProjectItem
           v-for="file in project.files" :key="file.filePath"
           :file="file"
-          @succeed-process="({ filePath, info }) => updateFileProperty(filePath, 'info', info)"
-          @update-peaks="({ filePath, peaks }) => updateFileProperty(filePath, 'peaks', peaks)"
+          @succeed-process="(v) => updateFileProperty(file.filePath, 'segments', v)"
+          @update-peaks="(v) => updateFileProperty(file.filePath, 'peaks', v)"
         />
       </div>
     </template>

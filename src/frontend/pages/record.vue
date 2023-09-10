@@ -2,6 +2,7 @@
 import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
+import type { Project } from 'models/types'
 import { RECORD_STEPS } from '../includes/driver'
 
 const { createProject } = useDBStore()
@@ -87,7 +88,6 @@ async function handleSave() {
   if (!blob.value)
     return
 
-  // @ts-expect-error showSaveFilePicker is still in experimental
   const newHandle = await window.showSaveFilePicker({
     suggestedName: 'record.webm',
     types: [{

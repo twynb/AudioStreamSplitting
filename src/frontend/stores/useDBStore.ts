@@ -1,4 +1,5 @@
 import { useLocalStorage } from '@vueuse/core'
+import type { Project } from '../models/types'
 
 export const useDBStore = defineStore('db', () => {
   const projects = useLocalStorage<Project[]>('db', [], { deep: true })
