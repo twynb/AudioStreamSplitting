@@ -1,12 +1,14 @@
+import os
 from enum import Enum
 from collections import namedtuple
 from itertools import pairwise
+from os import path
 
 import numpy as np
 from scipy import signal
 import librosa
 
-from .audio_stream_io import (
+from audio_stream_io import (
     overlapping_stream,
     read_audio_file_to_stream,
 )
@@ -35,11 +37,11 @@ class Preset(
     Presets are:
 
                       filter_length,      downsampling,       peak_threshold
-    - EXTRA_STRICT:     73,                 2,                0.6
-    - STRICT:           57,                 4,                0.55
+    - EXTRA_STRICT:     57,                 2,                0.6
+    - STRICT:           49,                 4,                0.55
     - NORMAL:           41,                 8,                0.5
-    - LENIENT:          25,                 16,               0.45
-    - EXTRA_LENIENT:    9,                  32,               0.4
+    - LENIENT:          33,                 16,               0.45
+    - EXTRA_LENIENT:    25,                 32,               0.4
 
     Normal is the recommended preset, strict may result in too little segments and lenient may result in increasingly
     too many but inaccurate segments.
@@ -384,11 +386,54 @@ def segment_file(path, preset=Preset.NORMAL):
             end - start, sr=samplerate, hop_length=hop_length, n_fft=2048
         )
 
-        # TODO decide whether to remove librosa.load() call for memory efficiency
-        yield librosa.load(
-            path,
-            mono=False,
-            sr=samplerate,
-            offset=start_time,
-            duration=duration,
-        ), start_time, duration
+        yield start_time, duration, samplerate
+
+
+if __name__ == "__main__":
+    ####################################################################################################################
+    for f in os.listdir("../../../test_output/"):
+        os.remove(os.path.join("../../../test_output/", f))
+
+    file_parent_path = path.abspath("../../../../../Music/Stuff/")
+
+    album = "full_album.mp3"  # 1h 6m 30s    13 songs
+    hiphop = "hiphop.mp3"  # 15m 30s      4 songs
+    edm = "modern_edm.mp3"  # 20m 40s      5 songs
+    pop = "old_pop.mp3"  # 19m 45s      5 songs
+    rock = "rock.mp3"  # 15m 40s      4 songs
+    crackle = "with_crackle.mp3"  # 12m          3 songs
+
+    current_track = path.join(file_parent_path, crackle)
+    ####################################################################################################################
+
+    kernel = create_gaussian_checkerboard_kernel(n=16, var=0.5, normalize=True)
+    print(kernel.shape)
+
+    # songs = [crackle, rock, pop, edm, hiphop, album]
+    # presets = [Preset.EXTRA_LENIENT, Preset.LENIENT, Preset.NORMAL, Preset.STRICT, Preset.EXTRA_STRICT]
+    # for song in songs:
+    #     for preset in presets:
+    #         seg_count = 0
+    #         # Process and write segments
+    #         for start, duration, samplerate in segment_file(path.join(file_parent_path, song), preset):
+    #             seg_count += 1
+    #
+    #             start_m, start_s = divmod(int(start), 60)
+    #             m, s = divmod(int(duration), 60)
+    #             song_name = f"Song_{start_m:02d}m{start_s:02d}s_{m:02d}m{s:02d}s"
+    #             # probably not how this would work
+    #             # tags = identify(segment)
+    #             # song_name = tags.name
+    #             # tag_audio_file(tags)
+    #
+    #             output_path = path.abspath("../../../test_output/")
+    #             # save_numpy_as_audio_file(segment, song_name, output_path, int(samplerate))
+    #
+    #             print(
+    #                 f"Successfully written {song_name} to {output_path} "
+    #                 f"with a duration of {m:02d}m {s:02d}s."
+    #             )
+    #
+    #         print(f"{seg_count} segments found for {song} with {preset}")
+    #         print()
+    #     print()
