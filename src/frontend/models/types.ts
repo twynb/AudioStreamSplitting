@@ -12,7 +12,9 @@ export interface Project {
     fileName: string
     filePath: string
     peaks?: number[][]
-    segments?: PostAudioSplit200SegmentsItem[]
+    segments?: ProjectFileSegment[]
   }[]
   createAt: string
 }
+
+export type ProjectFileSegment = PostAudioSplit200SegmentsItem & { metaIndex: number }

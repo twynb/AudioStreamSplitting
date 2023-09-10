@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/plugins/regions'
-import type { Project } from '../models/types'
-import type { PostAudioSplit200SegmentsItem } from '../models/api'
+import type { Project, ProjectFileSegment } from '../models/types'
 import { getAudioStreamSplittingAPI } from '../models/api'
+import ConfirmModal from './dialogs/ConfirmModal.vue'
+import EditSongModal from './dialogs/EditSongModal.vue'
 
 const props = defineProps<{ file: Project['files'][0] }>()
 
 const emits = defineEmits<{
-  (e: 'succeedProcess', v: PostAudioSplit200SegmentsItem[]): void
+  (e: 'succeedProcess', v: ProjectFileSegment[]): void
   (e: 'updatePeaks', v: number[][]): void
+  (e: 'changeMeta', songIndex: number, metaIndex: number): void
 }>()
 
 const { postAudioSplit, postAudioGetSegment } = getAudioStreamSplittingAPI()
@@ -49,11 +51,12 @@ const isFetching = ref(false)
 async function handleProcess() {
   isFetching.value = true
   try {
-    let segments: PostAudioSplit200SegmentsItem[]
+    let segments: ProjectFileSegment[]
     if (props.file.segments) {
       segments = props.file.segments
     }
     else {
+      toast({ content: 'It will take a while.' })
       const { data } = await postAudioSplit({ filePath: props.file.filePath })
 
       if (!data.segments || !data.segments?.length) {
@@ -61,7 +64,16 @@ async function handleProcess() {
         throw new Error('This audio cannot be splitted')
       }
 
-      segments = data.segments
+      data.segments = data.segments
+        .map((s) => {
+          const notNullOpts = s.metadataOptions?.filter(o => o.album || o.artist || o.title || o.year)
+          const notDuplicatedOpts = [...new Set((notNullOpts ?? []).map(o => JSON.stringify(o)))]
+            .map(o => JSON.parse(o))
+          return { ...s, metadataOptions: notDuplicatedOpts }
+        })
+
+      segments = data.segments.map(s => ({ ...s, metaIndex: 0 }))
+
       emits('succeedProcess', segments)
     }
 
@@ -71,23 +83,21 @@ async function handleProcess() {
   finally { isFetching.value = false }
 }
 
-function addRegion(segments: PostAudioSplit200SegmentsItem[]) {
-  segments.forEach(({ duration, metadataOptions, offset }) => {
-    if (!duration || !metadataOptions || !offset)
+function addRegion(segments: ProjectFileSegment[]) {
+  segments.forEach(({ duration, metadataOptions, offset, metaIndex }) => {
+    if (!duration || !offset || !metadataOptions)
       return
 
-    const opts = metadataOptions.map(o => ({
-      ...o, title: o.title ?? 'unknown', artist: o.artist ?? 'unknown',
-    }))
+    const meta = metadataOptions[metaIndex]
 
     const contentEl = document.createElement('div')
-    contentEl.innerHTML = Object.entries(opts[0]).map(([key, value]) =>
-        `<span
-          class="${key}"
-          style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
-        >
-          ${key}: ${value}
-        </span>`,
+    contentEl.innerHTML = Object.entries(meta).map(([key, value]) =>
+      `<span
+        class="${key}"
+        style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
+      >
+        ${key}: ${value}
+      </span>`,
     ).join('\n')
 
     regions.value && regions.value.addRegion({
@@ -106,7 +116,7 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
     suggestedName: `${name.replaceAll(' ', '_')}.wav`,
     types: [{
       description: 'WAV file',
-      accept: { 'audio/wav': ['.wave'] },
+      accept: { 'audio/wav': ['.wav'] },
     }],
   })
 
@@ -123,14 +133,39 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
   await writableStream.write(blob)
   await writableStream.close()
 }
+
+function handleEdit(songIndex: number) {
+  let newMetaIndex = 0
+  const { open, close } = useModal({
+    component: ConfirmModal,
+    attrs: {
+      contentClass: 'max-w-50vw lg:max-w-[500px]',
+      onCancel() { close() },
+      onOk() {
+        emits('changeMeta', songIndex, newMetaIndex)
+        regions.value?.clearRegions()
+        props.file.segments && addRegion(props.file.segments)
+        close()
+      },
+    },
+    slots: {
+      default: {
+        component: h(EditSongModal, {
+          metadatas: props.file.segments?.[songIndex]?.metadataOptions ?? [],
+          opt: `${props.file.segments?.[songIndex]?.metaIndex ?? 0}`,
+          onChange(v) { newMetaIndex = v },
+        }),
+      },
+    },
+  })
+
+  open()
+}
 </script>
 
 <template>
   <div class="space-y-2">
-    <div class="flex items-center gap-x-2">
-      <span class="text-sm" :class="file.segments ? 'i-carbon:checkmark-filled' : 'i-carbon:subtract-alt'" />
-      <p> {{ file.fileName }} </p>
-    </div>
+    <p> {{ file.fileName }} </p>
 
     <div class="relative">
       <div id="waveform" class="min-h-128px border rounded-md" />
@@ -144,7 +179,7 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
       .wav cannot be processed at the moment!
     </p>
 
-    <div class="flex-center">
+    <div class="flex-center py-2">
       <BaseButton
         :disabled="file.fileType === 'webm' || isFetching || file.segments"
         @click="handleProcess"
@@ -193,23 +228,24 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
           </th>
         </tr>
       </thead>
+
       <tbody>
-        <tr v-for="({ duration, metadataOptions, offset }, index) in file.segments" :key="index" class="border-b border-b-border">
+        <tr v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments" :key="index" class="border-b border-b-border">
           <template v-if="metadataOptions">
             <td class="p-4 align-middle font-medium">
-              {{ metadataOptions[0].title ?? 'unknown' }}
+              {{ metadataOptions[metaIndex].title }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[0].artist ?? 'unknown' }}
+              {{ metadataOptions[metaIndex].artist }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[0].album ?? 'unknown' }}
+              {{ metadataOptions[metaIndex].album }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[0].year ?? 'unknown' }}
+              {{ metadataOptions[metaIndex].year }}
             </td>
 
             <td class="p-4 align-middle">
@@ -217,7 +253,7 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
             </td>
 
             <td class="p-4 align-middle">
-              <BaseButton icon-only variant="ghost">
+              <BaseButton :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1" icon-only variant="ghost" @click="handleEdit(index)">
                 <span class="i-carbon-edit" />
               </BaseButton>
             </td>
@@ -227,7 +263,7 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
                 :disabled="!duration || !offset" icon-only variant="ghost" @click="duration && offset && handleSave({
                   duration,
                   offset,
-                  name: metadataOptions[0].title,
+                  name: metadataOptions[metaIndex].title,
                 })"
               >
                 <span class="i-carbon-download" />
@@ -242,6 +278,6 @@ async function handleSave({ duration, offset, name }: { duration: number; offset
 
 <style scoped>
 #waveform ::part(region-content){
-  @apply: flex flex-col gap-y-0.5 p-2 pr-3 min-w-100px max-w-150px lg:max-w-200px xl:max-w-250px bg-primary-foreground/80 text-primary text-sm rounded-br-md;
+  @apply: flex flex-col gap-y-0.5 p-2 pr-3 min-w-100px max-w-150px lg:max-w-200px xl:max-w-250px bg-primary-foreground/80 text-primary text-sm rounded-br-md !mt-0;
 }
 </style>

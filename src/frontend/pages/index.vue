@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 import { useEventListener } from '@vueuse/core'
+import type { Project } from 'models/types'
 import { DASHBOARD_STEPS } from '../includes/driver'
 
 const { getProjects, deleteProject, createProject } = useDBStore()

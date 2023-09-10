@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { title = 'Confirm' } = defineProps<{
   title?: string
-  content: string
+  contentClass?: string
 }>()
 
 const emits = defineEmits<{
@@ -13,9 +13,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <BaseModal :title="title" content-class="w-full max-w-30vw">
+  <BaseModal :title="title" :content-class="`w-full max-w-30vw ${contentClass}`">
     <template #body>
-      {{ content }}
+      <slot />
     </template>
 
     <template #footer>
