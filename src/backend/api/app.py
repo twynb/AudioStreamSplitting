@@ -1,3 +1,4 @@
+import mimetypes
 import os
 
 from api.audio import audio_bp
@@ -10,6 +11,9 @@ from flask import (
 )
 from flask_cors import CORS
 from utils.path import get_abs_src_dir_in_built_app
+
+mimetypes.add_type("application/javascript", ".js")
+mimetypes.add_type("application/javascript", ".mjs")
 
 gui_dir = os.path.join(os.getcwd(), "gui")
 if not os.path.exists(gui_dir):
