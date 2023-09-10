@@ -76,6 +76,7 @@ declare global {
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
   const useAttrs: typeof import('vue')['useAttrs']
+  const useConvertSecToMin: typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
@@ -91,6 +92,7 @@ declare global {
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
   const usePost: typeof import('./composables/usePost')['usePost']
+  const useRandomColor: typeof import('./composables/useRandomColor')['useRandomColor']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -182,6 +184,7 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useConvertSecToMin: UnwrapRef<typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
@@ -196,6 +199,7 @@ declare module 'vue' {
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
+    readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -281,6 +285,7 @@ declare module '@vue/runtime-core' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useConvertSecToMin: UnwrapRef<typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
@@ -295,6 +300,7 @@ declare module '@vue/runtime-core' {
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
+    readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

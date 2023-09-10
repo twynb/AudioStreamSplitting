@@ -63,12 +63,9 @@ def get_segment():
 
     audio_stream.seek(0)
 
-    content_length = len(audio_stream.getvalue())
-
     return Response(
         audio_stream,
         headers=headers,
-        content_length=content_length,
         content_type="audio/wav",
     )
 
