@@ -12,7 +12,6 @@ def get_abs_src_dir_in_built_app(lvl=2):
     path = Path(os.path.abspath(__file__))
     for _ in range(lvl):
         path = path.parent
-    print(str(path))
     return str(path)
 
 
