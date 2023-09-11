@@ -11,7 +11,7 @@ import soundfile
 def read_audio_file_to_numpy(
     audiofile, mono=False, offset=0, duration=None, sample_rate=22050
 ) -> Tuple[np.ndarray, float]:
-    """:param mono: loads file as mono audio if true
+    """
     :param audiofile: Path to audiofile
     :param mono: If true, convert to mono.
     :param offset: Start of the segment to read, in seconds.
@@ -27,10 +27,11 @@ def read_audio_file_to_numpy(
 def read_audio_file_to_stream(
     audiofile, block_len=4096, mono=False
 ) -> (Generator[np.ndarray, None, None], float, int):
-    """:param audiofile: Path to audiofile
+    """
+    :param audiofile: Path to audiofile
     :param block_len: block length of stream
     :param mono: loads file as mono audio if true
-    :returns: Audiostream
+    :returns: Audiostream , samplerate, hop length
     """
     # get rates
     sr = librosa.get_samplerate(audiofile)
@@ -53,6 +54,10 @@ def read_audio_file_to_stream(
 
 
 def overlapping_stream(stream):
+    """
+    :param stream: Takes a Generator
+    :returns: A Generator with 75% Overlap between each instance
+    """
     for curr_block, next_block in pairwise(stream):
         for ratio in np.linspace(1, 0, 4, endpoint=False):
             curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
@@ -72,7 +77,8 @@ def save_numpy_as_audio_file(
     tags: dict = {},
     extension=".mp3",
 ):
-    """:param song: np.ndarray of the song
+    """
+    :param song: np.ndarray of the song
     :param songname: name of the song
     :param file_path: path to file (without filename)
     :param rate: samplerate of the song {Default: 100}
@@ -86,7 +92,8 @@ def save_numpy_as_audio_file(
 
 
 def tag_audio_file(savename: str, songname: str, tags: dict):
-    """:param savename: path to savefile
+    """
+    :param savename: path to savefile
     :param songname: name of the song
     :param tags:
         album
