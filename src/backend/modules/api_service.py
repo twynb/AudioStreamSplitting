@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Generator
 
 import acoustid
+from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
 from utils.env import get_env
 from utils.logger import log_error
 
@@ -62,25 +63,22 @@ def identify_all_from_generator(
     is_first_segment = True
     segments = []
     mismatch_offsets = []
-    try:
-        for (segment, samplerate), start, duration in generator:
-            result = get_song_options(start, duration, file_path)
-            if (
-                result
-                in [
-                    SongOptionResult.SONG_FINISHED,
-                    SongOptionResult.SONG_NOT_RECOGNISED,
-                ]
-            ) and not is_first_segment:
-                segments.append(get_last_song())
-            elif result == SongOptionResult.SONG_MISMATCH:
-                segments.append(get_last_song())
-                mismatch_offsets.append(start)
-            if result != SongOptionResult.SONG_EXTENDED:
-                is_first_segment = False
-        segments.append(get_final_song())
-    except Exception as ex:
-        log_error(ex, "Splitting from generator")
+    for (segment, samplerate), start, duration in generator:
+        result = get_song_options(start, duration, file_path)
+        if (
+            result
+            in [
+                SongOptionResult.SONG_FINISHED,
+                SongOptionResult.SONG_NOT_RECOGNISED,
+            ]
+        ) and not is_first_segment:
+            segments.append(get_last_song())
+        elif result == SongOptionResult.SONG_MISMATCH:
+            segments.append(get_last_song())
+            mismatch_offsets.append(start)
+        if result != SongOptionResult.SONG_EXTENDED:
+            is_first_segment = False
+    segments.append(get_final_song())
     return (segments, mismatch_offsets)
 
 
@@ -151,8 +149,12 @@ def get_song_options(offset: float, duration: float, file_path: str):
             metadata = _get_api_song_data_acoustid(fingerprint, duration)
             if len(metadata) != 0:
                 return _check_song_extended_or_finished(offset, duration, metadata)
-        except Exception as ex:
-            log_error(ex, "AcoustID segment identification")
+        except NoBackendError as ex:
+            log_error(ex, "No fpcalc/chromaprint found")
+        except FingerprintGenerationError as ex:
+            log_error(ex, "AcoustID fingerprinting")
+        except WebServiceError as ex:
+            log_error(ex, "AcoustID request")
 
     # if acoustID doesn't find anything, try shazam
     # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
@@ -173,8 +175,8 @@ def get_song_options(offset: float, duration: float, file_path: str):
             elif len(metadata_start) != 0 and len(metadata_end) != 0:
                 _store_finished_song(offset, duration, ())
                 return SongOptionResult.SONG_MISMATCH
-        except Exception as ex:
-            log_error(ex, "Shazam segment identification")
+        except ConnectionError as ex:
+            log_error(ex, "Shazam connection error")
 
     # if neither finds anything, song not recognised.
     _store_finished_song(offset, duration, ())
