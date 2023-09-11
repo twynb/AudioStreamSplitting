@@ -87,6 +87,7 @@ declare global {
   const useDriverStore: typeof import('./stores/useDriverStore')['useDriverStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
+  const useHash: typeof import('./composables/useHash')['useHash']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
@@ -194,6 +195,7 @@ declare module 'vue' {
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
+    readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
@@ -295,6 +297,7 @@ declare module '@vue/runtime-core' {
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
+    readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>

@@ -116,6 +116,3 @@ components:
           type: string
         year:
           type: string
-      required:
-        - title
-        - artist

@@ -45,9 +45,9 @@ export interface PostAudioSplitBody {
 }
 
 export interface Metadata {
-  title: string
+  title?: string
   album?: string
-  artist: string
+  artist?: string
   year?: string
 }
 

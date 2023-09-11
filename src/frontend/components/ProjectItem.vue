@@ -24,9 +24,11 @@ const isAudioLoading = ref(true)
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
 
+const hash = useHash(props.file.filePath)
+
 onMounted(() => {
   ws.value = WaveSurfer.create({
-    container: '#waveform',
+    container: `#waveform_${hash}`,
     waveColor: 'rgb(173, 250, 29)',
     progressColor: '#8EAC50',
     barRadius: 5,
@@ -89,6 +91,8 @@ function addRegion(segments: ProjectFileSegment[]) {
       return
 
     const meta = metadataOptions[metaIndex]
+    if (!meta)
+      return
 
     const contentEl = document.createElement('div')
     contentEl.innerHTML = Object.entries(meta).map(([key, value]) =>
@@ -168,7 +172,7 @@ function handleEdit(songIndex: number) {
     <p> {{ file.fileName }} </p>
 
     <div class="relative">
-      <div id="waveform" class="min-h-128px border rounded-md" />
+      <div :id="`waveform_${hash}`" class="waveform min-h-128px border rounded-md" />
 
       <div v-if="isAudioLoading" class="absolute-center">
         <BaseLoader />
@@ -233,19 +237,19 @@ function handleEdit(songIndex: number) {
         <tr v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments" :key="index" class="border-b border-b-border">
           <template v-if="metadataOptions">
             <td class="p-4 align-middle font-medium">
-              {{ metadataOptions[metaIndex].title }}
+              {{ metadataOptions[metaIndex]?.title ?? 'unknown' }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex].artist }}
+              {{ metadataOptions[metaIndex]?.artist ?? 'unknown' }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex].album }}
+              {{ metadataOptions[metaIndex]?.album ?? 'unknown' }}
             </td>
 
             <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex].year }}
+              {{ metadataOptions[metaIndex]?.year ?? 'unknown' }}
             </td>
 
             <td class="p-4 align-middle">
@@ -263,7 +267,7 @@ function handleEdit(songIndex: number) {
                 :disabled="!duration || !offset" icon-only variant="ghost" @click="duration && offset && handleSave({
                   duration,
                   offset,
-                  name: metadataOptions[metaIndex].title,
+                  name: metadataOptions[metaIndex]?.title ?? 'unknown',
                 })"
               >
                 <span class="i-carbon-download" />
@@ -277,7 +281,7 @@ function handleEdit(songIndex: number) {
 </template>
 
 <style scoped>
-#waveform ::part(region-content){
+.waveform ::part(region-content){
   @apply: flex flex-col gap-y-0.5 p-2 pr-3 min-w-100px max-w-150px lg:max-w-200px xl:max-w-250px bg-primary-foreground/80 text-primary text-sm rounded-br-md !mt-0;
 }
 </style>
