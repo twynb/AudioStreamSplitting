@@ -16,7 +16,7 @@ a = Analysis(  # noqa F821
     ["src/backend/main.py"],
     pathex=["src/backend"],
     binaries=[],
-    datas=[("gui/*", "./gui"), (".env", ".")],
+    datas=[("gui/*", "./gui")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

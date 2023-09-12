@@ -39,7 +39,8 @@
       "index": "Appearance",
       "darkmode": "Dark Mode"
     },
-    "advanced": "Advanced"
+    "advanced": "Advanced",
+    "download": "Download"
   },
   "dialog": {
     "create_project": {
@@ -66,7 +67,7 @@
     "no_webm": ".webm cannot be processed at the moment!"
   },
   "toast": {
-    "empty_api_key": "Please give in a valid API key!",
+    "empty_field": "Please give in a valid value!",
     "changed_successfully": "Changed successfully!",
     "unkown_error": "Something wrong happend!",
     "long_process": "Processing will take a while...",

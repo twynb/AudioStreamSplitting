@@ -8,16 +8,15 @@ const env = useLocalStorage<Record<string, string>>(
   {
     SERVICE_ACOUSTID_API_KEY: import.meta.env.VITE_SERVICE_ACOUSTID_API_KEY,
     SERVICE_SHAZAM_API_KEY: import.meta.env.VITE_SERVICE_SHAZAM_API_KEY,
-  }, {
-    mergeDefaults: true,
-  })
+    OUTPUT_FILE_NAME_TEMPLATE: import.meta.env.VITE_OUTPUT_FILE_NAME_TEMPLATE,
+  }, { mergeDefaults: true })
 
 const { toast } = useToastStore()
 
 async function setApiKey(key: string) {
   if (!env.value[key]) {
-    toast({ content: t('toast.empty_api_key'), variant: 'destructive' })
-    throw new Error('Please give in a valid API key!')
+    toast({ content: t('toast.empty_field'), variant: 'destructive' })
+    throw new Error('Please give in a valid value!')
   }
 
   try {
@@ -60,6 +59,20 @@ async function setApiKey(key: string) {
 
         <div class="flex gap-x-3">
           <BaseTextArea id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" class="min-h-80px" />
+
+          <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">
+            {{ t('button.set') }}
+          </BaseButton>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
+          Output File Name
+        </BaseLabel>
+
+        <div class="flex gap-x-3">
+          <BaseInput id="OUTPUT_FILE_NAME_TEMPLATE" v-model="env.OUTPUT_FILE_NAME_TEMPLATE" />
 
           <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">
             {{ t('button.set') }}
