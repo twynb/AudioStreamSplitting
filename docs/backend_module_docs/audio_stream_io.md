@@ -14,7 +14,7 @@ Public functions:
 
 ### read_audio_file_to_numpy
 
-Reads a File To Load as a numpy Array
+Reads a file To load as a numpy array.
 
 #### read_audio_file_to_numpy:Arguments
 
@@ -26,52 +26,52 @@ Reads a File To Load as a numpy Array
 
 #### read_audio_file_to_numpy:Returns
 
-Returns a ``Tuple[np.ndarray,float]`` of sounddata
+Returns a ``Tuple[np.ndarray,float]`` of sound data.
 
 ### read_audio_file_to_stream
 
-Reads A audofile as a Stream
+Reads an audiofile as a stream.
 
 #### read_audio_file_to_stream:Arguments
 
-- `` audiofile: string `` Path to audiofile
-- `` block_len: int `` block length of stream
-- `` mono: bool `` loads file as mono audio if true
+- `` audiofile: string `` Path to audio file
+- `` block_len: int `` Block length of stream
+- `` mono: bool `` Loads file as mono audio if true
 
 #### read_audio_file_to_stream:Returns
 
-Returns an `` Audiostream: Generator `` the `` Samplerate: int `` and the `` hop_lenght: int ``
+Returns an `` audiostream: Generator `` the `` samplerate: int `` and the `` hop_lenght: int ``.
 
 ### overlapping_stream
 
-Gets a stream and Returns is with 75% overlapp between each instance.
+Gets a stream and returns is with 75% overlap between each instance.
 
 #### overlapping_stream:Arguments
 
-- `` stream: Generator `` Takes a generator of stereo Audiofiles. $2\times x$ with x as the block size
+- `` stream: Generator `` Takes a generator of stereo audio file data. $2\times x$ with $x$ as the block size.
 
 #### overlapping_stream:Retruns
 
-Returns a `` Generator `` with the size $2\times y$ with y as the block size
+Returns a `` Generator `` with the size $2\times y$ with $y$ as the block size.
 
 ### save_numpy_as_audio_file
 
 #### save_numpy_as_audio_file:Augments
 
-- `` song: np.ndarray`` of the song
-- `` songname: string `` name of the song
-- `` file_path: string|path `` path to file (without filename)
-- `` rate: int `` samplerate of the song {Default: 100}
-- `` tags: dict `` dict of tags {Default: {}} see [Tags](#tag_audio_file)
-- `` extension: string `` string of the extension {Default: ".mp3"}
+- `` song: np.ndarray`` Numpy array of the song
+- `` songname: string `` Name of the song
+- `` file_path: string|path `` Path to file (without file name)
+- `` rate: int `` Samplerate of the song {Default: 100}
+- `` tags: dict `` Dict of tags {Default: {}} see [Tags](#tag_audio_file)
+- `` extension: string `` String of the extension {Default: ".mp3"}
 
 ### tag_audio_file
 
 #### tag_audio_file:Augments
 
-- `` savename: string|path `` path to savefile
-- `` songname: string `` name of the song
-- `` tags: dict `` A dict of Tags
+- `` savename: string|path `` Path to savefile
+- `` songname: string `` Name of the song
+- `` tags: dict `` A dict of tags
 
 ##### tag_audio_file:Augments:tags
 
@@ -94,4 +94,4 @@ Possible tags are:
 - year
 - isrc
 
-Also some alieses like album -> albumname are possible
+Also some aliases like album -> albumname are possible
