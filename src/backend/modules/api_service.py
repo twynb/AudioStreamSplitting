@@ -17,9 +17,6 @@ Current implementation is c.
 All of the above would lead to errors if previous and next segment are the same song.
 """
 
-ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
-SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
-
 
 class SongOptionResult(Enum):
     """SongOptionResult contains information about the state of the API service."""
@@ -137,6 +134,10 @@ def get_song_options(offset: float, duration: float, file_path: str):
     song_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=sample_rate
     )
+
+    ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
+    SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
+
     # first check using acoustID
     if ACOUSTID_API_KEY is not None:
         duration, fingerprint = _create_fingerprint(song_data, sample_rate)
@@ -238,6 +239,8 @@ def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
     :param fingerprint_duration: duration of the fingerprint in seconds.
     :returns: [{""title": title, "artist": artist}]
     """
+    ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
+
     try:
         result = []
         for score, recording_id, title, artist in acoustid.parse_lookup_result(
