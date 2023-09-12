@@ -90,6 +90,12 @@ paths:
                   type: number
                 metadata:
                   $ref: "#/components/schemas/Metadata"
+                fileType:
+                  type: string
+                  description: The target file type. Defaults to "mp3" if not provided.
+                nameTemplate:
+                  type: string
+                  description: The file name template. Defaults to the one specified in .env if not provided.
       responses:
         "200":
           description: Store the segment in the target file.
