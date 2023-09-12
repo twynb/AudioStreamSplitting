@@ -21,6 +21,7 @@ declare module 'vue' {
     BaseSkeleton: typeof import('./components/BaseSkeleton.vue')['default']
     BaseSlider: typeof import('./components/BaseSlider.vue')['default']
     BaseSwitch: typeof import('./components/BaseSwitch.vue')['default']
+    BaseTextArea: typeof import('./components/BaseTextArea.vue')['default']
     ConfirmModal: typeof import('./components/dialogs/ConfirmModal.vue')['default']
     ContentLayout: typeof import('./components/ContentLayout.vue')['default']
     CreateProjectModal: typeof import('./components/dialogs/CreateProjectModal.vue')['default']

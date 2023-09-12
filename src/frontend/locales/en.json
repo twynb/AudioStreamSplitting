@@ -13,7 +13,8 @@
     "done": "Done",
     "previous": "Previous",
     "create_new_project": "Create new project",
-    "save": "Save"
+    "save": "Save",
+    "set": "Set"
   },
   "placeholder": {},
   "sidebar": {
@@ -37,7 +38,8 @@
     "appearance": {
       "index": "Appearance",
       "darkmode": "Dark Mode"
-    }
+    },
+    "advanced": "Advanced"
   },
   "dialog": {
     "create_project": {
@@ -60,6 +62,14 @@
     "artist": "Artist",
     "album": "Album",
     "year": "Year",
-    "duration": "Duration"
+    "duration": "Duration",
+    "no_webm": ".webm cannot be processed at the moment!"
+  },
+  "toast": {
+    "empty_api_key": "Please give in a valid API key!",
+    "changed_successfully": "Changed successfully!",
+    "unkown_error": "Something wrong happend!",
+    "long_process": "Processing will take a while...",
+    "cant_split": "This audio cannot be split"
   }
 }

@@ -58,13 +58,11 @@ async function handleProcess() {
       segments = props.file.segments
     }
     else {
-      toast({ content: 'It will take a while.' })
+      toast({ content: t('toast.long_process') })
       const { data } = await postAudioSplit({ filePath: props.file.filePath })
 
-      if (!data.segments || !data.segments?.length) {
-        toast({ content: 'This audio cannot be splitted' })
+      if (!data.segments || !data.segments?.length)
         throw new Error('This audio cannot be splitted')
-      }
 
       data.segments = data.segments
         .map((s) => {
@@ -81,7 +79,9 @@ async function handleProcess() {
 
     addRegion(segments)
   }
-  catch (e) { console.log(e) }
+  catch (e) {
+    toast({ content: t('toast.cant_split'), variant: 'destructive' })
+  }
   finally { isFetching.value = false }
 }
 
@@ -115,6 +115,7 @@ function addRegion(segments: ProjectFileSegment[]) {
   })
 }
 
+// TODO replace with save through backend
 async function handleSave({ duration, offset, name }: { duration: number; offset: number; name: string }) {
   const newHandle = await window.showSaveFilePicker({
     suggestedName: `${name.replaceAll(' ', '_')}.wav`,
@@ -180,7 +181,7 @@ function handleEdit(songIndex: number) {
     </div>
 
     <p v-if="file.fileType === 'webm'" class="text-center text-sm text-muted-foreground">
-      .wav cannot be processed at the moment!
+      {{ t('song.no_webm') }}
     </p>
 
     <div class="flex-center py-2">
