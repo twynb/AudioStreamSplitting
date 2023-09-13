@@ -20,6 +20,10 @@ export interface PostAudioStoreBody {
   offset?: number
   duration?: number
   metadata?: Metadata
+  /** The target file type. Defaults to "mp3" if not provided. */
+  fileType?: string
+  /** The file name template. Defaults to the one specified in .env if not provided. */
+  nameTemplate?: string
 }
 
 export interface PostAudioGetSegmentBody {

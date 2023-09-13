@@ -9,6 +9,7 @@ const env = useLocalStorage<Record<string, string>>(
     SERVICE_ACOUSTID_API_KEY: import.meta.env.VITE_SERVICE_ACOUSTID_API_KEY,
     SERVICE_SHAZAM_API_KEY: import.meta.env.VITE_SERVICE_SHAZAM_API_KEY,
     OUTPUT_FILE_NAME_TEMPLATE: import.meta.env.VITE_OUTPUT_FILE_NAME_TEMPLATE,
+    SAVE_DIRECTORY: import.meta.env.VITE_SAVE_DIRECTORY,
   }, { mergeDefaults: true })
 
 const { toast } = useToastStore()
@@ -43,8 +44,8 @@ async function setApiKey(key: string) {
           AcoustId API Key
         </BaseLabel>
 
-        <div class="flex gap-x-3">
-          <BaseTextArea id="SERVICE_ACOUSTID_API_KEY" v-model="env.SERVICE_ACOUSTID_API_KEY" class="min-h-80px" />
+        <div class="min-w-400px flex gap-x-3">
+          <BaseTextArea id="SERVICE_ACOUSTID_API_KEY" v-model="env.SERVICE_ACOUSTID_API_KEY" />
 
           <BaseButton @click="setApiKey('SERVICE_ACOUSTID_API_KEY')">
             {{ t('button.set') }}
@@ -57,10 +58,24 @@ async function setApiKey(key: string) {
           Shazam API Key
         </BaseLabel>
 
-        <div class="flex gap-x-3">
-          <BaseTextArea id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" class="min-h-80px" />
+        <div class="min-w-400px flex gap-x-3">
+          <BaseTextArea id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" />
 
           <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">
+            {{ t('button.set') }}
+          </BaseButton>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
+          {{ t('settings.save_directory') }}
+        </BaseLabel>
+
+        <div class="min-w-400px flex gap-x-3">
+          <BaseInput id="SAVE_DIRECTORY" v-model="env.SAVE_DIRECTORY" />
+
+          <BaseButton @click="setApiKey('SAVE_DIRECTORY')">
             {{ t('button.set') }}
           </BaseButton>
         </div>
@@ -71,7 +86,7 @@ async function setApiKey(key: string) {
           Output File Name
         </BaseLabel>
 
-        <div class="flex gap-x-3">
+        <div class="min-w-400px flex gap-x-3">
           <BaseInput id="OUTPUT_FILE_NAME_TEMPLATE" v-model="env.OUTPUT_FILE_NAME_TEMPLATE" />
 
           <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">

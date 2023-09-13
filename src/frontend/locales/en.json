@@ -40,7 +40,8 @@
       "darkmode": "Dark Mode"
     },
     "advanced": "Advanced",
-    "download": "Download"
+    "download": "Download",
+    "save_directory": "Save Directory"
   },
   "dialog": {
     "create_project": {
@@ -71,6 +72,7 @@
     "changed_successfully": "Changed successfully!",
     "unkown_error": "Something wrong happend!",
     "long_process": "Processing will take a while...",
-    "cant_split": "This audio cannot be split"
+    "cant_split": "This audio cannot be split",
+    "save_file_success": "Has been successfully saved to {target}"
   }
 }

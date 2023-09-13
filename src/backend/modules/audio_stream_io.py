@@ -82,12 +82,11 @@ def save_numpy_as_audio_file(
     """
     savename = path.join(file_path, songname + extension)
     soundfile.write(savename, song.T, rate)
-    tag_audio_file(savename, songname, tags)
+    tag_audio_file(savename, tags)
 
 
-def tag_audio_file(savename: str, songname: str, tags: dict):
+def tag_audio_file(savename: str, tags: dict):
     """:param savename: path to savefile
-    :param songname: name of the song
     :param tags:
         album
         albumartist
@@ -108,9 +107,10 @@ def tag_audio_file(savename: str, songname: str, tags: dict):
     :returns: none
     """
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
-    audiofile.append_tag("title", songname)
     if tags:
-        for key, values in tags.items():
-            for value in values:
-                audiofile.append_tag(key, value)
+        for key, value in tags.items():
+            # `year` already seems to appear in audiofile
+            # Error: music_tag.file.NotAppendable: Mp3File can not have multiple values for 'year'
+            key != "year" and audiofile.append_tag(key, value)
+
     audiofile.save()

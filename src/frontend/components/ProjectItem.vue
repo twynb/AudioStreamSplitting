@@ -2,6 +2,7 @@
 import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/plugins/regions'
 import type { Project, ProjectFileSegment } from '../models/types'
+import type { Metadata } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
 import ConfirmModal from './dialogs/ConfirmModal.vue'
 import EditSongModal from './dialogs/EditSongModal.vue'
@@ -14,7 +15,7 @@ const emits = defineEmits<{
   (e: 'changeMeta', songIndex: number, metaIndex: number): void
 }>()
 
-const { postAudioSplit, postAudioGetSegment } = getAudioStreamSplittingAPI()
+const { postAudioSplit, postAudioStore } = getAudioStreamSplittingAPI()
 const { toast } = useToastStore()
 const { t } = useI18n()
 const { data } = await axios.post('/audio/get', { audioPath: props.file.filePath }, { responseType: 'blob' })
@@ -49,9 +50,9 @@ onMounted(() => {
   })
 })
 
-const isFetching = ref(false)
+const isProcessing = ref(false)
 async function handleProcess() {
-  isFetching.value = true
+  isProcessing.value = true
   try {
     let segments: ProjectFileSegment[]
     if (props.file.segments) {
@@ -82,7 +83,7 @@ async function handleProcess() {
   catch (e) {
     toast({ content: t('toast.cant_split'), variant: 'destructive' })
   }
-  finally { isFetching.value = false }
+  finally { isProcessing.value = false }
 }
 
 function addRegion(segments: ProjectFileSegment[]) {
@@ -115,28 +116,21 @@ function addRegion(segments: ProjectFileSegment[]) {
   })
 }
 
-// TODO replace with save through backend
-async function handleSave({ duration, offset, name }: { duration: number; offset: number; name: string }) {
-  const newHandle = await window.showSaveFilePicker({
-    suggestedName: `${name.replaceAll(' ', '_')}.wav`,
-    types: [{
-      description: 'WAV file',
-      accept: { 'audio/wav': ['.wav'] },
-    }],
-  })
+const isStoring = ref(false)
+const currentStoringIndex = ref(-1)
+async function handleStore(
+  { duration, offset, metadata }: { duration: number; offset: number; metadata: Metadata },
+  songIndex: number,
+) {
+  currentStoringIndex.value = songIndex
+  isStoring.value = true
+  const filePath = props.file.filePath
+  const targetDirectory = import.meta.env.VITE_SAVE_DIRECTORY
 
-  const { data: blob } = await postAudioGetSegment({
-    filePath: props.file.filePath,
-    duration,
-    offset,
-  })
-
-  if (!blob)
-    return
-
-  const writableStream = await newHandle.createWritable()
-  await writableStream.write(blob)
-  await writableStream.close()
+  await postAudioStore({ filePath, duration, offset, metadata, targetDirectory })
+  toast({ title: metadata.title, content: t('toast.save_file_success', { target: targetDirectory }) })
+  currentStoringIndex.value = -1
+  isStoring.value = false
 }
 
 function handleEdit(songIndex: number) {
@@ -186,11 +180,11 @@ function handleEdit(songIndex: number) {
 
     <div class="flex-center py-2">
       <BaseButton
-        :disabled="file.fileType === 'webm' || isFetching || file.segments"
+        :disabled="file.fileType === 'webm' || isProcessing || file.segments"
         @click="handleProcess"
       >
         <BaseLoader
-          v-if="isFetching"
+          v-if="isProcessing"
           class="mr-2 border-primary-foreground !border-2"
           :size="15"
         />
@@ -198,7 +192,7 @@ function handleEdit(songIndex: number) {
       </BaseButton>
     </div>
 
-    <table id="create_project_files_list" class="w-full caption-bottom text-sm">
+    <table class="w-full caption-bottom text-sm">
       <caption class="mt-4 text-sm text-muted-foreground">
         A list of found songs
       </caption>
@@ -235,7 +229,10 @@ function handleEdit(songIndex: number) {
       </thead>
 
       <tbody>
-        <tr v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments" :key="index" class="border-b border-b-border">
+        <tr
+          v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments"
+          :key="index" class="border-b border-b-border"
+        >
           <template v-if="metadataOptions">
             <td class="p-4 align-middle font-medium">
               {{ metadataOptions[metaIndex]?.title ?? 'unknown' }}
@@ -258,20 +255,31 @@ function handleEdit(songIndex: number) {
             </td>
 
             <td class="p-4 align-middle">
-              <BaseButton :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1" icon-only variant="ghost" @click="handleEdit(index)">
+              <BaseButton
+                icon-only variant="ghost"
+                :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1"
+                @click="handleEdit(index)"
+              >
                 <span class="i-carbon-edit" />
               </BaseButton>
             </td>
 
             <td class="p-4 align-middle">
               <BaseButton
-                :disabled="!duration || !offset" icon-only variant="ghost" @click="duration && offset && handleSave({
+                icon-only variant="ghost"
+                :disabled="!duration || !offset || isStoring"
+                @click="duration && offset && handleStore({
                   duration,
                   offset,
-                  name: metadataOptions[metaIndex]?.title ?? 'unknown',
-                })"
+                  metadata: metadataOptions[metaIndex],
+                }, index)"
               >
-                <span class="i-carbon-download" />
+                <BaseLoader
+                  v-if="currentStoringIndex === index && isStoring"
+                  class="border-primary !border-2"
+                  :size="15"
+                />
+                <span v-else class="i-carbon-download" />
               </BaseButton>
             </td>
           </template>
