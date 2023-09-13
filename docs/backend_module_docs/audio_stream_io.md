@@ -48,11 +48,11 @@ Gets a stream and returns is with 75% overlap between each instance.
 
 #### overlapping_stream:Arguments
 
-- `` stream: Generator `` Takes a generator of stereo audio file data. $2\times x$ with $x$ as the block size.
+- `` stream: Generator `` Takes a generator of stereo audio file data. Stereo data with the size $2\times x$ (2 channels) with $x$ as the block size.
 
 #### overlapping_stream:Retruns
 
-Returns a `` Generator `` with the size $2\times y$ with $y$ as the block size.
+Returns a `` Generator `` with the size $2\times y$ (2 channels) with $y$ as the block size.
 
 ### save_numpy_as_audio_file
 
