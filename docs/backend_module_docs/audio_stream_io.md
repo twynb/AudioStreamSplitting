@@ -14,7 +14,7 @@ Public functions:
 
 ### read_audio_file_to_numpy
 
-Reads a file To load as a numpy array.
+Reads a file to load as a NumPy array.
 
 #### read_audio_file_to_numpy:Arguments
 
@@ -26,29 +26,29 @@ Reads a file To load as a numpy array.
 
 #### read_audio_file_to_numpy:Returns
 
-Returns a ``Tuple[np.ndarray,float]`` of sound data.
+Returns a ``Tuple[numpy.ndarray,float]`` of sound data.
 
 ### read_audio_file_to_stream
 
-Reads an audiofile as a stream.
+Reads an audio file as a stream.
 
 #### read_audio_file_to_stream:Arguments
 
 - `` audiofile: string `` Path to audio file
 - `` block_len: int `` Block length of stream
-- `` mono: bool `` Loads file as mono audio if true
+- `` mono: bool `` If true, convert to mono.
 
 #### read_audio_file_to_stream:Returns
 
-Returns an `` audiostream: Generator `` the `` samplerate: int `` and the `` hop_lenght: int ``.
+Returns an `` audiostream: Generator `` the `` samplerate: int `` and the `` hop_length: int ``.
 
 ### overlapping_stream
 
-Gets a stream and returns is with 75% overlap between each instance.
+Gets a stream and returns it with 75% overlap between each instance.
 
 #### overlapping_stream:Arguments
 
-- `` stream: Generator `` Takes a generator of stereo audio file data. Stereo data with the size $2\times x$ (2 channels) with $x$ as the block size.
+- `` stream: Generator `` Takes a generator of stereo audio file data with the size $2\times x$ (2 channels) with $x$ as the block size.
 
 #### overlapping_stream:Retruns
 
@@ -56,9 +56,9 @@ Returns a `` Generator `` with the size $2\times y$ (2 channels) with $y$ as the
 
 ### save_numpy_as_audio_file
 
-#### save_numpy_as_audio_file:Augments
+#### save_numpy_as_audio_file:Arguments
 
-- `` song: np.ndarray`` Numpy array of the song
+- `` song: numpy.ndarray `` Numpy array of the song
 - `` songname: string `` Name of the song
 - `` file_path: string|path `` Path to file (without file name)
 - `` rate: int `` Samplerate of the song {Default: 100}
@@ -67,13 +67,13 @@ Returns a `` Generator `` with the size $2\times y$ (2 channels) with $y$ as the
 
 ### tag_audio_file
 
-#### tag_audio_file:Augments
+#### tag_audio_file:Arguments
 
-- `` savename: string|path `` Path to savefile
+- `` savename: string|path `` Path to save file
 - `` songname: string `` Name of the song
 - `` tags: dict `` A dict of tags
 
-##### tag_audio_file:Augments:tags
+##### tag_audio_file:Arguments:tags
 
 Possible tags are:
 
@@ -94,4 +94,4 @@ Possible tags are:
 - year
 - isrc
 
-Also some aliases like album -> albumname are possible
+Also some aliases like album -> albumname are possible.
