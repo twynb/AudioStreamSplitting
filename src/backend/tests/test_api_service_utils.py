@@ -1,15 +1,4 @@
-from unittest.mock import patch
-
-from modules.api_service import (
-    SongOptionResult,
-    _check_song_extended_or_finished,
-    _get_overlapping_metadata_values,
-    _song_export,
-    _store_finished_song,
-    get_final_song,
-    get_last_song,
-    reset_service_state,
-)
+from modules.api_service import ApiService, SongOptionResult
 
 # main API functions can't be tested because they depend on external APIs. test utils though.
 
@@ -100,66 +89,20 @@ CURRENT_METADATA_OPTIONS_NO_OVERLAP = [
 ]
 
 
-def test_reset_service_state():
-    global last_song_offset
-    global last_song_duration
-    global last_song_metadata_options
-    global current_song_offset
-    global current_song_duration
-    global current_song_metadata_options
-    reset_service_state()
-    assert get_last_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    assert get_final_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    last_song_offset = 30.2
-    last_song_duration = 517
-    last_song_metadata_options = [
-        {"title": "My cool song", "artist": "Me"},
-        {"title": "Thunderstruck", "artist": "AC/DC", "album": "The Razor's Edge"},
-    ]
-    current_song_offset = 75.5
-    current_song_duration = 89
-    current_song_metadata_options = [
-        {"title": "The Testing Song", "artist": "TeStArTiSt"},
-    ]
-    reset_service_state()
-    assert get_last_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-    assert get_final_song() == {
-        "offset": 0,
-        "duration": 0,
-        "metadataOptions": TEST_EMPTY_METADATA_OPTIONS,
-    }
-
-
-@patch("modules.api_service.last_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_offset", CURRENT_OFFSET)
-@patch("modules.api_service.last_song_duration", LAST_DURATION)
-@patch("modules.api_service.current_song_duration", CURRENT_DURATION)
-@patch(
-    "modules.api_service.last_song_metadata_options", LAST_METADATA_OPTIONS_NO_OVERLAP
-)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    CURRENT_METADATA_OPTIONS_NO_OVERLAP,
-)
 def test_get_last_and_final_song():
-    assert get_last_song() == {
+    service = ApiService()
+    service.last_song_offset = LAST_OFFSET
+    service.current_song_offset = CURRENT_OFFSET
+    service.last_song_duration = LAST_DURATION
+    service.current_song_duration = CURRENT_DURATION
+    service.last_song_metadata_options = LAST_METADATA_OPTIONS_NO_OVERLAP
+    service.current_song_metadata_options = CURRENT_METADATA_OPTIONS_NO_OVERLAP
+    assert service.get_last_song() == {
         "offset": LAST_OFFSET,
         "duration": LAST_DURATION,
         "metadataOptions": LAST_METADATA_OPTIONS_NO_OVERLAP,
     }
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": CURRENT_OFFSET,
         "duration": CURRENT_DURATION,
         "metadataOptions": CURRENT_METADATA_OPTIONS_NO_OVERLAP,
@@ -167,7 +110,8 @@ def test_get_last_and_final_song():
 
 
 def test_song_export_no_metadata():
-    assert _song_export(100, 439.2, []) == {
+    service = ApiService()
+    assert service._song_export(100, 439.2, []) == {
         "offset": 100,
         "duration": 439.2,
         "metadataOptions": [],
@@ -175,7 +119,8 @@ def test_song_export_no_metadata():
 
 
 def test_song_export_one_metadata():
-    assert _song_export(
+    service = ApiService()
+    assert service._song_export(
         100, 439.2, [{"title": "My Metadata Title", "artist": "Artsy Art Artist"}]
     ) == {
         "offset": 100,
@@ -187,7 +132,8 @@ def test_song_export_one_metadata():
 
 
 def test_song_export_several_metadata():
-    assert _song_export(
+    service = ApiService()
+    assert service._song_export(
         100,
         439.2,
         [
@@ -204,37 +150,33 @@ def test_song_export_several_metadata():
     }
 
 
-@patch("modules.api_service.current_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_duration", LAST_DURATION)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    LAST_METADATA_OPTIONS_NO_OVERLAP,
-)
 def test_check_song_extended_or_finished_no_overlaps():
+    service = ApiService()
+    service.current_song_offset = LAST_OFFSET
+    service.current_song_duration = LAST_DURATION
+    service.current_song_metadata_options = LAST_METADATA_OPTIONS_NO_OVERLAP
     assert (
-        _check_song_extended_or_finished(
+        service._check_song_extended_or_finished(
             CURRENT_OFFSET, CURRENT_DURATION, CURRENT_METADATA_OPTIONS_NO_OVERLAP
         )
         == SongOptionResult.SONG_FINISHED
     )
-    assert get_last_song()["duration"] == LAST_DURATION
-    assert get_final_song()["duration"] == CURRENT_DURATION
+    assert service.get_last_song()["duration"] == LAST_DURATION
+    assert service.get_final_song()["duration"] == CURRENT_DURATION
 
 
-@patch("modules.api_service.current_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_duration", LAST_DURATION)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    LAST_METADATA_OPTIONS_ONE_OVERLAP,
-)
 def test_check_song_extended_or_finished_one_overlap():
+    service = ApiService()
+    service.current_song_offset = LAST_OFFSET
+    service.current_song_duration = LAST_DURATION
+    service.current_song_metadata_options = LAST_METADATA_OPTIONS_ONE_OVERLAP
     assert (
-        _check_song_extended_or_finished(
+        service._check_song_extended_or_finished(
             CURRENT_OFFSET, CURRENT_DURATION, CURRENT_METADATA_OPTIONS_ONE_OVERLAP
         )
         == SongOptionResult.SONG_EXTENDED
     )
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": LAST_OFFSET,
         "duration": CURRENT_DURATION + LAST_DURATION,
         "metadataOptions": [
@@ -248,20 +190,18 @@ def test_check_song_extended_or_finished_one_overlap():
     }
 
 
-@patch("modules.api_service.current_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_duration", LAST_DURATION)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    LAST_METADATA_OPTIONS_TWO_OVERLAPS,
-)
 def test_check_song_extended_or_finished_two_overlaps():
+    service = ApiService()
+    service.current_song_offset = LAST_OFFSET
+    service.current_song_duration = LAST_DURATION
+    service.current_song_metadata_options = LAST_METADATA_OPTIONS_TWO_OVERLAPS
     assert (
-        _check_song_extended_or_finished(
+        service._check_song_extended_or_finished(
             CURRENT_OFFSET, CURRENT_DURATION, CURRENT_METADATA_OPTIONS_TWO_OVERLAPS
         )
         == SongOptionResult.SONG_EXTENDED
     )
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": LAST_OFFSET,
         "duration": CURRENT_DURATION + LAST_DURATION,
         "metadataOptions": [
@@ -276,17 +216,18 @@ def test_check_song_extended_or_finished_two_overlaps():
     }
 
 
-@patch("modules.api_service.current_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_duration", LAST_DURATION)
-@patch("modules.api_service.current_song_metadata_options", [])
 def test_check_song_extended_or_finished_previous_is_empty():
+    service = ApiService()
+    service.current_song_offset = LAST_OFFSET
+    service.current_song_duration = LAST_DURATION
+    service.current_song_metadata_options = []
     assert (
-        _check_song_extended_or_finished(
+        service._check_song_extended_or_finished(
             CURRENT_OFFSET, CURRENT_DURATION, CURRENT_METADATA_OPTIONS_TWO_OVERLAPS
         )
         == SongOptionResult.SONG_EXTENDED
     )
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": LAST_OFFSET,
         "duration": CURRENT_DURATION + LAST_DURATION,
         "metadataOptions": CURRENT_METADATA_OPTIONS_TWO_OVERLAPS,
@@ -295,18 +236,16 @@ def test_check_song_extended_or_finished_previous_is_empty():
 
 # this should not be able to happen with the system as it is
 # if current is empty, _check_song_extended_or_finished isn't entered
-@patch("modules.api_service.current_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_duration", LAST_DURATION)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    CURRENT_METADATA_OPTIONS_ONE_OVERLAP,
-)
 def test_check_song_extended_or_finished_current_is_empty():
+    service = ApiService()
+    service.current_song_offset = LAST_OFFSET
+    service.current_song_duration = LAST_DURATION
+    service.current_song_metadata_options = CURRENT_METADATA_OPTIONS_ONE_OVERLAP
     assert (
-        _check_song_extended_or_finished(CURRENT_OFFSET, CURRENT_DURATION, [])
+        service._check_song_extended_or_finished(CURRENT_OFFSET, CURRENT_DURATION, [])
         == SongOptionResult.SONG_EXTENDED
     )
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": LAST_OFFSET,
         "duration": CURRENT_DURATION + LAST_DURATION,
         "metadataOptions": CURRENT_METADATA_OPTIONS_ONE_OVERLAP,
@@ -314,8 +253,9 @@ def test_check_song_extended_or_finished_current_is_empty():
 
 
 def test_get_overlapping_metadata_values_no_overlap():
+    service = ApiService()
     assert (
-        _get_overlapping_metadata_values(
+        service._get_overlapping_metadata_values(
             CURRENT_METADATA_OPTIONS_NO_OVERLAP, LAST_METADATA_OPTIONS_NO_OVERLAP
         )
         == []
@@ -323,7 +263,8 @@ def test_get_overlapping_metadata_values_no_overlap():
 
 
 def test_get_overlapping_metadata_values_one_overlap():
-    assert _get_overlapping_metadata_values(
+    service = ApiService()
+    assert service._get_overlapping_metadata_values(
         CURRENT_METADATA_OPTIONS_ONE_OVERLAP, LAST_METADATA_OPTIONS_ONE_OVERLAP
     ) == [
         {
@@ -336,7 +277,8 @@ def test_get_overlapping_metadata_values_one_overlap():
 
 
 def test_get_overlapping_metadata_values_two_overlaps():
-    assert _get_overlapping_metadata_values(
+    service = ApiService()
+    assert service._get_overlapping_metadata_values(
         CURRENT_METADATA_OPTIONS_TWO_OVERLAPS, LAST_METADATA_OPTIONS_TWO_OVERLAPS
     ) == [
         {"title": "This one matches too", "artist": "Another one"},
@@ -350,45 +292,46 @@ def test_get_overlapping_metadata_values_two_overlaps():
 
 
 def test_get_overlapping_metadata_values_one_empty():
+    service = ApiService()
     assert (
-        _get_overlapping_metadata_values([], CURRENT_METADATA_OPTIONS_NO_OVERLAP)
+        service._get_overlapping_metadata_values(
+            [], CURRENT_METADATA_OPTIONS_NO_OVERLAP
+        )
         == CURRENT_METADATA_OPTIONS_NO_OVERLAP
     )
     assert (
-        _get_overlapping_metadata_values(LAST_METADATA_OPTIONS_TWO_OVERLAPS, [])
+        service._get_overlapping_metadata_values(LAST_METADATA_OPTIONS_TWO_OVERLAPS, [])
         == LAST_METADATA_OPTIONS_TWO_OVERLAPS
     )
 
 
 def test_get_overlapping_metadata_values_both_empty():
-    assert _get_overlapping_metadata_values([], []) == []
+    service = ApiService()
+    assert service._get_overlapping_metadata_values([], []) == []
 
 
-# TODO: test _store_finished_song()
-@patch("modules.api_service.last_song_offset", LAST_OFFSET)
-@patch("modules.api_service.current_song_offset", CURRENT_OFFSET)
-@patch("modules.api_service.last_song_duration", LAST_DURATION)
-@patch("modules.api_service.current_song_duration", CURRENT_DURATION)
-@patch(
-    "modules.api_service.last_song_metadata_options", LAST_METADATA_OPTIONS_NO_OVERLAP
-)
-@patch(
-    "modules.api_service.current_song_metadata_options",
-    CURRENT_METADATA_OPTIONS_NO_OVERLAP,
-)
 def test_store_finished_song():
-    assert get_last_song() == {
+    service = ApiService()
+    service.last_song_offset = LAST_OFFSET
+    service.current_song_offset = CURRENT_OFFSET
+    service.last_song_duration = LAST_DURATION
+    service.current_song_duration = CURRENT_DURATION
+    service.last_song_metadata_options = LAST_METADATA_OPTIONS_NO_OVERLAP
+    service.current_song_metadata_options = CURRENT_METADATA_OPTIONS_NO_OVERLAP
+    assert service.get_last_song() == {
         "offset": LAST_OFFSET,
         "duration": LAST_DURATION,
         "metadataOptions": LAST_METADATA_OPTIONS_NO_OVERLAP,
     }
-    _store_finished_song(140.0, 503.0, [{"title": "mytest", "artist": "notyourtest"}])
-    assert get_last_song() == {
+    service._store_finished_song(
+        140.0, 503.0, [{"title": "mytest", "artist": "notyourtest"}]
+    )
+    assert service.get_last_song() == {
         "offset": CURRENT_OFFSET,
         "duration": CURRENT_DURATION,
         "metadataOptions": CURRENT_METADATA_OPTIONS_NO_OVERLAP,
     }
-    assert get_final_song() == {
+    assert service.get_final_song() == {
         "offset": 140.0,
         "duration": 503.0,
         "metadataOptions": [{"title": "mytest", "artist": "notyourtest"}],
