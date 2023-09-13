@@ -11,7 +11,6 @@ LOOKUP_SEGMENTS_DURATION = 4
 LOOKUP_OFFSET_INCREMENT = 10
 
 
-# TODO-CR figure out what happens when API limit is reached
 def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
     """Look up a song using the Shazam API.
     :param song_data: The song data. Must be at a sample rate of 44.100 Hz.
