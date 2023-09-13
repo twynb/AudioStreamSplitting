@@ -261,12 +261,7 @@ def _get_api_song_data_acoustid(fingerprint, fingerprint_duration):
         for score, recording_id, title, artist in acoustid.parse_lookup_result(
             acoustid.lookup(ACOUSTID_API_KEY, fingerprint, fingerprint_duration)
         ):
-            if (
-                title is not None
-                and artist is not None
-                and {"title": title, "artist": artist} not in result
-            ):
-                result.append({"title": title, "artist": artist})
+            result.append({"title": title, "artist": artist})
         return result
     except acoustid.WebServiceError:
         return []
