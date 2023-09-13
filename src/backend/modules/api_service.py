@@ -3,7 +3,9 @@ from enum import Enum
 from typing import Generator
 
 import acoustid
+from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
 from utils.env import get_env
+from utils.logger import log_error
 
 from .apis.shazam import lookup as shazam_lookup
 from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
@@ -136,32 +138,44 @@ class ApiService:
 
         # first check using acoustID
         if ACOUSTID_API_KEY is not None:
-            duration, fingerprint = self._create_fingerprint(song_data, sample_rate)
-            metadata = self._get_api_song_data_acoustid(fingerprint, duration)
-            if len(metadata) != 0:
-                return self._check_song_extended_or_finished(offset, duration, metadata)
+            try:
+                duration, fingerprint = self._create_fingerprint(song_data, sample_rate)
+                metadata = self._get_api_song_data_acoustid(fingerprint, duration)
+                if len(metadata) != 0:
+                    return self._check_song_extended_or_finished(
+                        offset, duration, metadata
+                    )
+            except NoBackendError as ex:
+                log_error(ex, "No fpcalc/chromaprint found")
+            except FingerprintGenerationError as ex:
+                log_error(ex, "AcoustID fingerprinting")
+            except WebServiceError as ex:
+                log_error(ex, "AcoustID request")
 
         # if acoustID doesn't find anything, try shazam
         # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
         if SHAZAM_API_KEY is not None and sample_rate == SAMPLE_RATE_STANDARD:
-            metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
-            metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
-            metadata_start = [metadata_start] if metadata_start is not None else []
-            metadata_end = [metadata_end] if metadata_end is not None else []
+            try:
+                metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
+                metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
+                metadata_start = [metadata_start] if metadata_start is not None else []
+                metadata_end = [metadata_end] if metadata_end is not None else []
 
-            shazam_metadata_options = self._get_overlapping_metadata_values(
-                metadata_start, metadata_end
-            )
-            if len(shazam_metadata_options) != 0:
-                return self._check_song_extended_or_finished(
-                    offset, duration, shazam_metadata_options
+                shazam_metadata_options = self._get_overlapping_metadata_values(
+                    metadata_start, metadata_end
                 )
-            elif len(metadata_start) != 0 and len(metadata_end) != 0:
-                self._store_finished_song(offset, duration, ())
-                return SongOptionResult.SONG_MISMATCH
+                if len(shazam_metadata_options) != 0:
+                    return self._check_song_extended_or_finished(
+                        offset, duration, shazam_metadata_options
+                    )
+                elif len(metadata_start) != 0 and len(metadata_end) != 0:
+                    self._store_finished_song(offset, duration, ())
+                    return SongOptionResult.SONG_MISMATCH
+            except ConnectionError as ex:
+                log_error(ex, "Shazam connection error")
 
-        # if neither finds anything, song not recognised.
-        self._store_finished_song(offset, duration, ())
+            # if neither finds anything, song not recognised.
+            self._store_finished_song(offset, duration, ())
         return SongOptionResult.SONG_NOT_RECOGNISED
 
     def _check_song_extended_or_finished(
@@ -239,7 +253,12 @@ class ApiService:
             for score, recording_id, title, artist in acoustid.parse_lookup_result(
                 acoustid.lookup(ACOUSTID_API_KEY, fingerprint, fingerprint_duration)
             ):
-                result.append({"title": title, "artist": artist})
+                if (
+                    title is not None
+                    and artist is not None
+                    and {"title": title, "artist": artist} not in result
+                ):
+                    result.append({"title": title, "artist": artist})
             return result
         except acoustid.WebServiceError:
             return []
