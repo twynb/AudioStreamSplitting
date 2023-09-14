@@ -10,9 +10,8 @@ from flask import (
     send_from_directory,
 )
 from flask_cors import CORS
-
-from backend.utils.logger import log_error
-from backend.utils.path import get_abs_src_dir_in_built_app
+from utils.logger import log_error
+from utils.path import get_abs_src_dir_in_built_app
 
 mimetypes.add_type("application/javascript", ".js")
 mimetypes.add_type("application/javascript", ".mjs")

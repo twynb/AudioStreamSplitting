@@ -2,8 +2,7 @@ import argparse
 
 from api.app import app
 from flaskwebgui import FlaskUI, find_browser
-
-from backend.utils.path import profile_dir
+from utils.path import profile_dir
 
 parser = argparse.ArgumentParser(description="Script description")
 

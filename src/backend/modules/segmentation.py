@@ -1,10 +1,10 @@
-from enum import Enum
 from collections import namedtuple
+from enum import Enum
 from itertools import pairwise
 
+import librosa
 import numpy as np
 from scipy import signal
-import librosa
 
 from .audio_stream_io import (
     overlapping_stream,

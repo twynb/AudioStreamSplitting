@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 import platform
 
 current_os = platform.system()
@@ -41,6 +42,10 @@ a = Analysis(  # noqa F821
     cipher=None,
     noarchive=False,
 )
+
+# Exclude tests folder
+test_folder_path = os.path.join(os.getcwd(), "src", "backend", "tests")
+a.datas = [entry for entry in a.datas if not entry[0].startswith(test_folder_path)]
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=None)  # noqa F821
 
