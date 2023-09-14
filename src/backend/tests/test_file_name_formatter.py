@@ -1,4 +1,4 @@
-from utils.file_name_formatter import format_file_name, replace_all
+from backend.utils.file_name_formatter import format_file_name, replace_all
 
 
 def test_replace_all_multiple():

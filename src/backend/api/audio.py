@@ -3,13 +3,13 @@ import os.path
 import wave
 
 from flask import Blueprint, Response, jsonify, request, send_file
-
 from modules.api_service import ApiService
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from modules.segmentation import segment_file
 from pathvalidate import sanitize_filename
-from utils.env import get_env
-from utils.file_name_formatter import format_file_name
+
+from backend.utils.env import get_env
+from backend.utils.file_name_formatter import format_file_name
 
 audio_bp = Blueprint("audio", __name__)
 

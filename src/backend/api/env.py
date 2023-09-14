@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
-from utils.env import get_env, set_env
+
+from backend.utils.env import get_env, set_env
 
 env_bp = Blueprint("env", __name__)
 

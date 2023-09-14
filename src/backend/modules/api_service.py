@@ -4,8 +4,9 @@ from typing import Generator
 
 import acoustid
 from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
-from utils.env import get_env
-from utils.logger import log_error
+
+from backend.utils.env import get_env
+from backend.utils.logger import log_error
 
 from .apis.shazam import lookup as shazam_lookup
 from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
