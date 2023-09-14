@@ -62,7 +62,7 @@ class ApiService:
         is_first_segment = True
         segments = []
         mismatch_offsets = []
-        for (segment, samplerate), start, duration in generator:
+        for start, duration in generator:
             result = self.get_song_options(start, duration, file_path)
             if (
                 result
