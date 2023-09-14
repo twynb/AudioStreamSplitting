@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  TAG_NAME: v1.0.0
+
 jobs:
   build:
     strategy:
@@ -59,6 +62,10 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
 
+      - name: Delete Existing Release and Tag
+        run: |
+          git push --delete origin ${{env.TAG_NAME}} || true
+
       - name: Release
         uses: softprops/action-gh-release@v1
         env:
@@ -69,6 +76,6 @@ jobs:
             audio_splitter_linux/audio_splitter_linux
             audio_splitter_window.exe/audio_splitter_window.exe
           draft: false
-          tag_name: v1.0.0
+          tag_name: ${{env.TAG_NAME}}
 
 
