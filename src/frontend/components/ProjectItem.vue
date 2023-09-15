@@ -88,22 +88,25 @@ async function handleProcess() {
 
 function addRegion(segments: ProjectFileSegment[]) {
   segments.forEach(({ duration, metadataOptions, offset, metaIndex }) => {
-    if (!duration || !offset || !metadataOptions)
+    if (!duration || !offset)
       return
 
-    const meta = metadataOptions[metaIndex]
-    if (!meta)
-      return
+    const meta = metadataOptions?.[metaIndex]
 
     const contentEl = document.createElement('div')
-    contentEl.innerHTML = Object.entries(meta).map(([key, value]) =>
-      `<span
-        class="${key}"
-        style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
-      >
+    if (meta) {
+      contentEl.innerHTML = Object.entries(meta).map(([key, value]) =>
+      `<span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
         ${key}: ${value}
       </span>`,
-    ).join('\n')
+      ).join('\n')
+    }
+    else {
+      contentEl.innerHTML = `
+      <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+        ${t('song.no_meta')}
+      </span>`
+    }
 
     regions.value && regions.value.addRegion({
       start: offset,
@@ -118,17 +121,27 @@ function addRegion(segments: ProjectFileSegment[]) {
 
 const isStoring = ref(false)
 const currentStoringIndex = ref(-1)
+const store = useEnvStore()
 async function handleStore(
   { duration, offset, metadata }: { duration: number; offset: number; metadata: Metadata },
   songIndex: number,
 ) {
+  const filePath = props.file.filePath
+  const targetDirectory = store.lsEnv.SAVE_DIRECTORY
+  if (!targetDirectory)
+    toast({ content: t('toast.no_save_directory') })
+
   currentStoringIndex.value = songIndex
   isStoring.value = true
-  const filePath = props.file.filePath
-  const targetDirectory = import.meta.env.VITE_SAVE_DIRECTORY
 
-  await postAudioStore({ filePath, duration, offset, metadata, targetDirectory })
-  toast({ title: metadata.title, content: t('toast.save_file_success', { target: targetDirectory }) })
+  try {
+    await postAudioStore({ filePath, duration, offset, metadata, targetDirectory })
+    toast({ title: metadata.title, content: t('toast.save_file_success', { target: targetDirectory }) })
+  }
+  catch (e) {
+    toast({ title: t('toast.title.no_save_directory'), content: t('toast.no_save_directory'), variant: 'destructive' })
+  }
+
   currentStoringIndex.value = -1
   isStoring.value = false
 }
@@ -233,56 +246,54 @@ function handleEdit(songIndex: number) {
           v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments"
           :key="index" class="border-b border-b-border"
         >
-          <template v-if="metadataOptions">
-            <td class="p-4 align-middle font-medium">
-              {{ metadataOptions[metaIndex]?.title ?? 'unknown' }}
-            </td>
+          <td class="p-4 align-middle font-medium">
+            {{ metadataOptions?.[metaIndex]?.title ?? 'unknown' }}
+          </td>
 
-            <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex]?.artist ?? 'unknown' }}
-            </td>
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.artist ?? 'unknown' }}
+          </td>
 
-            <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex]?.album ?? 'unknown' }}
-            </td>
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.album ?? 'unknown' }}
+          </td>
 
-            <td class="p-4 align-middle">
-              {{ metadataOptions[metaIndex]?.year ?? 'unknown' }}
-            </td>
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.year ?? 'unknown' }}
+          </td>
 
-            <td class="p-4 align-middle">
-              {{ useConvertSecToMin(duration ?? 0) }}
-            </td>
+          <td class="p-4 align-middle">
+            {{ useConvertSecToMin(duration ?? 0) }}
+          </td>
 
-            <td class="p-4 align-middle">
-              <BaseButton
-                icon-only variant="ghost"
-                :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1"
-                @click="handleEdit(index)"
-              >
-                <span class="i-carbon-edit" />
-              </BaseButton>
-            </td>
+          <td class="p-4 align-middle">
+            <BaseButton
+              icon-only variant="ghost"
+              :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1"
+              @click="handleEdit(index)"
+            >
+              <span class="i-carbon-edit" />
+            </BaseButton>
+          </td>
 
-            <td class="p-4 align-middle">
-              <BaseButton
-                icon-only variant="ghost"
-                :disabled="!duration || !offset || isStoring"
-                @click="duration && offset && handleStore({
-                  duration,
-                  offset,
-                  metadata: metadataOptions[metaIndex],
-                }, index)"
-              >
-                <BaseLoader
-                  v-if="currentStoringIndex === index && isStoring"
-                  class="border-primary !border-2"
-                  :size="15"
-                />
-                <span v-else class="i-carbon-download" />
-              </BaseButton>
-            </td>
-          </template>
+          <td class="p-4 align-middle">
+            <BaseButton
+              icon-only variant="ghost"
+              :disabled="!duration || !offset || isStoring"
+              @click="duration && offset && handleStore({
+                duration,
+                offset,
+                metadata: metadataOptions?.[metaIndex] ?? { album: 'unknown', artist: 'unknown', title: 'unknown', year: 'unknown' },
+              }, index)"
+            >
+              <BaseLoader
+                v-if="currentStoringIndex === index && isStoring"
+                class="border-primary !border-2"
+                :size="15"
+              />
+              <span v-else class="i-carbon-download" />
+            </BaseButton>
+          </td>
         </tr>
       </tbody>
     </table>

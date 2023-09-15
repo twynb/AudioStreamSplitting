@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
+type EnvKey = keyof typeof env.value
 
 const { t } = useI18n()
+const { defaultEnv, lsEnv } = storeToRefs(useEnvStore())
 
-const env = useLocalStorage<Record<string, string>>(
-  'env',
-  {
-    SERVICE_ACOUSTID_API_KEY: import.meta.env.VITE_SERVICE_ACOUSTID_API_KEY,
-    SERVICE_SHAZAM_API_KEY: import.meta.env.VITE_SERVICE_SHAZAM_API_KEY,
-    OUTPUT_FILE_NAME_TEMPLATE: import.meta.env.VITE_OUTPUT_FILE_NAME_TEMPLATE,
-    SAVE_DIRECTORY: import.meta.env.VITE_SAVE_DIRECTORY,
-  }, { mergeDefaults: true })
+const env = ref(defaultEnv.value)
+Object.entries(lsEnv.value).forEach(([key, value]) => {
+  if (value)
+    env.value[key as EnvKey] = value
+})
 
 const { toast } = useToastStore()
 
-async function setApiKey(key: string) {
-  if (!env.value[key]) {
+async function setApiKey(key: EnvKey) {
+  const value = env.value[key]
+
+  if (!value) {
     toast({ content: t('toast.empty_field'), variant: 'destructive' })
     throw new Error('Please give in a valid value!')
   }
 
   try {
-    await axios.post('/env/set', { key, value: env.value[key] })
+    await axios.post('/env/set', { key, value })
+    lsEnv.value[key] = value
     toast({ content: t('toast.changed_successfully') })
   }
   catch (e) {
@@ -83,13 +84,13 @@ async function setApiKey(key: string) {
 
       <div class="flex items-center justify-between">
         <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
-          Output File Name
+          {{ t('settings.output_file_name') }}
         </BaseLabel>
 
         <div class="min-w-400px flex gap-x-3">
           <BaseInput id="OUTPUT_FILE_NAME_TEMPLATE" v-model="env.OUTPUT_FILE_NAME_TEMPLATE" />
 
-          <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">
+          <BaseButton @click="setApiKey('OUTPUT_FILE_NAME_TEMPLATE')">
             {{ t('button.set') }}
           </BaseButton>
         </div>

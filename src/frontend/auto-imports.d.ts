@@ -85,6 +85,7 @@ declare global {
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useDriver: typeof import('./composables/useDriver')['useDriver']
   const useDriverStore: typeof import('./stores/useDriverStore')['useDriverStore']
+  const useEnvStore: typeof import('./stores/useEnvStore')['useEnvStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
   const useHash: typeof import('./composables/useHash')['useHash']
@@ -193,6 +194,7 @@ declare module 'vue' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
+    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
@@ -295,6 +297,7 @@ declare module '@vue/runtime-core' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
+    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
