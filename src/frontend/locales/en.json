@@ -12,7 +12,9 @@
     "next": "Next",
     "done": "Done",
     "previous": "Previous",
-    "create_new_project": "Create new project"
+    "create_new_project": "Create new project",
+    "save": "Save",
+    "set": "Set"
   },
   "placeholder": {},
   "sidebar": {
@@ -36,7 +38,11 @@
     "appearance": {
       "index": "Appearance",
       "darkmode": "Dark Mode"
-    }
+    },
+    "advanced": "Advanced",
+    "download": "Download",
+    "save_directory": "Save Directory",
+    "output_file_name": "Output File Name"
   },
   "dialog": {
     "create_project": {
@@ -53,5 +59,26 @@
     "confirm": {
       "title": "Are you sure ?"
     }
+  },
+  "song": {
+    "title": "Title",
+    "artist": "Artist",
+    "album": "Album",
+    "year": "Year",
+    "duration": "Duration",
+    "no_webm": ".webm cannot be processed at the moment!",
+    "no_meta": "No information"
+  },
+  "toast": {
+    "empty_field": "Please give in a valid value!",
+    "changed_successfully": "Changed successfully!",
+    "unkown_error": "Something wrong happend!",
+    "long_process": "Processing will take a while...",
+    "cant_split": "This audio cannot be split",
+    "save_file_success": "Has been successfully saved to {target}",
+    "title": {
+      "no_save_directory": "No save directory set"
+    },
+    "no_save_directory": "Please set the path for the save directory in the Settings tab."
   }
 }

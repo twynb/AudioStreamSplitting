@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
+import type { Project } from '../models/types'
 
 defineProps<{
   project: Project
