@@ -2,11 +2,38 @@
 import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
+import ConfirmModal from '@components/dialogs/ConfirmModal.vue'
 import { RECORD_STEPS } from '../includes/driver'
 
 const { createProject } = useDBStore()
 const router = useRouter()
 const { t } = useI18n()
+
+const isFFMPEGInstall = ref(false)
+onMounted(async () => {
+  try {
+    await axios.get('/project/check-ffmpeg')
+    isFFMPEGInstall.value = true
+  }
+  catch (e) {
+    const { open, close } = useModal({
+      component: ConfirmModal,
+      attrs: {
+        title: t('dialog.confirm.warning'),
+        content: t('record.no_ffmpeg'),
+        preventClose: true,
+        showCancel: false,
+        okContent: t('button.back_to_dashboard'),
+        onOk() {
+          router.push('/')
+          close()
+        },
+
+      },
+    })
+    open()
+  }
+})
 
 let ws: WaveSurfer
 let record: RecordPlugin
@@ -108,8 +135,6 @@ async function handleSave() {
 const submitInfo = ref({ name: '', description: '' })
 const submitError = ref({ name: '' })
 
-const { toast } = useToastStore()
-
 function handleSubmit() {
   if (!blob.value)
     return
@@ -126,7 +151,6 @@ function handleSubmit() {
     axiosConfig: { headers: { 'Content-Type': 'multipart/form-data' } },
     onSuccess(project) {
       createProject(project)
-      toast({ content: '.wav cannot be processed at the moment!', variant: 'destructive' })
       router.push(`/project/${project.id}`)
     },
   })

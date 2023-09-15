@@ -51,7 +51,11 @@
       "project_upload": "Upload"
     },
     "confirm": {
-      "title": "Are you sure ?"
+      "title": "Are you sure ?",
+      "warning": "Warning"
     }
+  },
+  "record": {
+    "no_ffmpeg": "Oops! It looks like ffmpeg isn't installed. Please install it using your system's package manager or download it from the official website to record from app."
   }
 }

@@ -1,31 +1,33 @@
 <script setup lang="ts">
-const { title = 'Confirm' } = defineProps<{
+const { title = 'Confirm', showCancel = true, showOk = true, preventClose = false } = defineProps<{
   title?: string
   content: string
+  okContent?: string
+  cancelContent?: string
+  showOk?: boolean
+  showCancel?: boolean
+  preventClose?: boolean
 }>()
 
-const emits = defineEmits<{
-  (e: 'ok'): void
-  (e: 'cancel'): void
-}>()
+const emits = defineEmits<{ (e: 'ok'): void; (e: 'cancel'): void }>()
 
 const { t } = useI18n()
 </script>
 
 <template>
-  <BaseModal :title="title" content-class="w-full max-w-30vw">
+  <BaseModal :title="title" content-class="w-full max-w-30vw" :prevent-close="preventClose">
     <template #body>
       {{ content }}
     </template>
 
     <template #footer>
       <div class="flex justify-end gap-x-2">
-        <BaseButton variant="secondary" @click="emits('cancel')">
-          {{ t('button.cancel') }}
+        <BaseButton v-if="showCancel" variant="secondary" @click="emits('cancel')">
+          {{ cancelContent ?? t('button.cancel') }}
         </BaseButton>
 
-        <BaseButton @click="emits('ok')">
-          {{ t('button.confirm') }}
+        <BaseButton v-if="showOk" @click="emits('ok')">
+          {{ okContent ?? t('button.confirm') }}
         </BaseButton>
       </div>
     </template>

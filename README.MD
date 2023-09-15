@@ -1,6 +1,6 @@
 # AudioStreamSplitting
 
-- [Audio Stream Splitting](#audio-stream-splitting)
+- [AudioStreamSplitting](#audiostreamsplitting)
   - [Using AudioStreamSplitting](#using-audiostreamsplitting)
     - [Setup](#setup)
   - [Development](#development)
@@ -8,8 +8,8 @@
     - [Installation](#installation)
       - [Manual setup](#manual-setup)
       - [Docker](#docker)
-        - [Without extension:](#without-extension)
-        - [With extension:](#with-extension)
+        - [Without extension](#without-extension)
+        - [With extension](#with-extension)
     - [Usage](#usage)
       - [Available commands](#available-commands)
   - [License](#license)
@@ -48,6 +48,8 @@ You can choose between manual setup or using Docker for simplicity.
 4. Setup `lint-staged` and `simple-git-hooks` using the command `npx simple-git-hooks`
 
 5. Download the latest release of [fpcalc](https://acoustid.org/chromaprint) for your system from [the AcoustID website](https://acoustid.org/chromaprint) if you want to use the AcoustID API. Put it in a location of your choosing and add it to your system PATH. You will probably need to restart your system before first using AudioStreamSplitting.
+
+6. Only if you plan to use the Record-in-App feature. [Download `ffmpeg` (https://ffmpeg.org/download.html). Make sure that `ffmpeg` is available in your system's PATH so that the application can use it to process audio.
 
 #### Docker
 
