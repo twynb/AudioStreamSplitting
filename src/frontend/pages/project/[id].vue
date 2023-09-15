@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Project } from 'models/types'
+
 const props = defineProps<{ id: string }>()
 
 const { getProjectById } = useDBStore()
@@ -10,14 +12,22 @@ if (!project)
 else
   project.visited = true
 
-function updateFileProperty<TKey extends keyof Project['files'][0]>(filePath: string, key: TKey, v: Project['files'][0][TKey]) {
+function updateFileProperty<TKey extends keyof Project['files'][0]>(fileIndex: number, key: TKey, v: Project['files'][0][TKey]) {
   if (!project)
-    return
-  const fileIndex = project.files.findIndex(p => p.filePath === filePath)
-  if (fileIndex === -1)
     return
 
   project.files[fileIndex][key] = v
+}
+
+function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: number) {
+  if (!project)
+    return
+  const segments = project.files[fileIndex].segments
+  if (!segments)
+    return
+  const newMeta = segments[songIndex].metadataOptions?.[metaIndex]
+  if (newMeta)
+    segments[songIndex].metaIndex = metaIndex
 }
 </script>
 
@@ -38,10 +48,11 @@ function updateFileProperty<TKey extends keyof Project['files'][0]>(filePath: st
     <template #default>
       <div class="space-y-10">
         <ProjectItem
-          v-for="file in project.files" :key="file.filePath"
+          v-for="file, fileIndex in project.files" :key="file.filePath"
           :file="file"
-          @succeed-process="({ filePath, info }) => updateFileProperty(filePath, 'info', info)"
-          @update-peaks="({ filePath, peaks }) => updateFileProperty(filePath, 'peaks', peaks)"
+          @succeed-process="(v) => updateFileProperty(fileIndex, 'segments', v)"
+          @update-peaks="(v) => updateFileProperty(fileIndex, 'peaks', v)"
+          @change-meta="(songIndex, metaIndex) => handleChangeMeta(fileIndex, songIndex, metaIndex)"
         />
       </div>
     </template>
