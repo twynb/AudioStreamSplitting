@@ -49,6 +49,10 @@ Example:
 }
 ```
 
+#### lookup:Raises
+
+- ``requests.exceptions.RequestException`` if the request fails due to network problems, too many redirections or other problems. A detailed list of Exceptions ``requests``can raise can be found in [the ``requests`` documentation](https://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions)
+
 #### lookup:Example
 
 Load a song and load metadata for it using ``lookup``.
@@ -80,6 +84,10 @@ Look up a snippet of the given song at the given offset. This function integrate
 #### _lookup_segment_with_offset:Returns
 
 Tuple ``(matches, track)`` of the retrieved metadata, matching the sections of the API response with the same name. The format for the API response can be found using the test functionality on the [Shazam API](https://rapidapi.com/apidojo/api/shazam) website.
+
+#### _lookup_segment_with_offset:Raises
+
+- ``requests.exceptions.RequestException`` if the request fails due to network problems, too many redirections or other problems. A detailed list of Exceptions ``requests``can raise can be found in [the ``requests`` documentation](https://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions)
 
 ### _format_song_data
 
@@ -130,6 +138,10 @@ Send the actual lookup request to the [Shazam API](https://rapidapi.com/apidojo/
 #### _send_lookup_request:Returns
 
 ``requests.Response`` containing the request response. The format for the API response can be found using the test functionality at the [Shazam API](https://rapidapi.com/apidojo/api/shazam) website.
+
+#### _send_lookup_request:Raises
+
+- ``requests.exceptions.RequestException`` if the request fails due to network problems, too many redirections or other problems. A detailed list of Exceptions ``requests``can raise can be found in [the ``requests`` documentation](https://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions)
 
 ### _extract_value_from_metadata
 
