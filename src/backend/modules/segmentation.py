@@ -1,10 +1,10 @@
-from enum import Enum
 from collections import namedtuple
+from enum import Enum
 from itertools import pairwise
 
+import librosa
 import numpy as np
 from scipy import signal
-import librosa
 
 from .audio_stream_io import (
     overlapping_stream,
@@ -384,7 +384,4 @@ def segment_file(path, preset=Preset.NORMAL):
             end - start, sr=samplerate, hop_length=hop_length, n_fft=2048
         )
 
-        # TODO decide whether to remove librosa.load() call for memory efficiency
-        yield librosa.load(
-            path, mono=False, sr=samplerate, offset=offset, duration=duration
-        ), start_time, duration
+        yield start_time, duration

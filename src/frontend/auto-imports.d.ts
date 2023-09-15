@@ -76,6 +76,7 @@ declare global {
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
   const useAttrs: typeof import('vue')['useAttrs']
+  const useConvertSecToMin: typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useDBStore: typeof import('./stores/useDBStore')['useDBStore']
@@ -84,13 +85,16 @@ declare global {
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useDriver: typeof import('./composables/useDriver')['useDriver']
   const useDriverStore: typeof import('./stores/useDriverStore')['useDriverStore']
+  const useEnvStore: typeof import('./stores/useEnvStore')['useEnvStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
+  const useHash: typeof import('./composables/useHash')['useHash']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useLink: typeof import('vue-router')['useLink']
   const useLocale: typeof import('./composables/useLocale')['useLocale']
   const useModal: typeof import('vue-final-modal')['useModal']
   const usePost: typeof import('./composables/usePost')['usePost']
+  const useRandomColor: typeof import('./composables/useRandomColor')['useRandomColor']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -182,6 +186,7 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useConvertSecToMin: UnwrapRef<typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
@@ -189,13 +194,16 @@ declare module 'vue' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
+    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
+    readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
+    readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -281,6 +289,7 @@ declare module '@vue/runtime-core' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useConvertSecToMin: UnwrapRef<typeof import('./composables/useConvertSecToMin')['useConvertSecToMin']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDBStore: UnwrapRef<typeof import('./stores/useDBStore')['useDBStore']>
@@ -288,13 +297,16 @@ declare module '@vue/runtime-core' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
+    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
+    readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLocale: UnwrapRef<typeof import('./composables/useLocale')['useLocale']>
     readonly useModal: UnwrapRef<typeof import('vue-final-modal')['useModal']>
     readonly usePost: UnwrapRef<typeof import('./composables/usePost')['usePost']>
+    readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

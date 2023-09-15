@@ -8,9 +8,13 @@ const { open, close } = useModal({
   component: ConfirmModal,
   attrs: {
     title: t('dialog.confirm.title'),
-    content: 'Do you realy want to delete all projects.',
     onOk() { handleClearAll() },
     onCancel() { close() },
+  },
+  slots: {
+    default: {
+      component: h('p', null, 'Do you realy want to delete all projects.'),
+    },
   },
 })
 
