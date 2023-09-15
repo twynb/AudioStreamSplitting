@@ -128,8 +128,10 @@ async function handleStore(
 ) {
   const filePath = props.file.filePath
   const targetDirectory = store.lsEnv.SAVE_DIRECTORY
-  if (!targetDirectory)
-    toast({ content: t('toast.no_save_directory') })
+  if (!targetDirectory) {
+    toast({ title: t('toast.title.no_save_directory'), content: t('toast.no_save_directory'), variant: 'destructive' })
+    return
+  }
 
   currentStoringIndex.value = songIndex
   isStoring.value = true
@@ -139,7 +141,7 @@ async function handleStore(
     toast({ title: metadata.title, content: t('toast.save_file_success', { target: targetDirectory }) })
   }
   catch (e) {
-    toast({ title: t('toast.title.no_save_directory'), content: t('toast.no_save_directory'), variant: 'destructive' })
+    toast({ content: t('toast.unkown_error'), variant: 'destructive' })
   }
 
   currentStoringIndex.value = -1
