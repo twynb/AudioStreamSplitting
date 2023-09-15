@@ -64,6 +64,10 @@ def foo(bar, foobar):
     return bar
 ```
 
+#### Re-Generating Documentation
+
+TODO
+
 ## Code Structure
 
 The code is structured into two main parts, the back-end (containing the business logic and written in python) and the front-end (containing the UI and written in TypeScript with Vue.js). It's modular such that you could theoretically stick a new front-end on the current back-end without rewriting business logic.
