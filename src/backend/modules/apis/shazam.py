@@ -22,13 +22,13 @@ LOOKUP_OFFSET_INCREMENT = 10
 
 def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
     """Attempt to identify the given song using the Shazam API.
-        If the song can't be recognised from the first segment, step through it until the song ends or
-        a result is found.
+        If the song can't be recognised from the first segment, step through it until the song ends
+        or a result is found.
         The step size is defined by LOOKUP_OFFSET_INCREMENT and set to 10 seconds by default.
         The segment size is defined by LOOKUP_SEGMENTS_DURATION and set to 4 seconds by default,
         as the Shazam API expects segments between 3 and 5 seconds.
-        :param song_data: The song data. The data must be at a sample rate of 44100Hz as the Shazam API
-            will not work with other sample rates.
+        :param song_data: The song data. The data must be at a sample rate of 44100Hz as the Shazam
+            API will not work with other sample rates.
         :param apikey: The Shazam API key.
         :param from_start: Whether to take a sample from the start or end of the song.
         :returns: the retrieved metadata as a dict, or None if no matches are found.
@@ -42,8 +42,9 @@ def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
             }
             ``
         :raise `requests.exceptions.RequestException`: if the request fails due to network problems,
-            too many redirections or other problems. A detailed list of Exceptions ``requests``can raise
-            can be found in the requests documentation at (https://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions)
+            too many redirections or other problems. A detailed list of Exceptions `requests`can
+            raise can be found in the `requests` documentation at
+            (https://docs.python-requests.org/en/latest/user/quickstart/#errors-and-exceptions)
         Usage example:
     Load a song and load metadata for it using `lookup`.
     ``
