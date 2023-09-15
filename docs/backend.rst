@@ -9,7 +9,6 @@ Subpackages
 
    backend.api
    backend.modules
-   backend.tests
    backend.utils
 
 Submodules
