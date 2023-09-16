@@ -14,8 +14,8 @@ sys.path.append(pathlib.Path(__file__).parents[2].joinpath("src").resolve().as_p
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "AudioStreamSplitting"
-copyright = "2023, Author"
-author = "Author"
+copyright = "2023, cubetho, Christina Reichel (ChrisItisdud), 4lex0017, JosuaE-FHWS"
+author = "cubetho, Christina Reichel (ChrisItisdud), 4lex0017, JosuaE-FHWS"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
