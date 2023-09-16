@@ -34,19 +34,12 @@ class Preset(
 
     Presets are:
 
-    +---------------+---------------+--------------+----------------+
-    | Preset        | filter_length | downsampling | peak_threshold |
-    +===============+===============+==============+================+
-    | EXTRA_STRICT  | 57            | 2            | 0.6            |
-    +---------------+---------------+--------------+----------------+
-    | STRICT        | 49            | 4            | 0.55           |
-    +---------------+---------------+--------------+----------------+
-    | NORMAL        | 41            | 8            | 0.5            |
-    +---------------+---------------+--------------+----------------+
-    | LENIENT       | 33            | 16           | 0.45           |
-    +---------------+---------------+--------------+----------------+
-    | EXTRA_LENIENT | 25            | 32           | 0.4            |
-    +---------------+---------------+--------------+----------------+
+                      filter_length,      downsampling,       peak_threshold
+    - EXTRA_STRICT:     57,                 2,                0.6
+    - STRICT:           49,                 4,                0.55
+    - NORMAL:           41,                 8,                0.5
+    - LENIENT:          33,                 16,               0.45
+    - EXTRA_LENIENT:    25,                 32,               0.4
 
     Normal is the recommended preset, strict may result in too little segments and lenient may
     result in increasingly too many but inaccurate segments.
@@ -65,7 +58,8 @@ def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
     :param hop_length: The hop-length of the sequence.
-    :param fft_window: The Window size for the fast-fourier-transformation (default: 2048)
+    :param fft_window: The Window size for the fast-fourier-transformation
+                       (default: 2048)
     :return: The chroma feature vector.
     """
     # convert to mono
@@ -85,7 +79,8 @@ def extract_spectro(feature, samplerate, hop_length: int, fft_window=2048):
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
     :param hop_length: The hop-length of the sequence.
-    :param fft_window: The Window size for the fast-fourier-transformation (default: 2048)
+    :param fft_window: The Window size for the fast-fourier-transformation
+                       (default: 2048)
     :return: The mel-spectrogram feature vector.
     """
     # convert to mono
@@ -108,7 +103,8 @@ def smooth_downsample_feature_sequence(
     :param samplerate: the samplerate of the feature sequence
     :param filter_len: length of the smoothing filter
     :param downsampling: down-sampling rate
-    :returns: the smoothed and down-sampled feature sequence, the down-sampled samplerate.
+    :returns: the smoothed and down-sampled feature sequence,
+              the down-sampled samplerate.
     """
     if filter_len % 2 != 1:
         filter_len = filter_len + 1
@@ -130,7 +126,8 @@ def median_downsample_feature_sequence(
     :param samplerate: the samplerate of the feature sequence
     :param filter_len: length of the median filter
     :param downsampling: down-sampling rate
-    :returns: the smoothed and down-sampled feature sequence, the down-sampled samplerate.
+    :returns: the smoothed and down-sampled feature sequence,
+              the down-sampled samplerate.
     """
     if filter_len % 2 != 1:
         filter_len = filter_len + 1
@@ -167,8 +164,10 @@ def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
     corners in a matrix.
     This is a combination of a basic checkerboard kernel and a gauss filter kernel.
     :param n: length of one quadrant in the resulting kernel
-    :param var: the variance of the resulting kernel (default: 1.0)
-    :param normalize: whether the resulting kernel should be normalized or not (default: True)
+    :param var: the variance of the resulting kernel
+                (default: 1.0)
+    :param normalize: whether the resulting kernel should be normalized or not
+                      (default: True)
     :returns: gaussian checkerboard kernel of length 2 * n + 1.
     """
     taper = np.sqrt(0.5) / (n * var)
@@ -217,12 +216,15 @@ def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
 def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
     """Computes the novelty function for the given self similarity matrix.
     :param ssm: the self similarity matrix
-    :param kernel: the kernel for edge / corner detection (default: gaussian checkerboard)
+    :param kernel: the kernel for edge / corner detection
+                   (default: gaussian checkerboard)
     :param n: length of one quadrant of the kernel (default: 10)
     :param var: variance for the gaussian checkerboard kernel (default: 0.5)
-    :param exclude: whether to exclude the start and end of the resulting novelty function.
-    If True this sets both the start and end to 0. (default: False)
-    :returns: the resulting novelty function. Peaks indicate edges / corners (transitions).
+    :param exclude: whether to exclude the start and end of the resulting novelty
+                    function.
+                    If True this sets both the start and end to 0. (default: False)
+    :returns: the resulting novelty function.
+              Peaks indicate edges / corners (transitions).
     """
     if kernel is None:
         kernel = create_gaussian_checkerboard_kernel(n, var=var)
@@ -309,7 +311,8 @@ def segment_block(
     :param filter_len: the length of the median filter
     :param downsampling: the downsampling factor to use
     :param threshold: the threshold for peak selection
-    :param offset: an offset (in audio frames) to calculate indices for consecutive calls correctly
+    :param offset: an offset (in audio frames) to calculate indices for consecutive
+                   calls correctly
     :returns: a list of indexes, where transitions should be.
     """
     if feature == FeatureType.CHROMA:
@@ -332,8 +335,8 @@ def segment_file(path, preset=Preset.NORMAL):
     """Segments a given file into a generator.
     :param path: The path to the File
     :param preset: The down-sampling rate for the SSM see: :class:`Preset`
-    :return: A generator that iterates over the found segments, the start time and duration
-    for the original file.
+    :return: A generator that iterates over the found segments,
+             the start time and duration for the original file.
     """
     block_len = 4096
     stream, samplerate, hop_length = read_audio_file_to_stream(
