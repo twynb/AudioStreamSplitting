@@ -4,14 +4,14 @@ import { defineConfig } from 'vitepress'
 
 const __dirname = path.resolve(__filename, '..', '..')
 
-const components = fs.readdirSync(path.join(__dirname, 'frontend', 'components'))
+const components = fs.readdirSync(path.join(__dirname, 'components'))
 const componentsSidebarItems = components
   .filter((f) => {
     const [name, ext] = f.split('.')
     return name !== 'index' && ext === 'md'
   }).map((f) => {
     const name = f.split('.')[0]
-    return { text: name, link: `components/${name}` }
+    return { text: name, link: `${name}` }
   })
 
 export default defineConfig({
@@ -27,23 +27,14 @@ export default defineConfig({
     logo: '/logo.ico',
     nav: [
       {
-        text: 'Backend',
-        link: '/backend/',
-        activeMatch: '/backend/',
-      },
-      {
-        text: 'Frontend',
-        link: '/frontend/',
-        activeMatch: '/frontend/',
+        text: 'Components',
+        link: '/components/',
+        activeMatch: '/components/',
       },
     ],
     sidebar: {
-      '/backend/': {
-        base: '/backend/',
-        items: [],
-      },
-      '/frontend/': {
-        base: '/frontend/',
+      '/components/': {
+        base: '/components/',
         items: [
           {
             text: 'Components',

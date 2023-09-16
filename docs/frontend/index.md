@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: Go to docs
-      link: /frontend/
+      link: /components/
     - theme: alt
       text: View on GitHub
       link: https://github.com/4lex0017/AudioStreamSplitting
