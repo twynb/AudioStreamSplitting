@@ -28,7 +28,7 @@ export default defineConfig({
     nav: [
       {
         text: 'Components',
-        link: '/components/',
+        link: '/components/BaseBadge',
         activeMatch: '/components/',
       },
     ],
