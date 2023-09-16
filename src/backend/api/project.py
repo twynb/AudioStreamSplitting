@@ -4,6 +4,7 @@ import subprocess
 import uuid
 
 from flask import Blueprint, jsonify, make_response, request
+from utils.logger import log_error
 from utils.path import audios_dir, mkdir
 from werkzeug.utils import secure_filename
 
@@ -16,7 +17,7 @@ def create():
     description = request.form.get("description")
     files = request.files.getlist("file")
     project_id = uuid.uuid4()
-    project_path = f"{audios_dir}/{project_id}"
+    project_path = os.path.join(audios_dir, project_id)
     mkdir(project_path)
 
     project = {
@@ -52,7 +53,7 @@ def create():
                     check=True,
                 )
             except subprocess.CalledProcessError as e:
-                print(f"Error: {e}")
+                log_error(e)
             else:
                 os.remove(file_path)
                 file_name = f"{name}.wav"
@@ -81,7 +82,8 @@ def check_ffmpeg():
             check=True,
         )
         return "ffmpeg is installed", 200
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        log_error(e)
         return "ffmpeg is not installed", 404
 
 
