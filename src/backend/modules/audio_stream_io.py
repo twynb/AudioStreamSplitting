@@ -60,6 +60,7 @@ def read_audio_file_to_stream(
 def overlapping_stream(stream):
     """
     Changes a stream of audiodata blocks into a stream of overlapping blocks.
+    These have to be in stereo.
 
     :param stream: Takes a Generator
     :returns: A Generator with 75% Overlap between each instance
@@ -101,28 +102,28 @@ def save_numpy_as_audio_file(
 
 def tag_audio_file(savename: str, tags: dict):
     """
-    Tags an audofile with different tags
+    Tags an audiofile with different tags.
+
+    Possible tags:
+            * album
+            * albumartist
+            * artist
+            * artwork
+            * comment
+            * compilation
+            * composer
+            * discnumber
+            * genre
+            * lyrics
+            * totaldiscs
+            * totaltracks
+            * tracknumber
+            * tracktitle
+            * year
+            * isrc
 
     :param savename: path to savefile
     :param tags: dict of tags
-
-            possible tags:
-                - album
-                - albumartist
-                - artist
-                - artwork
-                - comment
-                - compilation
-                - composer
-                - discnumber
-                - genre
-                - lyrics
-                - totaldiscs
-                - totaltracks
-                - tracknumber
-                - tracktitle
-                - year
-                - isrc
     :returns: none
     """
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
