@@ -1,4 +1,19 @@
+import path from 'node:path'
+import fs from 'node:fs'
 import { defineConfig } from 'vitepress'
+
+const __dirname = path.resolve(__filename, '..', '..')
+console.log(__dirname)
+
+const components = fs.readdirSync(path.join(__dirname, 'frontend', 'components'))
+const componentsSidebarItems = components
+  .filter((f) => {
+    const [name, ext] = f.split('.')
+    return name !== 'index' && ext === 'md'
+  }).map((f) => {
+    const name = f.split('.')[0]
+    return { text: name, link: `components/${name}` }
+  })
 
 export default defineConfig({
   lang: 'en-US',
@@ -34,11 +49,7 @@ export default defineConfig({
           {
             text: 'Components',
             collapsed: false,
-            items: [
-              { text: 'BaseBadge', link: 'components/BaseBadge' },
-              { text: 'BaseButton', link: 'components/BaseButton' },
-              { text: 'BaseProgress', link: 'components/BaseProgress' },
-            ],
+            items: componentsSidebarItems,
           },
         ],
       },

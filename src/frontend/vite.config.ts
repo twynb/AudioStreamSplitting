@@ -51,6 +51,15 @@ export default defineConfig({
       fullInstall: true,
       include: [path.resolve(__dirname, 'locales/**')],
     }),
+
+    {
+      name: 'vue-docs',
+      transform(_code: unknown, id: string) {
+        if (!/vue&type=docs/.test(id))
+          return
+        return 'export default \'\''
+      },
+    },
   ],
 
   build: {

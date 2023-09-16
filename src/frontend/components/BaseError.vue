@@ -1,11 +1,13 @@
-<script setup lang="ts">
-defineProps<{
-  error?: string
-}>()
-</script>
-
 <template>
-  <p v-if="error" class="text-sm text-destructive">
-    {{ error }}
+  <p class="text-sm text-destructive">
+    <!-- @slot Slot for content -->
+    <slot />
   </p>
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseError>Error text</BaseError>
+  ```
+</docs>

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 defineProps<{
+  /**
+   * Current value
+   */
   curr: number
+  /**
+   * Max value
+   */
   max: number
 }>()
 </script>
@@ -10,3 +16,10 @@ defineProps<{
     <div data-state="indeterminate" data-max="100" class="h-full w-full bg-primary transition-all" :style="{ transform: `translateX(${(curr * 100 / max) - 100}%)` }" />
   </div>
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseProgress :curr="8" :max="10" />
+  ```
+</docs>
