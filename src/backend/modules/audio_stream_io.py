@@ -105,24 +105,23 @@ def tag_audio_file(savename: str, tags: dict):
 
     :param savename: path to savefile
     :param tags: dict of tags
-
-            possible tags:
-                - album
-                - albumartist
-                - artist
-                - artwork
-                - comment
-                - compilation
-                - composer
-                - discnumber
-                - genre
-                - lyrics
-                - totaldiscs
-                - totaltracks
-                - tracknumber
-                - tracktitle
-                - year
-                - isrc
+            possible tags::
+            album
+            albumartist
+            artist
+            artwork
+            comment
+            compilation
+            composer
+            discnumber
+            genre
+            lyrics
+            totaldiscs
+            totaltracks
+            tracknumber
+            tracktitle
+            year
+            isrc
     :returns: none
     """
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
