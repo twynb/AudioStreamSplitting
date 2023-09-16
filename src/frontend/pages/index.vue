@@ -109,7 +109,7 @@ function handleToProject(id: string) {
           </p>
 
           <p class="mt-2 text-center text-muted-foreground">
-            Add a new project and let our app automatically detect and <br> split songs in audio files.
+            {{ t('dashboard.project.add_new_project_prompt') }}
           </p>
 
           <BaseButton id="new_project_btn" class="mt-4 gap-1" @click="async () => await open() && driver.moveNext()">

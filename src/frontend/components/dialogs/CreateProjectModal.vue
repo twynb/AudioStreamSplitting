@@ -87,15 +87,15 @@ function handleSubmit() {
     emits('ok', data.value)
   }
 
-  errors.value.name = data.value.name ? '' : 'No name is given'
+  errors.value.name = data.value.name ? '' : t('error.create_project.no_name_entered')
   if (getProjects().find(p => p.name === data.value.name))
-    errors.value.name = `${data.value.name} is already existed. Please choose an other name.`
+    errors.value.name = t('error.create_project.name_exists_already', { name: data.value.name })
   if (errors.value.name && driver.value.isActive()) {
     driver.value.moveTo(1)
     return
   }
 
-  errors.value.file = data.value.files.length ? '' : 'No file is uploaded. Please upload at least one file to create project.'
+  errors.value.file = data.value.files.length ? '' : t('error.create_project.no_file_uploaded')// 'No file is uploaded. Please upload at least one file to create project.'
   if (errors.value.file && driver.value.isActive())
     driver.value.moveTo(3)
 }

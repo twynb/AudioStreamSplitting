@@ -14,7 +14,9 @@
     "previous": "Previous",
     "create_new_project": "Create new project",
     "save": "Save",
-    "set": "Set"
+    "set": "Set",
+    "process": "Process",
+    "clear": "Clear"
   },
   "placeholder": {},
   "sidebar": {
@@ -26,6 +28,7 @@
   },
   "dashboard": {
     "project": {
+      "add_new_project_prompt": "Add a new project and let us automatically detect <br />and split songs in your sound files.",
       "create_at": "Create at",
       "no_project": "No project yet"
     }
@@ -42,7 +45,11 @@
     "advanced": "Advanced",
     "download": "Download",
     "save_directory": "Save Directory",
-    "output_file_name": "Output File Name"
+    "output_file_name": "Output File Name",
+    "acoustid_api_key": "AcoustID API Key",
+    "shazam_api_key": "Shazam API Key",
+    "clear_all_confirm": "Are you sure you want to delete all projects? This cannot be undone.",
+    "clear_heading": "Clear all projects"
   },
   "dialog": {
     "create_project": {
@@ -67,7 +74,8 @@
     "year": "Year",
     "duration": "Duration",
     "no_webm": ".webm cannot be processed at the moment!",
-    "no_meta": "No information"
+    "no_meta": "No information",
+    "list_caption": "Found songs:"
   },
   "toast": {
     "empty_field": "Please give in a valid value!",
@@ -80,5 +88,42 @@
       "no_save_directory": "No save directory set"
     },
     "no_save_directory": "Please set the path for the save directory in the Settings tab."
+  },
+  "driver": {
+    "project": {
+      "new_project_title": "Create a new project",
+      "new_project_description": "Click this button to start creating a new project.",
+      "create_name_title": "Project name",
+      "create_name_description": "Enter a unique name for your project here.",
+      "create_description_title": "Project description",
+      "create_description_description": "Provide a brief description of your project.",
+      "create_project_files_title": "Upload project files",
+      "create_project_files_description": "Click here to upload files related to your project.",
+      "create_project_files_list_title": "Uploaded files",
+      "create_project_files_list_description": "View a list of files you have uploaded for your project.",
+      "create_project_title": "Create project",
+      "create_project_description": "Click this button to create your project with the provided details."
+    },
+    "record": {
+      "start_title": "Start recording",
+      "start_description": "Click this button to begin recording your media.",
+      "stop_title": "Stop recording",
+      "stop_description": "Click this button to stop recording.",
+      "download_title": "Download recorded media",
+      "download_description": "Click here to download the media you have recorded.",
+      "control_title": "Media control buttons",
+      "control_description": "Use these buttons to control your media playback.",
+      "delete_title": "Delete recorded media",
+      "delete_description": "Click this button to delete the recorded media files.",
+      "create_project_title": "Create project",
+      "create_project_description": "Fill out this form to create a new project with the recorded media."
+    }
+  },
+  "error": {
+    "create_project": {
+      "no_name_entered": "Please enter a name.",
+      "name_exists_already": "{name} already exists. Please enter a different name.",
+      "no_file_uploaded": "No file was uploaded. Please upload at least one file to create a project."
+    }
   }
 }
