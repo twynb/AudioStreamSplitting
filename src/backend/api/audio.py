@@ -16,7 +16,8 @@ audio_bp = Blueprint("audio", __name__)
 @audio_bp.route("/split", methods=["POST"])
 def split():
     """Split and identify the segments of the provided file.
-    This uses the logic from `modules.api_service` and `modules.segmentation`.
+    This uses the logic from ``modules.api_service`` and ``modules.segmentation``.
+
     :returns: The result as a JSON, if the file path is valid. A 400 error otherwise.
     """
     data = request.json
@@ -40,6 +41,7 @@ def split():
 def get_segment():
     """Get the given segment of the provided file's audio.
     Formats the segment as a wav file and sends that file.
+
     :returns: the audio as a .wav file.
     """
     data = request.json
@@ -85,7 +87,8 @@ def store():
     """Store the given segment of the provided file as a new file.
     Add the given metadata to this file.
     If the provided file or the target directory does not exist, a 400 error is returned.
-    :returns: "{success: true}" if storing the file worked. A 400 error otherwise.
+
+    :returns: ``"{success: true}"`` if storing the file worked. A 400 error otherwise.
     """
     data = request.json
     file_path = data["filePath"]
