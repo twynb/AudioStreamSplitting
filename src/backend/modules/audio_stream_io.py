@@ -66,8 +66,12 @@ def overlapping_stream(stream):
     """
     for curr_block, next_block in pairwise(stream):
         for ratio in np.linspace(1, 0, 4, endpoint=False):
-            curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
-            next_end_index = int((next_block.shape[1] * (1 - ratio)))
+            if curr_block.ndim == 1:
+                curr_start_index = int((curr_block.shape[0] * (1 - ratio)))
+                next_end_index = int((next_block.shape[0] * (1 - ratio)))
+            else:
+                curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
+                next_end_index = int((next_block.shape[1] * (1 - ratio)))
             yield np.append(
                 curr_block[:, curr_start_index:], next_block[:, :next_end_index], axis=1
             )
