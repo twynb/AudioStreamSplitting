@@ -1,48 +1,46 @@
 import type { DriveStep } from 'driver.js'
 
-const { t } = useI18n()
-
 export const DASHBOARD_STEPS: DriveStep[] = [
   {
     element: '#new_project_btn',
     popover: {
-      title: t('driver.project.new_project_title'),
-      description: t('driver.project.new_project_description'),
+      title: 'Create a New Project',
+      description: 'Click this button to start creating a new project.',
     },
   },
   {
     element: '#create_project_name',
     popover: {
-      title: t('driver.project.create_name_title'),
-      description: t('driver.project.create_name_description'),
+      title: 'Project Name',
+      description: 'Enter a unique name for your project here.',
     },
   },
   {
     element: '#create_project_description',
     popover: {
-      title: t('driver.project.create_description_title'),
-      description: t('driver.project.create_decsription_description'),
+      title: 'Project Description',
+      description: 'Provide a brief description of your project.',
     },
   },
   {
     element: '#create_project_files',
     popover: {
-      title: t('driver.project.project_files_title'),
-      description: t('driver.project.project_files_description'),
+      title: 'Upload Project Files',
+      description: 'Click here to upload files related to your project.',
     },
   },
   {
     element: '#create_project_files_list',
     popover: {
-      title: t('driver.project.project_files_list_title'),
-      description: t('driver.project.project_files_list_description'),
+      title: 'Uploaded Files',
+      description: 'View a list of files you have uploaded for your project.',
     },
   },
   {
     element: '#create_project_create_btn',
     popover: {
-      title: t('driver.project.create_project_title'),
-      description: t('driver.project.create_project_description'),
+      title: 'Create Project',
+      description: 'Click this button to create your project with the provided details.',
     },
   },
 ]
@@ -51,43 +49,43 @@ export const RECORD_STEPS: DriveStep[] = [
   {
     element: '#start_record_btn',
     popover: {
-      title: t('driver.record.start_title'),
-      description: t('driver.record.start_description'),
+      title: 'Start Recording',
+      description: 'Click this button to begin recording your media.',
     },
   },
   {
     element: '#stop_record_btn',
     popover: {
-      title: t('driver.record.stop_title'),
-      description: t('driver.record.stop_description'),
+      title: 'Stop Recording',
+      description: 'Click this button to stop recording your media.',
     },
   },
   {
     element: '#download_record_btn',
     popover: {
-      title: t('driver.record.download_title'),
-      description: t('driver.record.download_description'),
+      title: 'Download Recorded Media',
+      description: 'Click here to download the media you have recorded.',
     },
   },
   {
     element: '#media_control_btns',
     popover: {
-      title: t('driver.record.control_title'),
-      description: t('driver.record.control_description'),
+      title: 'Media Control Buttons',
+      description: 'Use these buttons to control your media playback.',
     },
   },
   {
     element: '#delete_record_btn',
     popover: {
-      title: t('driver.record.delete_title'),
-      description: t('driver.record.delete_description'),
+      title: 'Delete Recorded Media',
+      description: 'Click this button to delete the recorded media file.',
     },
   },
   {
     element: '#create_project_form',
     popover: {
-      title: t('driver.record.create_project_title'),
-      description: t('driver.record.create_project_description'),
+      title: 'Create Project Form',
+      description: 'Fill out this form to create a new project with the provided details.',
     },
   },
 ]
