@@ -1,9 +1,0 @@
-# BaseSkeleton
-
----
-
-## Examples
-
-```vue
-<BaseSkeleton />
-```

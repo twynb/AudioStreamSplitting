@@ -1,9 +1,0 @@
-# BaseLogo
-
----
-
-## Examples
-
-```vue
-<BaseLogo />
-```

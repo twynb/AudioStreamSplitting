@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import { defineConfig } from 'vitepress'
 
 const __dirname = path.resolve(__filename, '..', '..')
-console.log(__dirname)
 
 const components = fs.readdirSync(path.join(__dirname, 'frontend', 'components'))
 const componentsSidebarItems = components

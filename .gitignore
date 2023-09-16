@@ -166,3 +166,4 @@ test_output/
 *.mp3
 !build.spec
 **/.vitepress/cache
+docs/frontend/components/**
