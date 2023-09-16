@@ -48,7 +48,8 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/4lex0017/AudioStreamSplitting' },
     ],
     footer: {
-      message: 'Released under the GNU License.',
+      message: 'Released under the GNU GPLv3 License.',
+      copyright: 'Phat Nguyen (chubetho), Christina Reichel (ChrisItisdud), 4lex0017, JosuaE-FHWS',
     },
   },
 })
