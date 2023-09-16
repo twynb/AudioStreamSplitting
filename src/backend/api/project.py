@@ -80,7 +80,7 @@ def check_ffmpeg():
             stderr=subprocess.PIPE,
             check=True,
         )
-        return "ffmpeg is installed", 400
+        return "ffmpeg is installed", 200
     except subprocess.CalledProcessError:
         return "ffmpeg is not installed", 404
 
