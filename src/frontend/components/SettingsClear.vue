@@ -29,7 +29,6 @@ async function handleClearAll() {
   <div class="flex items-center justify-between">
     <h3>{{ t('settings.clear_heading') }}</h3>
     <BaseButton variant="destructive" @click="open">
-      Clear
       {{ t('button.clear') }}
     </BaseButton>
   </div>

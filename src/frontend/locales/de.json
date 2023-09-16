@@ -1,55 +1,129 @@
 {
   "button": {
-    "back_to_dashboard": "Zurück zum Dashboard",
-    "cancel": "Stornieren",
+    "cancel": "Abbrechen",
     "create": "Erstellen",
     "delete": "Löschen",
     "edit": "Bearbeiten",
-    "new": "Neu",
     "new_project": "Neues Projekt",
     "upload": "Hochladen",
+    "back_to_dashboard": "Zurück zum Dashboard",
+    "new": "Neu erstellen",
     "confirm": "Bestätigen",
-    "done": "Erledigt",
-    "next": "Nächste",
-    "previous": "Vorherige"
+    "next": "Weiter",
+    "done": "Abschließen",
+    "previous": "Zurück",
+    "create_new_project": "Neues Projekt erstellen",
+    "save": "Speichern",
+    "set": "Übernehmen",
+    "process": "Verarbeiten",
+    "clear": "Alle löschen"
+  },
+  "placeholder": {},
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "notifications": "Mitteilungen",
+    "settings": "Einstellungen",
+    "statistics": "Statistiken",
+    "record": "Aufnehmen"
   },
   "dashboard": {
     "project": {
-      "create_at": "Erstellen Sie unter",
-      "no_project": "Noch kein Projekt"
+      "add_new_project_prompt": "Fügen Sie ein neues Projekt hinzu, damit wir automatisch Lieder in Ihren Dateien erkennen und aufspalten können.",
+      "create_at": "Erstellt am",
+      "no_project": "Sie haben noch kein Projekt erstellt"
     }
+  },
+  "settings": {
+    "general": {
+      "index": "Allgemein",
+      "language": "Sprache"
+    },
+    "appearance": {
+      "index": "Aussehen",
+      "darkmode": "Dunkler Modus"
+    },
+    "advanced": "Erweitert",
+    "download": "Herunterladen",
+    "save_directory": "Dateipfad für gespeicherte Dateien",
+    "output_file_name": "Dateiname für gespeicherte Dateien",
+    "acoustid_api_key": "AcoustID API-Key",
+    "shazam_api_key": "Shazam API-Key",
+    "clear_all_confirm": "Sind Sie sicher, dass Sie alle Projekte löschen wollen? Dies kann nicht rückgängig gemacht werden.",
+    "clear_heading": "Alle Projekte löschen"
   },
   "dialog": {
     "create_project": {
       "title": "Neues Projekt erstellen",
-      "drop_message": "Ziehen und ablegen oder Durchsuchen",
-      "file_last_modified": "Zuletzt bearbeitet",
+      "drop_message": "Ziehen Sie eine Datei in dieses Fenster oder klicken Sie, um Ihr Gerät nach einer Datei zu durchsuchen.",
+      "support_files": "MP3- und WAV-Dateien werden unterstützt.",
+      "list_uploaded_file": "Ihre hochgeladenen Dateien.",
+      "file_last_modified": "Zuletzt verändert",
       "file_size": "Größe",
-      "list_uploaded_file": "Eine Liste Ihrer hochgeladenen Dateien.",
-      "project_description": "Beschreibung",
       "project_name": "Name",
-      "project_upload": "Hochladen",
-      "support_files": "Unterstützt MP3- und WAV-Dateien"
+      "project_description": "Beschreibung",
+      "project_upload": "Dateien hochladen"
     },
     "confirm": {
-      "title": "Bist du sicher ?"
+      "title": "Sicher?"
     }
   },
-  "sidebar": {
-    "dashboard": "Armaturenbrett",
-    "notifications": "Benachrichtigungen",
-    "record": "Aufzeichnen",
-    "settings": "Einstellungen",
-    "statistics": "Statistiken"
+  "song": {
+    "title": "Titel",
+    "artist": "Interpret",
+    "album": "Album",
+    "year": "Jahr",
+    "duration": "Dauer",
+    "no_webm": ".webm-Dateien können nicht verarbeitet werden!",
+    "no_meta": "Keine Information",
+    "list_caption": "Gefundene Lieder"
   },
-  "settings": {
-    "appearance": {
-      "darkmode": "Dunkler Modus",
-      "index": "Aussehen"
+  "toast": {
+    "empty_field": "Bitte geben Sie einen gültigen Wert ein!",
+    "changed_successfully": "Erfolgreich geändert!",
+    "unkown_error": "Ein Fehler ist aufgetreten!",
+    "long_process": "Die Verarbeitung wird eine Weile dauern...",
+    "cant_split": "Diese Tondatei konnte nicht aufgeteilt werden.",
+    "save_file_success": "Erfolgreich in {target} gespeichert!",
+    "title": {
+      "no_save_directory": "Kein Dateipfad gesetzt!"
     },
-    "general": {
-      "index": "Allgemein",
-      "language": "Sprache"
+    "no_save_directory": "Bitte geben Sie im Einstellungen-Tab einen Dateipfad an, an dem Dateien gespeichert werden sollen."
+  },
+  "driver": {
+    "project": {
+      "new_project_title": "Neues Projekt erstellen",
+      "new_project_description": "Klicken, um ein neues Projekt zu starten.",
+      "create_name_title": "Projektname",
+      "create_name_description": "Geben Sie hier einen Namen für Ihr Projekt ein, den kein anderes Ihrer Projekte hat.",
+      "create_description_title": "Projektbeschreibung",
+      "create_description_description": "Geben Sie hier eine kurze Beschreibung Ihres Projekts an.",
+      "create_project_files_title": "Dateien hochladen",
+      "create_project_files_description": "Hier klicken, um zu verarbeitende Dateien hochzuladen.",
+      "create_project_files_list_title": "Hochgeladene Dateien",
+      "create_project_files_list_description": "Hier sehen Sie eine Liste der für dieses Projekt hochgeladenen Dateien.",
+      "create_project_title": "Projekt erstellen",
+      "create_project_description": "Klicken Sie auf diesen Knopf, um das Projekt mit den gegebenen Details zu erstellen."
+    },
+    "record": {
+      "start_title": "Aufnahme starten",
+      "start_description": "Hier klicken, um Ton aufzunehmen.",
+      "stop_title": "Aufnahme beenden",
+      "stop_description": "Hier klicken, um die Aufnahme zu beenden.",
+      "download_title": "Aufgenommene Medien herunterladen",
+      "download_description": "Hier klicken, um die aufgenommene Tondatei herunterzuladen.",
+      "control_title": "Steuerknöpfe",
+      "control_description": "Benutzen Sie diese Knöpfe, um die Medienwiedergabe zu steuern.",
+      "delete_title": "Aufnahme löschen",
+      "delete_description": "Hier klicken, um die aufgenommene Tondatei zu löschen.",
+      "create_project_title": "Projekt erstellen",
+      "create_project_description": "Füllen Sie dieses Formular aus, um zu dieser Tondatei ein Projekt zu erstellen."
+    }
+  },
+  "error": {
+    "create_project": {
+      "no_name_entered": "Bitte geben Sie einen Namen ein.",
+      "name_exists_already": "{name} existiert bereits. Bitte geben Sie einen anderen Namen ein.",
+      "no_file_uploaded": "Bitte laden Sie mindestens eine Datei hoch, um ein Projekt zu erstellen."
     }
   }
 }
