@@ -12,6 +12,8 @@ def read_audio_file_to_numpy(
     audiofile, mono=False, offset=0, duration=None, sample_rate=22050
 ) -> Tuple[np.ndarray, float]:
     """
+    Reads an audiofile into an numpy array.
+
     :param audiofile: Path to audiofile
     :param mono: If true, convert to mono.
     :param offset: Start of the segment to read, in seconds.
@@ -28,6 +30,8 @@ def read_audio_file_to_stream(
     audiofile, block_len=4096, mono=False
 ) -> (Generator[np.ndarray, None, None], float, int):
     """
+    Reads an audiofile as blocks in a stream.
+
     :param audiofile: Path to audiofile
     :param block_len: block length of stream
     :param mono: loads file as mono audio if true
@@ -55,6 +59,8 @@ def read_audio_file_to_stream(
 
 def overlapping_stream(stream):
     """
+    Changes a stream of audiodata blocks into a stream of overlapping blocks.
+
     :param stream: Takes a Generator
     :returns: A Generator with 75% Overlap between each instance
     """
@@ -78,11 +84,13 @@ def save_numpy_as_audio_file(
     extension=".mp3",
 ):
     """
+    Saves a numpy array into an audofile. Also sets tags to the audiofile.
+
     :param song: np.ndarray of the song
     :param songname: name of the song
     :param file_path: path to file (without filename)
     :param rate: samplerate of the song {Default: 100}
-    :param tags: dict of tags {Default: {}}
+    :param tags: dict of tags see: :func:`tag_audio_file` {Default: {}}
     :param extension: string of the extension {Default: ".mp3"}
     :returns: none
     """
@@ -92,31 +100,34 @@ def save_numpy_as_audio_file(
 
 
 def tag_audio_file(savename: str, tags: dict):
-    """:param savename: path to savefile
-    :param tags:
-        album
-        albumartist
-        artist
-        artwork
-        comment
-        compilation
-        composer
-        discnumber
-        genre
-        lyrics
-        totaldiscs
-        totaltracks
-        tracknumber
-        tracktitle
-        year
-        isrc
+    """
+    Tags an audofile with different tags
+
+    :param savename: path to savefile
+    :param tags: dict of tags
+
+            possible tags:
+                - album
+                - albumartist
+                - artist
+                - artwork
+                - comment
+                - compilation
+                - composer
+                - discnumber
+                - genre
+                - lyrics
+                - totaldiscs
+                - totaltracks
+                - tracknumber
+                - tracktitle
+                - year
+                - isrc
     :returns: none
     """
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
     if tags:
         for key, value in tags.items():
-            # `year` already seems to appear in audiofile
-            # Error: music_tag.file.NotAppendable: Mp3File can not have multiple values for 'year'
-            key != "year" and audiofile.append_tag(key, value)
+            audiofile.set(key, value)
 
     audiofile.save()
