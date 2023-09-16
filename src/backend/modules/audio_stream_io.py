@@ -69,12 +69,17 @@ def overlapping_stream(stream):
             if curr_block.ndim == 1:
                 curr_start_index = int((curr_block.shape[0] * (1 - ratio)))
                 next_end_index = int((next_block.shape[0] * (1 - ratio)))
+                yield np.append(
+                    curr_block[curr_start_index:], next_block[:next_end_index], axis=0
+                )
             else:
                 curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
                 next_end_index = int((next_block.shape[1] * (1 - ratio)))
-            yield np.append(
-                curr_block[:, curr_start_index:], next_block[:, :next_end_index], axis=1
-            )
+                yield np.append(
+                    curr_block[:, curr_start_index:],
+                    next_block[:, :next_end_index],
+                    axis=1,
+                )
         if curr_block.shape != next_block.shape:
             yield next_block
 
