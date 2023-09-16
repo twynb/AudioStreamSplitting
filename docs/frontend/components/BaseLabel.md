@@ -1,10 +1,8 @@
 # BaseLabel
 
-## Props
-
-| Prop name | Description | Type    | Values | Default |
-| --------- | ----------- | ------- | ------ | ------- |
-| hasError  |             | boolean | -      |         |
+| Name     | Description | Type               | Default |
+| -------- | ----------- | ------------------ | ------- |
+| hasError |             | boolean (optional) |         |
 
 ## Slots
 

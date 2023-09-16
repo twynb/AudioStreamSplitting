@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: Backend
-      link: /backend
+      link: /backend/
     - theme: brand
       text: Frontend
-      link: /frontend/components/BaseBadge
+      link: /frontend/
     - theme: alt
       text: View on GitHub
       link: https://github.com/4lex0017/AudioStreamSplitting

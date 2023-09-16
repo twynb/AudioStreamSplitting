@@ -1,9 +1,7 @@
 # BaseError
 
-## Props
-
-| Prop name | Description | Type   | Values | Default |
-| --------- | ----------- | ------ | ------ | ------- |
-| error     |             | string | -      |         |
+| Name  | Description | Type              | Default |
+| ----- | ----------- | ----------------- | ------- |
+| error |             | string (optional) |         |
 
 ---

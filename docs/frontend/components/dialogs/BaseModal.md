@@ -1,11 +1,9 @@
 # BaseModal
 
-## Props
-
-| Prop name    | Description | Type   | Values | Default |
-| ------------ | ----------- | ------ | ------ | ------- |
-| title        |             | string | -      |         |
-| contentClass |             | string | -      |         |
+| Name         | Description | Type              | Default |
+| ------------ | ----------- | ----------------- | ------- |
+| title        |             | string (optional) |         |
+| contentClass |             | string (optional) |         |
 
 ## Slots
 

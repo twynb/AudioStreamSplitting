@@ -1,11 +1,13 @@
 # BaseSelect
 
-## Props
+| Name        | Description | Type              | Default |
+| ----------- | ----------- | ----------------- | ------- |
+| placeholder |             | string (optional) |         |
+| options     |             | {                 |
 
-| Prop name   | Description | Type   | Values | Default |
-| ----------- | ----------- | ------ | ------ | ------- |
-| placeholder |             | string | -      |         |
-| options     |             | Array  | -      |         |
+label: string
+value: string
+}||
 
 ## Slots
 

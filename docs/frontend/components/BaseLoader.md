@@ -1,9 +1,7 @@
 # BaseLoader
 
-## Props
-
-| Prop name | Description | Type   | Values | Default |
-| --------- | ----------- | ------ | ------ | ------- |
-| size      |             | number | -      |         |
+| Name | Description | Type              | Default |
+| ---- | ----------- | ----------------- | ------- |
+| size |             | number (optional) |         |
 
 ---
