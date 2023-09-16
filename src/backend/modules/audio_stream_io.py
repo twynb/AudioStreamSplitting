@@ -128,9 +128,6 @@ def tag_audio_file(savename: str, tags: dict):
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
     if tags:
         for key, value in tags.items():
-            if key == "year":
-                audiofile.set(key, value)
-            else:
-                audiofile.append_tag(key, value)
+            audiofile.set(key, value)
 
     audiofile.save()
