@@ -158,6 +158,7 @@ npm run be:debug
 | npm run `build:fe`       | Build frontend (html, js, css)   |
 | npm run `build:app`      | Build desktop app                |
 | npm run `preview`        | Preview built desktop app        |
+| npm run `docs:generate`  | Generate backend documentation   |
 
 ## Contributors
 
