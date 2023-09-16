@@ -1,9 +1,9 @@
 # AudioStreamSplitting
 
-- [AudioStreamSplitting](#audiostreamsplitting)
+- [Audio Stream Splitting](#audiostreamsplitting)
   - [Using AudioStreamSplitting](#using-audiostreamsplitting)
     - [Setup](#setup)
-  - [License](#license)
+    - [License](#license)
 
 AudioStreamSplitting is a tool designed to take long audio files including multiple songs (such as a recording of an LP), split the file up into the separate songs and add metadata (such as the song's title) to each if the songs can be identified.
 
