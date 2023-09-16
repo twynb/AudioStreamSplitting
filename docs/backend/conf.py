@@ -8,8 +8,8 @@
 import pathlib
 import sys
 
-sys.path.append(pathlib.Path(__file__).parents[1].joinpath("src").resolve().as_posix())
-print(pathlib.Path(__file__).parents[1].joinpath("src", "backend").resolve().as_posix())
+sys.path.append(pathlib.Path(__file__).parents[2].joinpath("src").resolve().as_posix())
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 

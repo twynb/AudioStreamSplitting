@@ -9,7 +9,7 @@ def log_error(ex: Exception, context: str):
     :param ex: The thrown exception.
     :param context: The context in which the exception was thrown.
     """
-    app.logger.error('Error in context "' + context + '": ' + str(ex))
+    app.logger.error(f"Error in context '{context}': {str(ex)}")
 
 
 def log_warning(message: str):
@@ -17,4 +17,4 @@ def log_warning(message: str):
 
     :param message: The warning message.
     """
-    app.logger.warning("Warning: " + str)
+    app.logger.warning(f"Warning: {message}")
