@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { title = 'Confirm', showCancel = true, showOk = true, preventClose = false } = defineProps<{
   title?: string
-  content: string
+  contentClass?: string
   okContent?: string
   cancelContent?: string
   showOk?: boolean
@@ -15,9 +15,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <BaseModal :title="title" content-class="w-full max-w-30vw" :prevent-close="preventClose">
+  <BaseModal :title="title" :content-class="`w-full max-w-30vw ${contentClass}`" :prevent-close="preventClose">
     <template #body>
-      {{ content }}
+      <slot />
     </template>
 
     <template #footer>

@@ -2,9 +2,7 @@ import io
 import os.path
 import wave
 
-import librosa
 from flask import Blueprint, Response, jsonify, request, send_file
-
 from modules.api_service import ApiService
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from modules.segmentation import segment_file
@@ -22,7 +20,9 @@ def split():
     if not os.path.exists(file_path):
         return "File does not exist!", 400
     generator = segment_file(file_path)
-    segments, mismatch_offsets = ApiService().identify_all_from_generator(generator, file_path)
+    segments, mismatch_offsets = ApiService().identify_all_from_generator(
+        generator, file_path
+    )
 
     result = {
         "segments": segments,
@@ -65,12 +65,9 @@ def get_segment():
 
     audio_stream.seek(0)
 
-    content_length = len(audio_stream.getvalue())
-
     return Response(
         audio_stream,
         headers=headers,
-        content_length=content_length,
         content_type="audio/wav",
     )
 
@@ -120,30 +117,6 @@ def store():
         extension=file_type,
     )
     return jsonify({"success": True})
-
-
-# TODO decide whether to remove the routes below this comment
-
-
-@audio_bp.route("/process", methods=["POST"])
-def process():
-    data = request.json
-    file_path = data["filePath"]
-    if not os.path.exists(file_path):
-        return "File does not exist!", 400
-    audio_data, sample_rate = librosa.load(file_path, sr=None)
-    duration = librosa.get_duration(y=audio_data, sr=sample_rate)
-    num_channels = audio_data.shape[0]
-    num_samples = len(audio_data)
-    info = {
-        "duration": duration,
-        "numChannels": num_channels,
-        "numSamples": num_samples,
-        "sampleRate": sample_rate,
-    }
-    file = {"filePath": file_path, "info": info}
-
-    return jsonify(file)
 
 
 @audio_bp.route("/get", methods=["POST"])

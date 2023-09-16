@@ -20,6 +20,10 @@ export interface PostAudioStoreBody {
   offset?: number
   duration?: number
   metadata?: Metadata
+  /** The target file type. Defaults to "mp3" if not provided. */
+  fileType?: string
+  /** The file name template. Defaults to the one specified in .env if not provided. */
+  nameTemplate?: string
 }
 
 export interface PostAudioGetSegmentBody {
@@ -45,9 +49,9 @@ export interface PostAudioSplitBody {
 }
 
 export interface Metadata {
-  title: string
+  title?: string
   album?: string
-  artist: string
+  artist?: string
   year?: string
 }
 
@@ -65,8 +69,8 @@ export function getAudioStreamSplittingAPI() {
   }
 
   /**
- * @summary Get the given segment for the given file.
- */
+   * @summary Get the given segment for the given file.
+   */
   const postAudioGetSegment = <TData = AxiosResponse<Blob>>(
     postAudioGetSegmentBody: PostAudioGetSegmentBody, options?: AxiosRequestConfig,
   ): Promise<TData> => {
@@ -80,8 +84,8 @@ export function getAudioStreamSplittingAPI() {
   }
 
   /**
- * @summary Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
- */
+   * @summary Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
+   */
   const postAudioStore = <TData = AxiosResponse<PostAudioStore200>>(
     postAudioStoreBody: PostAudioStoreBody, options?: AxiosRequestConfig,
   ): Promise<TData> => {

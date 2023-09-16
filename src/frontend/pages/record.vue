@@ -2,6 +2,7 @@
 import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
+import type { Project } from 'models/types'
 import ConfirmModal from '@components/dialogs/ConfirmModal.vue'
 import { RECORD_STEPS } from '../includes/driver'
 
@@ -114,7 +115,6 @@ async function handleSave() {
   if (!blob.value)
     return
 
-  // @ts-expect-error showSaveFilePicker is still in experimental
   const newHandle = await window.showSaveFilePicker({
     suggestedName: 'record.webm',
     types: [{
@@ -130,7 +130,7 @@ async function handleSave() {
 
 /**
  * Submit
-*/
+ */
 
 const submitInfo = ref({ name: '', description: '' })
 const submitError = ref({ name: '' })
