@@ -79,7 +79,8 @@
     "list_caption": "Found songs",
     "unknown": "unknown",
     "genre": "Genre",
-    "isrc": "ISRC"
+    "isrc": "ISRC",
+    "albumartist": "Album artist"
   },
   "toast": {
     "empty_field": "Please enter a valid value!",

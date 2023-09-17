@@ -236,6 +236,10 @@ function handleEdit(songIndex: number) {
           </th>
 
           <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+            {{ t('song.albumartist') }}
+          </th>
+
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
             {{ t('song.genre') }}
           </th>
 
@@ -276,6 +280,10 @@ function handleEdit(songIndex: number) {
 
           <td class="p-4 align-middle">
             {{ useConvertSecToMin(duration ?? 0) }}
+          </td>
+
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.albumartist ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">

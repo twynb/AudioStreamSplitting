@@ -118,6 +118,8 @@ components:
           type: string
         album:
           type: string
+        albumartist:
+          type: string
         artist:
           type: string
         year:

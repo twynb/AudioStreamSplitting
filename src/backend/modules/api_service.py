@@ -1,14 +1,14 @@
-import os
 from enum import Enum
 from typing import Generator
 
-import acoustid
 from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
+from modules.apis.acoustid import create_fingerprint as create_acoustid_fingerprint
+from modules.apis.acoustid import lookup as acoustid_lookup
+from modules.apis.shazam import lookup as shazam_lookup
+from modules.audio_stream_io import read_audio_file_to_numpy
+from requests import exceptions
 from utils.env import get_env
 from utils.logger import log_error
-
-from .apis.shazam import lookup as shazam_lookup
-from .audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 
 
 class SongOptionResult(Enum):
@@ -71,7 +71,17 @@ class ApiService:
     the current song is stored in the ``last_song_*`` attributes
     and can be retrieved using ``get_last_song``.
 
-    The workflow of using the API service, as implemented in ``identify_all_from_generator``
+    The specific metadata that can be retrieved depends on the API that identified the song. The
+    following metadata can be retrieved by at least one of the supported APIs:
+        * artist
+        * title
+        * album
+        * albumartist
+        * year
+        * isrc
+        * genre
+
+    The workflow of using the API service, as implemented in ``identify_all_from_generator``,
     should look as follows::
 
       import modules.api_service
@@ -182,8 +192,10 @@ class ApiService:
             * title
             * artist
             * album
+            * albumartist
             * year
             * isrc
+            * genre
 
         :param generator: A generator (returned by ``modules.segmentation``) that provides tuples of
             song data as (offset: float, duration: float).
@@ -230,8 +242,10 @@ class ApiService:
             * title
             * artist
             * album
+            * albumartist
             * year
             * isrc
+            * genre
 
         :returns: A dict with the keys ``"offset"`` for the segment start,
             ``"duration"`` for the segment duration and ``"metadataOptions"``
@@ -271,8 +285,10 @@ class ApiService:
             * title
             * artist
             * album
+            * albumartist
             * year
             * isrc
+            * genre
 
         :returns: A dict with the keys ``"offset"`` for the segment start,
             ``"duration"`` for the segment duration
@@ -373,14 +389,13 @@ class ApiService:
         ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
         SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
 
-        print(str(offset) + ", " + str(duration))
-
         # first check using acoustID
         if ACOUSTID_API_KEY is not None:
             try:
-                duration, fingerprint = self._create_fingerprint(song_data, sample_rate)
-                metadata = self._get_api_song_data_acoustid(fingerprint, duration)
-                print(metadata)
+                duration, fingerprint = create_acoustid_fingerprint(
+                    song_data, sample_rate
+                )
+                metadata = acoustid_lookup(fingerprint, duration, ACOUSTID_API_KEY)
                 if len(metadata) != 0:
                     return self._check_song_extended_or_finished(
                         offset, duration, metadata
@@ -404,7 +419,6 @@ class ApiService:
                 shazam_metadata_options = self._get_overlapping_metadata_values(
                     metadata_start, metadata_end
                 )
-                print(shazam_metadata_options)
                 if len(shazam_metadata_options) != 0:
                     return self._check_song_extended_or_finished(
                         offset, duration, shazam_metadata_options
@@ -414,6 +428,8 @@ class ApiService:
                     return SongOptionResult.SONG_MISMATCH
             except ConnectionError as ex:
                 log_error(ex, "Shazam connection error")
+            except exceptions.ReadTimeout as ex:
+                log_error(ex, "Shazam request timed out")
 
         # if neither finds anything, song not recognised.
         self._store_finished_song(offset, duration, ())
@@ -487,82 +503,6 @@ class ApiService:
                 if metadata["title"] in titles2 and metadata["artist"] in artists2:
                     overlapping_metadata.append(metadata)
             return overlapping_metadata
-
-    def _create_fingerprint(self, song_data, samplerate):
-        """Create a chromaprint/AcoustID fingerprint for the given audio data
-        in order to identify it using AcoustID.
-        As of current, this works by writing the data to a temporary file
-        and using the fpcalc command line tool to generate the fingerprint.
-        The temporary file is deleted immediately afterwards.
-
-        TODO: If it becomes feasible to build and distribute DLL versions of chromaprint
-        for all target platforms, this should be refactored to use that instead.
-
-        :param song_data: the audio data to generate a fingerprint from.
-        :param samplerate: the audio data's sample rate.
-        :returns: (song_duration, fingerprint).
-            ``song_duration`` is measured in seconds and used for the API call to AcoustID.
-            ``fingerprint`` is generated by fpcalc.
-        :raise acoustid.NoBackendError: if fpcalc is not installed.
-        :raise acoustid.FingerprintGenerationError: if fingerprint generation fails.
-        """
-        filename = "TEMP_FILE_FOR_FINGERPRINTING"
-        save_numpy_as_audio_file(
-            song_data, os.path.abspath(filename), "", rate=samplerate
-        )
-
-        filename_with_path = os.path.abspath(filename + ".mp3")
-        fingerprint_duration, fingerprint = acoustid.fingerprint_file(
-            filename_with_path, force_fpcalc=True
-        )
-        os.remove(filename_with_path)
-        return (fingerprint_duration, fingerprint)
-
-    def _get_api_song_data_acoustid(self, fingerprint, fingerprint_duration):
-        """Get data about the provided fingerprint from the AcoustID API.
-        This uses the ``pyacoustid`` library as a wrapper, which will only return the song's title
-        and artist, as well as a match score and the MusicBrainz ID,
-        although those are discarded as they have no further use.
-
-        TODO: This should be enhanced to include a second call to the AcoustID API
-        that gathers more metadata for the song using the MusicBrainz ID.
-
-        :param fingerprint: the fingerprint generated using ``_create_fingerprint``.
-        :param fingerprint_duration: duration of the fingerprinted data, in seconds.
-        :returns: A list of dicts containing the results.
-            The dicts have the keys ``"artist"`` for the artist name
-            and ``"title"`` for the song title.
-
-            Example::
-
-                [
-                  {
-                    "title": "Thunderstruck",
-                    "artist": "AC/DC",
-                  },
-                  {
-                    "title": "Thunderstruck",
-                    "artist": "2Cellos"
-                  }
-                ]
-        :raise acoustid.WebServiceError: if the request fails.
-        """
-        ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
-
-        try:
-            result = []
-            for score, recording_id, title, artist in acoustid.parse_lookup_result(
-                acoustid.lookup(ACOUSTID_API_KEY, fingerprint, fingerprint_duration)
-            ):
-                if (
-                    title is not None
-                    and artist is not None
-                    and {"title": title, "artist": artist} not in result
-                ):
-                    result.append({"title": title, "artist": artist})
-            return result
-        except acoustid.WebServiceError:
-            return []
 
     def _store_finished_song(self, offset: float, duration: float, metadata_options):
         """Store the current (finished) data in the ``last_song_*`` variables.

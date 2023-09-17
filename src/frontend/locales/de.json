@@ -79,7 +79,8 @@
     "list_caption": "Gefundene Lieder",
     "unknown": "Unbekannt",
     "genre": "Genre",
-    "isrc": "ISRC"
+    "isrc": "ISRC",
+    "albumartist": "Album-Interpret"
   },
   "toast": {
     "empty_field": "Bitte geben Sie einen gültigen Wert ein!",

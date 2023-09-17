@@ -15,7 +15,7 @@ For information on how to contribute to AudioStreamSplitting, refer to ``CONTRIB
 
 ### Setup
 
-1. Generate a valid API key for the [AcoustID](https://acoustid.org/) and/or [Shazam](https://rapidapi.com/apidojo/api/shazam) song recognition APIs. While this program can work if you only provide one of the two, it is highly recommended to have both. More song recognition APIs may be supported in the future.
+1. Generate a valid API key for the [AcoustID](https://acoustid.org/) and/or [Shazam](https://rapidapi.com/apidojo/api/shazam) song recognition APIs. While this program can work if you only provide one of the two, it is highly recommended to have both. More song recognition APIs may be supported in the future. For the AcoustID API, you will need to register an application and use the application API key, rather than just the normal user API key.
 2. Download the latest release of [fpcalc](https://acoustid.org/chromaprint) for your system from [the AcoustID website](https://acoustid.org/chromaprint) if you want to use the AcoustID API. Put it in a location of your choosing and add it to your system PATH. You will probably need to restart your system before first using AudioStreamSplitting.
 3. Only if you plan to use the Record-in-App feature. [Download `ffmpeg` (https://ffmpeg.org/download.html). Make sure that `ffmpeg` is available in your system's PATH so that the application can use it to process audio.
 4. Download the latest release of AudioStreamSplitting from the "Releases" section of this site and run it.

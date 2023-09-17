@@ -102,7 +102,6 @@ def _lookup_segment_with_offset(song_data: np.ndarray, apikey: str, offset: int)
     song_data_segment = _get_song_data_segment(song_data, offset)
     payload = _create_payload_from_song_data(song_data_segment)
     response = _send_lookup_request(payload, apikey).json()
-    print(response)
     if "track" in response and "matches" in response:
         return (response["matches"], response["track"])
     return ([], [])
