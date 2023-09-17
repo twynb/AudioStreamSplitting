@@ -122,3 +122,7 @@ components:
           type: string
         year:
           type: string
+        isrc:
+          type: string
+        genre:
+          type: string

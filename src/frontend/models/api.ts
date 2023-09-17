@@ -53,6 +53,8 @@ export interface Metadata {
   album?: string
   artist?: string
   year?: string
+  isrc?: string
+  genre?: string
 }
 
 export function getAudioStreamSplittingAPI() {

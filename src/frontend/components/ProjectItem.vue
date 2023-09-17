@@ -95,9 +95,11 @@ function addRegion(segments: ProjectFileSegment[]) {
 
     const contentEl = document.createElement('div')
     if (meta) {
-      contentEl.innerHTML = Object.entries(meta).map(([key, value]) =>
+      contentEl.innerHTML = Object.entries(meta).filter(([key, _]) =>
+        ['title', 'artist', 'album'].includes(key),
+      ).map(([key, value]) =>
       `<span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-        ${key}: ${value}
+        ${t(`song.${key}`)}: ${value}
       </span>`,
       ).join('\n')
     }
@@ -234,6 +236,14 @@ function handleEdit(songIndex: number) {
           </th>
 
           <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+            {{ t('song.genre') }}
+          </th>
+
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+            {{ t('song.isrc') }}
+          </th>
+
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
             {{ t('button.edit') }}
           </th>
 
@@ -249,23 +259,31 @@ function handleEdit(songIndex: number) {
           :key="index" class="border-b border-b-border"
         >
           <td class="p-4 align-middle font-medium">
-            {{ metadataOptions?.[metaIndex]?.title ?? 'unknown' }}
+            {{ metadataOptions?.[metaIndex]?.title ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.artist ?? 'unknown' }}
+            {{ metadataOptions?.[metaIndex]?.artist ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.album ?? 'unknown' }}
+            {{ metadataOptions?.[metaIndex]?.album ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.year ?? 'unknown' }}
+            {{ metadataOptions?.[metaIndex]?.year ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">
             {{ useConvertSecToMin(duration ?? 0) }}
+          </td>
+
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.genre ?? t('song.unknown') }}
+          </td>
+
+          <td class="p-4 align-middle">
+            {{ metadataOptions?.[metaIndex]?.isrc ?? t('song.unknown') }}
           </td>
 
           <td class="p-4 align-middle">

@@ -29,6 +29,14 @@ def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
     The segment size is defined by the LOOKUP_SEGMENTS_DURATION constant and set to 4 seconds,
     as the Shazam API expects uploaded segments to be between 3 and 5 seconds long.
 
+    The following metadata can potentially be retrieved:
+        * title
+        * artist
+        * album
+        * year
+        * isrc
+        * genre
+
     :param song_data: The song data. The data must be at a sample rate of 44100Hz as the Shazam
         API will not work with other sample rates.
     :param apikey: The Shazam API key.
@@ -71,14 +79,7 @@ def lookup(song_data: np.ndarray, apikey: str, from_start: bool = True):
             break
         matches, track = _lookup_segment_with_offset(song_data, apikey, offset)
     if len(matches) != 0:
-        album = _extract_value_from_metadata(track, "Album")
-        year = _extract_value_from_metadata(track, "Released")
-        return {
-            "title": track["title"],
-            "artist": track["subtitle"],
-            "album": album,
-            "year": year,
-        }
+        return _process_lookup_response(track)
     return None
 
 
@@ -101,6 +102,7 @@ def _lookup_segment_with_offset(song_data: np.ndarray, apikey: str, offset: int)
     song_data_segment = _get_song_data_segment(song_data, offset)
     payload = _create_payload_from_song_data(song_data_segment)
     response = _send_lookup_request(payload, apikey).json()
+    print(response)
     if "track" in response and "matches" in response:
         return (response["matches"], response["track"])
     return ([], [])
@@ -160,7 +162,41 @@ def _send_lookup_request(payload: str, apikey: str):
         "X-RapidAPI-Key": apikey,
         "X-RapidAPI-Host": "shazam.p.rapidapi.com",
     }
-    return requests.post(SHAZAM_URL_DETECT_V2, data=payload, headers=headers)
+    return requests.post(
+        SHAZAM_URL_DETECT_V2, data=payload, headers=headers, timeout=10
+    )
+
+
+def _process_lookup_response(track):
+    """Extract the metadata from the "track" segtion of the response.
+
+    The following metadata can potentially be retrieved:
+        * title
+        * artist
+        * album
+        * year
+        * isrc
+        * genre
+
+    :param track: The "track" segment of the API response.
+    :returns: ``dict`` with the retrieved metadata.
+    """
+    album = _extract_value_from_metadata(track, "Album")
+    year = _extract_value_from_metadata(track, "Released")
+    genre = (
+        track["genres"]["primary"]
+        if ("genres" in track and "primary" in track["genres"])
+        else None
+    )
+    isrc = track["isrc"] if "isrc" in track else None
+    return {
+        "title": track["title"],
+        "artist": track["subtitle"],
+        "album": album,
+        "year": year,
+        "isrc": isrc,
+        "genre": genre,
+    }
 
 
 def _extract_value_from_metadata(track, key: str):

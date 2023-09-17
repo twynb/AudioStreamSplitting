@@ -178,6 +178,13 @@ class ApiService:
         If ``get_song_options`` returns ``SongOptionResult.SONG_MISMATCH``,
         the segment's offset is additionally written to the ``mismatch_offsets`` list.
 
+        The following metadata can potentially be retrieved:
+            * title
+            * artist
+            * album
+            * year
+            * isrc
+
         :param generator: A generator (returned by ``modules.segmentation``) that provides tuples of
             song data as (offset: float, duration: float).
         :param file_path: The path to the analyzed file.
@@ -219,6 +226,13 @@ class ApiService:
         This should be called after a song is finished, except for the first time
         (as it will then contain empty metadata).
 
+        The following metadata can potentially be retrieved:
+            * title
+            * artist
+            * album
+            * year
+            * isrc
+
         :returns: A dict with the keys ``"offset"`` for the segment start,
             ``"duration"`` for the segment duration and ``"metadataOptions"``
             for the metadata options.
@@ -252,6 +266,13 @@ class ApiService:
         """Retrieve the final song.
         This should be called after calling ``get_song_options`` for the last time for a file
         as the very last call to an ``ApiService`` instance.
+
+        The following metadata can potentially be retrieved:
+            * title
+            * artist
+            * album
+            * year
+            * isrc
 
         :returns: A dict with the keys ``"offset"`` for the segment start,
             ``"duration"`` for the segment duration
@@ -352,11 +373,14 @@ class ApiService:
         ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
         SHAZAM_API_KEY = get_env("SERVICE_SHAZAM_API_KEY")
 
+        print(str(offset) + ", " + str(duration))
+
         # first check using acoustID
         if ACOUSTID_API_KEY is not None:
             try:
                 duration, fingerprint = self._create_fingerprint(song_data, sample_rate)
                 metadata = self._get_api_song_data_acoustid(fingerprint, duration)
+                print(metadata)
                 if len(metadata) != 0:
                     return self._check_song_extended_or_finished(
                         offset, duration, metadata
@@ -380,6 +404,7 @@ class ApiService:
                 shazam_metadata_options = self._get_overlapping_metadata_values(
                     metadata_start, metadata_end
                 )
+                print(shazam_metadata_options)
                 if len(shazam_metadata_options) != 0:
                     return self._check_song_extended_or_finished(
                         offset, duration, shazam_metadata_options
@@ -390,8 +415,8 @@ class ApiService:
             except ConnectionError as ex:
                 log_error(ex, "Shazam connection error")
 
-            # if neither finds anything, song not recognised.
-            self._store_finished_song(offset, duration, ())
+        # if neither finds anything, song not recognised.
+        self._store_finished_song(offset, duration, ())
         return SongOptionResult.SONG_NOT_RECOGNISED
 
     def _check_song_extended_or_finished(
@@ -399,6 +424,11 @@ class ApiService:
     ):
         """Check if metadata options of the analyzed segment match those of the previous segment.
         Store the finished song if applicable.
+
+        This check only accounts for differences in artist and title - if the analyzed and previous
+        segment have metadata options with matching artists and titles, the corresponding metadata
+        options from the previous segment are used, even if that means discarding metadata that was
+        loaded for the current but not the previous segment.
 
         :param offset: The offset at which the segment begins, in seconds.
         :param duration: The duration of the segment, in seconds.
@@ -422,6 +452,7 @@ class ApiService:
     def _get_overlapping_metadata_values(self, metadata1, metadata2):
         """From two lists of metadata, get all that have the same artist and title.
         If either of the lists is empty, return the other list.
+
         If metadata other than artist and title mismatch, the metadata from metadata1 are used,
         even if that means discarding data that is empty in metadata1 and set in metadata2.
 
