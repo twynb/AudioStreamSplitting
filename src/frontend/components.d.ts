@@ -22,7 +22,7 @@ declare module 'vue' {
     BaseSwitch: typeof import('./components/BaseSwitch.vue')['default']
     BaseTextArea: typeof import('./components/BaseTextArea.vue')['default']
     ConfirmModal: typeof import('./components/ConfirmModal.vue')['default']
-    ContentLayout: typeof import('./components/ContentLayout.vue')['default']
+    BaseLayout: typeof import('./components/BaseLayout.vue')['default']
     CreateProjectModal: typeof import('./components/CreateProjectModal.vue')['default']
     DashboardItem: typeof import('./components/DashboardItem.vue')['default']
     EditSongModal: typeof import('./components/EditSongModal.vue')['default']

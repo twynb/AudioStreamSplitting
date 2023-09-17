@@ -14,7 +14,7 @@ const componentsSidebarItems = docsComponents
     return name !== 'index' && ext === 'md'
   }).map((f) => {
     const name = f.split('.')[0]
-    return { text: name, link: `/components/${name}` }
+    return { text: name, link: `/${name}` }
   })
 
 const srcComposablesPath = path.join(srcFrontendPath, 'composables')
@@ -31,13 +31,12 @@ const composablesSidebarItems = docsComposables
     return name !== 'index' && ext === 'md'
   }).map((f) => {
     const name = f.split('.')[0]
-    return { text: name, link: `/composables/${name}` }
+    return { text: name, link: `/${name}` }
   })
 
 export default defineConfig({
   lang: 'en-US',
   title: 'AudioSplitter',
-  description: 'Just playing around.',
 
   lastUpdated: true,
   cleanUrls: true,
@@ -72,11 +71,13 @@ export default defineConfig({
         items: [
           {
             text: 'Components',
+            base: '/frontend/components',
             collapsed: false,
             items: componentsSidebarItems,
           },
           {
             text: 'Composables',
+            base: '/frontend/composables',
             collapsed: false,
             items: composablesSidebarItems,
           },

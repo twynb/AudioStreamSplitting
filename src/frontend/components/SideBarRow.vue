@@ -1,8 +1,20 @@
 <script setup lang="ts">
 const props = defineProps<{
+  /**
+   * Icon of row
+   */
   icon: string
+  /**
+   * Text content of row
+   */
   text: string
+  /**
+   * Target when row is clicked
+   */
   link?: string
+  /**
+   * Indicator when row has notification
+   */
   badgeCount?: number
 }>()
 

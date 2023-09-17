@@ -33,3 +33,7 @@ async function handleClearAll() {
     </BaseButton>
   </div>
 </template>
+
+<docs>
+  Clear section in settings page
+</docs>

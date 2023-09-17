@@ -214,7 +214,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ContentLayout :header=" t('sidebar.record')">
+  <BaseLayout :header=" t('sidebar.record')">
     <template #header>
       <div class="flex items-center gap-x-3">
         <h1 class="text-4xl">
@@ -302,5 +302,5 @@ onUnmounted(() => {
         </Transition>
       </div>
     </template>
-  </ContentLayout>
+  </BaseLayout>
 </template>

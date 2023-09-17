@@ -17,7 +17,7 @@ function handleToggleDark() {
 </script>
 
 <template>
-  <ContentLayout :header="t('sidebar.settings')">
+  <BaseLayout :header="t('sidebar.settings')">
     <div class="max-w-80% space-y-10">
       <div>
         <h2 class="text-3xl">
@@ -67,7 +67,7 @@ function handleToggleDark() {
 
       <SettingsAdvanced />
     </div>
-  </ContentLayout>
+  </BaseLayout>
 </template>
 
 <style>

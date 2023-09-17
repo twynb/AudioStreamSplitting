@@ -58,7 +58,7 @@ function handleToProject(id: string) {
 </script>
 
 <template>
-  <ContentLayout :header="t('sidebar.dashboard')">
+  <BaseLayout :header="t('sidebar.dashboard')">
     <template #header>
       <div class="flex items-center gap-x-3">
         <h1 class="text-4xl">
@@ -119,5 +119,5 @@ function handleToProject(id: string) {
         </div>
       </template>
     </template>
-  </ContentLayout>
+  </BaseLayout>
 </template>

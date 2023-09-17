@@ -1,15 +1,48 @@
 <script setup lang="ts">
-const { title = 'Confirm', showCancel = true, showOk = true, preventClose = false } = defineProps<{
+withDefaults(defineProps<{
+  /**
+   * Title of the modal.
+   */
   title?: string
+  /**
+   * CSS class for the modal's content.
+   */
   contentClass?: string
+  /**
+   * Text content of the "OK" button.
+   */
   okContent?: string
+  /**
+   * Text content of the "Cancel" button.
+   */
   cancelContent?: string
+  /**
+   * Controls the visibility of the "OK" button.
+   */
   showOk?: boolean
+  /**
+   * Controls the visibility of the "Cancel" button.
+   */
   showCancel?: boolean
+  /**
+   * Prevents the component from being closed.
+   */
   preventClose?: boolean
-}>()
+}>(),
+{
+  title: 'Confirm', showCancel: true, showOk: true, preventClose: false,
+})
 
-const emits = defineEmits<{ (e: 'ok'): void; (e: 'cancel'): void }>()
+const emits = defineEmits<{
+  /**
+   * Emits an event 'ok' when the "OK" action is triggered.
+   */
+  (e: 'ok'): void
+  /**
+   * Emits an event 'cancel' when the "Cancel" action is triggered.
+   */
+  (e: 'cancel'): void
+}>()
 
 const { t } = useI18n()
 </script>
@@ -17,6 +50,7 @@ const { t } = useI18n()
 <template>
   <BaseModal :title="title" :content-class="`w-full max-w-30vw ${contentClass}`" :prevent-close="preventClose">
     <template #body>
+      <!-- @slot Slot for content -->
       <slot />
     </template>
 

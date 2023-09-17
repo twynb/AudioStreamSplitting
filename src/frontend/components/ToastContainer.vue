@@ -15,3 +15,7 @@ const { getToasts } = useToastStore()
     <Toast v-for="t, in getToasts()" :key="t.id" :toast="t" />
   </TransitionGroup>
 </template>
+
+<docs>
+  Container for all toasts
+</docs>
