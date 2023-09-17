@@ -111,7 +111,9 @@ function handleSubmit() {
               {{ t('dialog.create_project.project_name') }}
             </BaseLabel>
             <BaseInput id="name" v-model="data.name" name="name" />
-            <BaseError :error="errors.name" />
+            <BaseError v-if="errors.name">
+              {{ errors.name }}
+            </BaseError>
           </div>
 
           <div id="create_project_description" class="grow space-y-1">
@@ -158,7 +160,9 @@ function handleSubmit() {
             </p>
           </div>
 
-          <BaseError :error="errors.file" />
+          <BaseError v-if="errors.file">
+            {{ errors.file }}
+          </BaseError>
         </div>
 
         <table id="create_project_files_list" class="w-full caption-bottom text-sm">

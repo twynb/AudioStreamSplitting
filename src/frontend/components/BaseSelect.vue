@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
 
+interface Option { label: string; value: string }
+
 defineProps<{
+  /**
+   * Placeholder for select
+   */
   placeholder?: string
-  options: {
-    label: string
-    value: string
-  }[]
+  /**
+   * Array of options for select
+   */
+  options: Option[]
 }>()
 
 const modelValue = defineModel({ default: '' })
@@ -33,6 +38,7 @@ function handleChooseOption(v: string) {
       @click="isExpanded = !isExpanded"
     >
       <span style="pointer-events: none">
+        <!-- @slot Label for option -->
         <slot name="label">
           {{ modelValue ?? placeholder }}
         </slot>
@@ -81,3 +87,14 @@ function handleChooseOption(v: string) {
     </Transition>
   </div>
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseSelect :options=[{label: "English",value: "en"}]>
+    <template #label>
+      Custom Label
+    </template>
+  </BaseSelect>
+  ```
+</docs>

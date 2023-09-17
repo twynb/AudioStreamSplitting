@@ -69,8 +69,8 @@ export function getAudioStreamSplittingAPI() {
   }
 
   /**
- * @summary Get the given segment for the given file.
- */
+   * @summary Get the given segment for the given file.
+   */
   const postAudioGetSegment = <TData = AxiosResponse<Blob>>(
     postAudioGetSegmentBody: PostAudioGetSegmentBody, options?: AxiosRequestConfig,
   ): Promise<TData> => {
@@ -84,8 +84,8 @@ export function getAudioStreamSplittingAPI() {
   }
 
   /**
- * @summary Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
- */
+   * @summary Store the given segment for the given file in the target directory. The file location will be "targetDirectory/metadata[title].mp3"
+   */
   const postAudioStore = <TData = AxiosResponse<PostAudioStore200>>(
     postAudioStoreBody: PostAudioStoreBody, options?: AxiosRequestConfig,
   ): Promise<TData> => {

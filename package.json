@@ -22,7 +22,8 @@
     "typecheck": "vue-tsc -p src/frontend --noEmit",
     "orval": "orval --config src/frontend/orval.config.ts",
     "up": "taze major -I",
-    "docs:generate": "python3 docs/generate_docs.py"
+    "docs:generate": "python3 docs/generate_docs.py",
+    "docs:fe": "vue-docgen -c src/frontend/docgen.config.js && vitepress dev docs/frontend"
   },
   "dependencies": {
     "@vueuse/core": "^10.4.1",
@@ -58,7 +59,9 @@
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vite-plugin-pages": "^0.31.0",
+    "vitepress": "^1.0.0-rc.13",
     "vitest": "^0.34.4",
+    "vue-docgen-cli": "^4.67.0",
     "vue-tsc": "^1.8.10"
   },
   "simple-git-hooks": {

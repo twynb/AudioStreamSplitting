@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
+  /**
+   * Hook when button is switched
+   */
   onSwitch?: () => void
 }>()
 
@@ -29,3 +32,10 @@ function handleSwitch() {
     />
   </button>
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseSwitch v-model="flag" :on-switch="() => doSomething()" />
+  ```
+</docs>

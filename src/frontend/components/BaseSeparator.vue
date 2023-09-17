@@ -1,5 +1,8 @@
 <script setup lang="ts">
 defineProps<{
+  /**
+   * Orientation of separator
+   */
   orientation: 'horizontal' | 'vertical'
 }>()
 </script>
@@ -11,3 +14,10 @@ defineProps<{
     ]"
   />
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseSeparator orientation="vertical" />
+  ```
+</docs>

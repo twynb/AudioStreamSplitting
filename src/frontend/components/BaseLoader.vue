@@ -1,7 +1,10 @@
-// https://cssloaders.github.io/
-
 <script setup lang="ts">
-const { size = 40 } = defineProps<{ size?: number }>()
+withDefaults(defineProps<{
+  /**
+   * Size for the loader
+   */
+  size?: number
+}>(), { size: 40 })
 </script>
 
 <template>
@@ -12,6 +15,7 @@ const { size = 40 } = defineProps<{ size?: number }>()
 </template>
 
 <style scoped>
+/* https://cssloaders.github.io */
 .loader {
   display: inline-block;
   box-sizing: border-box;
@@ -28,3 +32,10 @@ const { size = 40 } = defineProps<{ size?: number }>()
   }
 }
 </style>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseLoader :size="10" />
+  ```
+</docs>

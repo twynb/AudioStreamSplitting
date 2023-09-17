@@ -1,7 +1,16 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
+  /**
+   * Variant for the button
+   */
   variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost'
+  /**
+   * Content is only icon
+   */
   iconOnly?: boolean
+  /**
+   * Target if button works as a link
+   */
   to?: string
 }>(), {
   variant: 'primary',
@@ -31,6 +40,17 @@ const variantClass = computed(() => {
     class="h-10 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium ring-offset-background transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring"
     :class="[variantClass, { 'aspect-square !p-0': iconOnly }]"
   >
+    <!-- @slot Slot for content -->
     <slot />
   </component>
 </template>
+
+<docs>
+  ## Examples
+
+  ```vue
+  <BaseButton variant="primary">Button</BaseButton>
+
+  <BaseButton variant="ghost" icon-only>x</BaseButton>
+  ```
+</docs>

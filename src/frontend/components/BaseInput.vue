@@ -10,3 +10,10 @@ const modelValue = defineModel({ default: '' })
     autocomplete="off"
   >
 </template>
+
+<docs>
+   ## Examples
+  ```vue
+  <BaseInput v-model="inputValue" />
+  ```
+</docs>
