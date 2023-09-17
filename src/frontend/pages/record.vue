@@ -3,7 +3,7 @@ import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
 import type { Project } from 'models/types'
-import ConfirmModal from '@components/dialogs/ConfirmModal.vue'
+import ConfirmModal from '@components/ConfirmModal.vue'
 import { getRecordSteps } from '../includes/driver'
 
 const { createProject } = useDBStore()

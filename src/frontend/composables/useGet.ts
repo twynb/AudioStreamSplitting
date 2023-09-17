@@ -6,6 +6,12 @@ interface GetConfig {
   onSuccess?: (data: any) => void
 }
 
+/**
+ * Execute a GET request and manage the response data, loading state, and errors.
+ *
+ * @param config - The configuration for the GET request.
+ * @returns An object containing the response data, loading state, error message, and an execution function.
+ */
 export function useGet(config: GetConfig) {
   const data = ref<unknown>()
   const isFetching = ref(false)

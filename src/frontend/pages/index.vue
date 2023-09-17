@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
+import CreateProjectModal from '@components/CreateProjectModal.vue'
 import { useEventListener } from '@vueuse/core'
 import type { Project } from 'models/types'
 import { getDashboardSteps } from '../includes/driver'

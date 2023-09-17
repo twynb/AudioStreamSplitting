@@ -10,8 +10,11 @@ hero:
   tagline: Just upload your audio, and our automatic song detection and segmentation feature will expertly organize your tracks.
   actions:
     - theme: brand
-      text: Go to docs
-      link: /components/BaseBadge
+      text: Backend
+      link: /backend/_build/markdown/
+    - theme: brand
+      text: Frontend
+      link: /frontend/components/BaseBadge
     - theme: alt
       text: View on GitHub
       link: https://github.com/4lex0017/AudioStreamSplitting
