@@ -42,7 +42,7 @@ async function setApiKey(key: EnvKey) {
     <div class="space-y-5">
       <div class="flex items-center justify-between">
         <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_API_KEY">
-          AcoustId API Key
+          {{ t('settings.acoustid_api_key') }}
         </BaseLabel>
 
         <div class="min-w-400px flex gap-x-3">
@@ -56,7 +56,7 @@ async function setApiKey(key: EnvKey) {
 
       <div class="flex items-center justify-between">
         <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
-          Shazam API Key
+          {{ t('settings.shazam_api_key') }}
         </BaseLabel>
 
         <div class="min-w-400px flex gap-x-3">

@@ -4,7 +4,7 @@ import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
 import type { Project } from 'models/types'
 import ConfirmModal from '@components/dialogs/ConfirmModal.vue'
-import { RECORD_STEPS } from '../includes/driver'
+import { getRecordSteps } from '../includes/driver'
 
 const { createProject } = useDBStore()
 const router = useRouter()
@@ -202,7 +202,7 @@ setConfig({
 
     driver.value.movePrevious()
   },
-  steps: RECORD_STEPS,
+  steps: getRecordSteps(),
   showProgress: true,
 })
 

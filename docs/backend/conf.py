@@ -24,6 +24,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
     "sphinx.ext.todo",
+    "sphinx_markdown_builder",
+    "sphinx_autodoc_typehints",
 ]
 
 templates_path = ["_templates"]
@@ -34,10 +36,14 @@ language = "en"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+# html_logo = "../public/logo.ico"
 
 # -- Options for todo extension ----------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/todo.html#configuration
 
 todo_include_todos = True
+
+# -- Options for sorting -----------------------------------------------------
+autodoc_member_order = "bysource"

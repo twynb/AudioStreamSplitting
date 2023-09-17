@@ -2,7 +2,7 @@
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 import { useEventListener } from '@vueuse/core'
 import type { Project } from 'models/types'
-import { DASHBOARD_STEPS } from '../includes/driver'
+import { getDashboardSteps } from '../includes/driver'
 
 const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
@@ -45,7 +45,7 @@ setConfig({
 
     driver.value.movePrevious()
   },
-  steps: DASHBOARD_STEPS,
+  steps: getDashboardSteps(),
 })
 
 useEventListener('keydown', e => e.key === 'Escape' && !driver.value.isActive() && close())
@@ -109,7 +109,7 @@ function handleToProject(id: string) {
           </p>
 
           <p class="mt-2 text-center text-muted-foreground">
-            Add a new project and let our app automatically detect and <br> split songs in audio files.
+            {{ t('dashboard.project.add_new_project_prompt') }}
           </p>
 
           <BaseButton id="new_project_btn" class="mt-4 gap-1" @click="async () => await open() && driver.moveNext()">

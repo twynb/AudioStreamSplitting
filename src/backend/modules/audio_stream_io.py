@@ -60,17 +60,27 @@ def read_audio_file_to_stream(
 def overlapping_stream(stream):
     """
     Changes a stream of audiodata blocks into a stream of overlapping blocks.
+    These have to be in stereo.
 
     :param stream: Takes a Generator
     :returns: A Generator with 75% Overlap between each instance
     """
     for curr_block, next_block in pairwise(stream):
         for ratio in np.linspace(1, 0, 4, endpoint=False):
-            curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
-            next_end_index = int((next_block.shape[1] * (1 - ratio)))
-            yield np.append(
-                curr_block[:, curr_start_index:], next_block[:, :next_end_index], axis=1
-            )
+            if curr_block.ndim == 1:
+                curr_start_index = int((curr_block.shape[0] * (1 - ratio)))
+                next_end_index = int((next_block.shape[0] * (1 - ratio)))
+                yield np.append(
+                    curr_block[curr_start_index:], next_block[:next_end_index], axis=0
+                )
+            else:
+                curr_start_index = int((curr_block.shape[1] * (1 - ratio)))
+                next_end_index = int((next_block.shape[1] * (1 - ratio)))
+                yield np.append(
+                    curr_block[:, curr_start_index:],
+                    next_block[:, :next_end_index],
+                    axis=1,
+                )
         if curr_block.shape != next_block.shape:
             yield next_block
 
@@ -101,28 +111,28 @@ def save_numpy_as_audio_file(
 
 def tag_audio_file(savename: str, tags: dict):
     """
-    Tags an audofile with different tags
+    Tags an audiofile with different tags.
+
+    Possible tags:
+            * album
+            * albumartist
+            * artist
+            * artwork
+            * comment
+            * compilation
+            * composer
+            * discnumber
+            * genre
+            * lyrics
+            * totaldiscs
+            * totaltracks
+            * tracknumber
+            * tracktitle
+            * year
+            * isrc
 
     :param savename: path to savefile
     :param tags: dict of tags
-
-            possible tags:
-                - album
-                - albumartist
-                - artist
-                - artwork
-                - comment
-                - compilation
-                - composer
-                - discnumber
-                - genre
-                - lyrics
-                - totaldiscs
-                - totaltracks
-                - tracknumber
-                - tracktitle
-                - year
-                - isrc
     :returns: none
     """
     audiofile: music_tag.file.AudioFile = music_tag.load_file(savename)  # type: ignore
