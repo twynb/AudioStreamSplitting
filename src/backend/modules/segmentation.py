@@ -358,9 +358,13 @@ def segment_file(path, preset=Preset.NORMAL):
             ),
         )
 
+        if block.ndim == 1:
+            size = block.shape[0]
+        else:
+            size = block.shape[1]
+
         last_frame_in_audiofile = (
-            librosa.core.samples_to_frames(block.shape[1], hop_length=hop_length)
-            + offset
+            librosa.core.samples_to_frames(size, hop_length=hop_length) + offset
         )
 
     # Filter peaks and insert boundaries
