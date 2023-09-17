@@ -3,7 +3,7 @@ import type { WaveSurferOptions } from 'wavesurfer.js'
 import WaveSurfer from 'wavesurfer.js'
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js'
 import type { Project } from 'models/types'
-import { RECORD_STEPS } from '../includes/driver'
+import { getRecordSteps } from '../includes/driver'
 
 const { createProject } = useDBStore()
 const router = useRouter()
@@ -103,7 +103,7 @@ async function handleSave() {
 
 /**
  * Submit
-*/
+ */
 
 const submitInfo = ref({ name: '', description: '' })
 const submitError = ref({ name: '' })
@@ -178,7 +178,7 @@ setConfig({
 
     driver.value.movePrevious()
   },
-  steps: RECORD_STEPS,
+  steps: getRecordSteps(),
   showProgress: true,
 })
 
