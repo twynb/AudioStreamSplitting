@@ -15,7 +15,7 @@ const router = useRouter()
       </p>
 
       <BaseButton class="mt-5" @click="router.push('/')">
-        {{ t('notfound.back_to_dashboard') }}
+        {{ t('button.back_to_dashboard') }}
       </BaseButton>
     </div>
   </div>

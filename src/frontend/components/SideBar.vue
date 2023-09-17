@@ -40,18 +40,6 @@ const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) =>
         :text="t('sidebar.record')"
         link="/record"
       />
-
-      <SideBarRow
-        icon="i-carbon-chart-line-data"
-        :text="t('sidebar.statistics')"
-        link="/statistics"
-      />
-
-      <SideBarRow
-        icon="i-carbon-3d-mpr-toggle"
-        text="Playground"
-        link="/playground"
-      />
     </ul>
 
     <ul class="mt-auto">
