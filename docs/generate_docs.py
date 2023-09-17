@@ -14,6 +14,7 @@ else:
         f"sphinx-apidoc -d 2 -f -e -l -P -o ./docs/backend/ ./src/backend/ **/tests/*"
     )
     make = "make"
+    os.chdir(file.parent.joinpath("backend").resolve().as_posix())
 
 os.remove(file.parent.joinpath("backend", "modules.rst").resolve().as_posix())
 os.system(f"{make} clean")
