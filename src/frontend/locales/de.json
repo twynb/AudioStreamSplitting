@@ -64,7 +64,8 @@
       "project_upload": "Dateien hochladen"
     },
     "confirm": {
-      "title": "Sicher?"
+      "title": "Sicher?",
+      "warning": "Warnung"
     }
   },
   "song": {
@@ -88,6 +89,9 @@
       "no_save_directory": "Kein Dateipfad gesetzt!"
     },
     "no_save_directory": "Bitte geben Sie im Einstellungen-Tab einen Dateipfad an, an dem Dateien gespeichert werden sollen."
+  },
+  "record": {
+    "no_ffmpeg": "Hinweis: FFMpeg ist nicht installiert. Bitte installieren Sie FFMpeg über den Package-Manager Ihres Systems oder mithilfe des Downloads auf der offiziellen Webseite, um die Aufnahme benutzen zu können."
   },
   "driver": {
     "project": {
