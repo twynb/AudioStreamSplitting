@@ -390,8 +390,8 @@ class ApiService:
             except ConnectionError as ex:
                 log_error(ex, "Shazam connection error")
 
-            # if neither finds anything, song not recognised.
-            self._store_finished_song(offset, duration, ())
+        # if neither finds anything, song not recognised.
+        self._store_finished_song(offset, duration, ())
         return SongOptionResult.SONG_NOT_RECOGNISED
 
     def _check_song_extended_or_finished(
