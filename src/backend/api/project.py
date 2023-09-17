@@ -17,7 +17,7 @@ def create():
     description = request.form.get("description")
     files = request.files.getlist("file")
     project_id = uuid.uuid4()
-    project_path = os.path.join(audios_dir, project_id)
+    project_path = os.path.join(audios_dir, str(project_id))
     mkdir(project_path)
 
     project = {
