@@ -63,7 +63,7 @@ async function handleProcess() {
       const { data } = await postAudioSplit({ filePath: props.file.filePath })
 
       if (!data.segments || !data.segments?.length)
-        throw new Error('This audio cannot be splitted')
+        throw new Error('This audio cannot be split')
 
       data.segments = data.segments
         .map((s) => {
@@ -203,13 +203,13 @@ function handleEdit(songIndex: number) {
           class="mr-2 border-primary-foreground !border-2"
           :size="15"
         />
-        Process
+        {{ t('button.process') }}
       </BaseButton>
     </div>
 
     <table class="w-full caption-bottom text-sm">
       <caption class="mt-4 text-sm text-muted-foreground">
-        A list of found songs
+        {{ t('song.list_caption') }}
       </caption>
       <thead>
         <tr class="border-b border-b-border">

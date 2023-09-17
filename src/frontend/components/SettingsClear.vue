@@ -13,7 +13,7 @@ const { open, close } = useModal({
   },
   slots: {
     default: {
-      component: h('p', null, 'Do you realy want to delete all projects.'),
+      component: h('p', null, t('settings.clear_all_confirm')),
     },
   },
 })
@@ -27,9 +27,9 @@ async function handleClearAll() {
 
 <template>
   <div class="flex items-center justify-between">
-    <h3>Clear all projects</h3>
+    <h3>{{ t('settings.clear_heading') }}</h3>
     <BaseButton variant="destructive" @click="open">
-      Clear
+      {{ t('button.clear') }}
     </BaseButton>
   </div>
 </template>
