@@ -2,7 +2,7 @@
 import CreateProjectModal from '@components/dialogs/CreateProjectModal.vue'
 import { useEventListener } from '@vueuse/core'
 import type { Project } from 'models/types'
-import { DASHBOARD_STEPS } from '../includes/driver'
+import { getDashboardSteps } from '../includes/driver'
 
 const { getProjects, deleteProject, createProject } = useDBStore()
 const { t } = useI18n()
@@ -45,7 +45,7 @@ setConfig({
 
     driver.value.movePrevious()
   },
-  steps: DASHBOARD_STEPS,
+  steps: getDashboardSteps(),
 })
 
 useEventListener('keydown', e => e.key === 'Escape' && !driver.value.isActive() && close())
