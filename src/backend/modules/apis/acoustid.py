@@ -10,9 +10,15 @@ this module will use the exception classes from ``acoustid``.
 import os
 
 import acoustid
+import utils.list_helper
 from modules.audio_stream_io import save_numpy_as_audio_file
 
 METADATA_ALL = ["tracks", "recordings", "releasegroups"]
+"""The metadata to query from the AcoustID API.
+    * "tracks" offers the track title.
+    * "recordings" offers the track artist.
+    * "releasegroups" offers the albums the track was published on.
+"""
 
 
 def create_fingerprint(song_data, samplerate):
@@ -99,22 +105,98 @@ def _parse_lookup_result(data):
     :returns: A ``list`` of ``dict``s containing metadata.
     :raise acoustid.WebServiceError: if the response is incomplete or the request failed.
     """
-    print(data)
     if data["status"] != "ok":
         raise acoustid.WebServiceError("status: %s" % data["status"])
     if "results" not in data:
         raise acoustid.WebServiceError("results not included")
 
-    results = []
+    recordings = _extract_recordings(data["results"])
 
-    for result in data["results"]:
-        if "recordings" in result:
-            results = _append_results_for_recordings(result["recordings"], results)
-
-    return results
+    return _get_results_for_recordings(recordings)
 
 
-def _append_results_for_recordings(recordings, results: list):
+def _extract_recordings(results):
+    """Extract all recordings from the results returned by AcoustID.
+
+    :param results: The "results" segment of the AcoustID response.
+    :returns: a ``list`` of all recordings. Recordings with the same title and set of artists are
+        merged and if a non-compilation releasegroup exists, all compilations are filtered out.
+    """
+    all_recordings = utils.list_helper.flatten(
+        [result["recordings"] for result in results if "recordings" in result]
+    )
+    return _merge_matching_recordings(all_recordings)
+
+
+def _merge_matching_recordings(recordings: list):
+    """Merge recordings with the same title and artists.
+    This iterates over all recordings and merges ones with the same title and artists.
+
+    TODO: This should be refactored to be more pythonic and readable, if possible.
+
+    :param recordings: a list of ``recording`` ``dict``s as provided by the AcoustID API.
+    :returns: a list of ``recordings`` where matching entries were merged.
+    """
+    grouped_by_title_and_artist = {}
+    artists_by_title_and_artist = {}
+    for recording in recordings:
+        if "title" not in recording or "artists" not in recording:
+            # no title or no artist => useless data, discard
+            continue
+        title = recording["title"]
+        artist_id = ",".join(
+            [artist.setdefault("id", "") for artist in recording["artists"]]
+        )
+        if title not in grouped_by_title_and_artist:
+            grouped_by_title_and_artist[title] = {}
+            artists_by_title_and_artist[title] = {}
+        if artist_id not in grouped_by_title_and_artist[title]:
+            grouped_by_title_and_artist[title][artist_id] = []
+            artists_by_title_and_artist[title][artist_id] = recording["artists"]
+        grouped_by_title_and_artist[title][artist_id] = (
+            grouped_by_title_and_artist[title][artist_id] + recording["releasegroups"]
+        )
+        print(type(grouped_by_title_and_artist[title]))
+        print(type(grouped_by_title_and_artist[title][artist_id]))
+    result = []
+    for title, entries in artists_by_title_and_artist.items():
+        print(artists_by_title_and_artist[title])
+        print(entries)
+        for artist_id, releasegroups in entries.items():
+            print(releasegroups)
+    return [
+        {
+            "title": title,
+            "artists": artists_by_title_and_artist[title][artist_id],
+            "releasegroups": _filter_out_compilations_from_releasegroups(
+                utils.list_helper.remove_duplicate_dicts(releasegroups)
+            ),
+        }
+        for title, entries in artists_by_title_and_artist.items()
+        for artist_id, releasegroups in entries.items()
+    ]
+
+
+def _filter_out_compilations_from_releasegroups(releasegroups):
+    """If there is at least one non-compilation album in "releasegroups",
+    exclude compilation albums.
+    Otherwise, return the unfiltered list of releasegroups.
+
+    :param releasegroups: The detected release groups.
+    :returns: The filtered list of release groups.
+    """
+    filtered_releasegroups = [
+        releasegroup
+        for releasegroup in releasegroups
+        if (
+            "secondarytypes" not in releasegroup
+            or releasegroup["secondarytypes"] != "Compilation"
+        )
+    ]
+    return filtered_releasegroups if len(filtered_releasegroups) != 0 else releasegroups
+
+
+def _get_results_for_recordings(recordings):
     """Go through all the given recordings, parse their metadata into a dict and append them to the
     results list. To return all possible results, go through each release group the recording is in
     and append a separate result, so releases on different albums are identified separately.
@@ -131,6 +213,7 @@ def _append_results_for_recordings(recordings, results: list):
     :param results: The list to append the results to.
     :returns: The list with the appended results.
     """
+    results = []
     for recording in recordings:
         # Get the artist if available.
         if "artists" not in recording or "title" not in recording:
@@ -167,10 +250,15 @@ def _get_result_for_releasegroup(releasegroup, artist_name: str, title: str):
         if "artists" in releasegroup
         else None
     )
+    album_title = (
+        releasegroup["title"]
+        if "title" in releasegroup
+        else (releasegroup["name"] if "name" in releasegroup else None)
+    )
     return {
         "artist": artist_name,
         "title": title,
-        "album": releasegroup["title"],
+        "album": album_title,
         "albumartist": album_artist_name,
     }
 
