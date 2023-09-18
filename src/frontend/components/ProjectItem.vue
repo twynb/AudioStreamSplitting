@@ -122,9 +122,10 @@ function addRegion(segments: ProjectFileSegment[]) {
 const isStoring = ref(false)
 const currentStoringIndex = ref(-1)
 const store = useEnvStore()
+const fileTypes = ['mp3', 'wav']
 async function handleStore(
-  { duration, offset, metadata }: { duration: number; offset: number; metadata: Metadata },
-  songIndex: number,
+  { duration, offset, metadata, songIndex, fileType }: { duration: number; offset: number; metadata: Metadata; songIndex: number; fileType: string },
+
 ) {
   const filePath = props.file.filePath
   const targetDirectory = store.lsEnv.SAVE_DIRECTORY
@@ -137,8 +138,11 @@ async function handleStore(
   isStoring.value = true
 
   try {
-    await postAudioStore({ filePath, duration, offset, metadata, targetDirectory })
-    toast({ title: metadata.title, content: t('toast.save_file_success', { target: targetDirectory }) })
+    await postAudioStore({ filePath, duration, offset, metadata, targetDirectory, fileType })
+    toast({
+      title: `${metadata.title}.${fileType}`,
+      content: t('toast.save_file_success', { target: targetDirectory }),
+    })
   }
   catch (e) {
     toast({ content: t('toast.unkown_error'), variant: 'destructive' })
@@ -195,7 +199,7 @@ function handleEdit(songIndex: number) {
 
     <div class="flex-center py-2">
       <BaseButton
-        :disabled="file.fileType === 'webm' || isProcessing || file.segments"
+        :disabled="file.fileType === 'webm' || isAudioLoading || isProcessing || file.segments"
         @click="handleProcess"
       >
         <BaseLoader
@@ -245,8 +249,8 @@ function handleEdit(songIndex: number) {
 
       <tbody>
         <tr
-          v-for="({ duration, offset, metaIndex, metadataOptions }, index) in file.segments"
-          :key="index" class="border-b border-b-border"
+          v-for="({ duration, offset, metaIndex, metadataOptions }, songIndex) in file.segments"
+          :key="songIndex" class="border-b border-b-border"
         >
           <td class="p-4 align-middle font-medium">
             {{ metadataOptions?.[metaIndex]?.title ?? 'unknown' }}
@@ -271,30 +275,43 @@ function handleEdit(songIndex: number) {
           <td class="p-4 align-middle">
             <BaseButton
               icon-only variant="ghost"
-              :disabled="file.segments && (file.segments[index].metadataOptions?.length ?? 0) <= 1"
-              @click="handleEdit(index)"
+              :disabled="file.segments && (file.segments[songIndex].metadataOptions?.length ?? 0) <= 1"
+              @click="handleEdit(songIndex)"
             >
               <span class="i-carbon-edit" />
             </BaseButton>
           </td>
 
           <td class="p-4 align-middle">
-            <BaseButton
-              icon-only variant="ghost"
+            <BaseMenuButton
               :disabled="!duration || !offset || isStoring"
-              @click="duration && offset && handleStore({
-                duration,
-                offset,
-                metadata: metadataOptions?.[metaIndex] ?? { album: 'unknown', artist: 'unknown', title: 'unknown', year: 'unknown' },
-              }, index)"
+              :length="fileTypes.length"
             >
-              <BaseLoader
-                v-if="currentStoringIndex === index && isStoring"
-                class="border-primary !border-2"
-                :size="15"
-              />
-              <span v-else class="i-carbon-download" />
-            </BaseButton>
+              <template #button>
+                <BaseLoader
+                  v-if="currentStoringIndex === songIndex && isStoring"
+                  class="border-primary !border-2"
+                  :size="15"
+                />
+                <span v-else class="i-carbon-download" />
+              </template>
+              <template #content="{ index: ftIndex }">
+                <li class="px-1">
+                  <BaseButton
+                    variant="ghost"
+                    @click="duration && offset && handleStore({
+                      duration,
+                      offset,
+                      metadata: metadataOptions?.[metaIndex] ?? { album: 'unknown', artist: 'unknown', title: 'unknown', year: 'unknown' },
+                      songIndex,
+                      fileType: fileTypes[ftIndex],
+                    })"
+                  >
+                    {{ `.${fileTypes[ftIndex]}` }}
+                  </BaseButton>
+                </li>
+              </template>
+            </BaseMenuButton>
           </td>
         </tr>
       </tbody>
