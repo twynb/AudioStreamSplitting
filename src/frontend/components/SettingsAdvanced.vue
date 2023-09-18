@@ -46,7 +46,7 @@ async function setApiKey(key: EnvKey) {
         </BaseLabel>
 
         <div class="min-w-400px flex gap-x-3">
-          <BaseTextArea id="SERVICE_ACOUSTID_API_KEY" v-model="env.SERVICE_ACOUSTID_API_KEY" />
+          <BaseInput id="SERVICE_ACOUSTID_API_KEY" v-model="env.SERVICE_ACOUSTID_API_KEY" type="password" />
 
           <BaseButton @click="setApiKey('SERVICE_ACOUSTID_API_KEY')">
             {{ t('button.set') }}
@@ -60,7 +60,7 @@ async function setApiKey(key: EnvKey) {
         </BaseLabel>
 
         <div class="min-w-400px flex gap-x-3">
-          <BaseTextArea id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" />
+          <BaseInput id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" type="password" />
 
           <BaseButton @click="setApiKey('SERVICE_SHAZAM_API_KEY')">
             {{ t('button.set') }}
