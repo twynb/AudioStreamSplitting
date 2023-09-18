@@ -284,6 +284,7 @@ function handleEdit(songIndex: number) {
 
           <td class="p-4 align-middle">
             <BaseMenuButton
+              class="!justify-start"
               :disabled="!duration || !offset || isStoring"
               :length="fileTypes.length"
             >
