@@ -4,18 +4,21 @@
   - [Code of Conduct](#code-of-conduct)
   - [Pull Request Workflow](#pull-request-workflow)
     - [Requirements](#requirements)
+      - [reST doc example](#rest-doc-example)
   - [Code Structure](#code-structure)
     - [Back-End Structure](#back-end-structure)
-    - [Front-End-Structure](#front-end-structure) (TODO)
+    - [Front-End Structure](#front-end-structure)
+    - [Generating documentation](#generating-documentation)
   - [Developing Environment](#developing-environment)
     - [System Requirements](#system-requirements)
     - [Installation](#installation)
       - [Manual setup](#manual-setup)
       - [Docker](#docker)
-        - [Without extension:](#without-extension)
-        - [With extension:](#with-extension)
+        - [Without extension](#without-extension)
+        - [With extension](#with-extension)
     - [Usage](#usage)
       - [Available commands](#available-commands)
+  - [Contributors](#contributors)
 
 This document contains guidelines and advice for people willing to contribute to AudioStreamSplitting development. Most of what is said in here is common sense, but it's best to have it all present and summarized.
 
@@ -83,7 +86,23 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 
 ### Front-End Structure
 
-TODO
+- **components**: This directory serves as a home for reusable UI components. All components placed here are automatically imported, simplifying their usage. If you're enhancing or creating user interface elements, this is where you'll focus your efforts.
+
+- **composables**: The "composables" directory contains functions or logic that can be shared across different parts of our application. Functions within this folder are also automatically imported, promoting code reusability.
+
+- **includes**: Files that are included or imported into our project are stored here. This could include configuration files, or utility functions.
+
+- **locales**: For applications with multilingual support, the "locales" directory is the repository for language files and localization-related code, ensuring a smooth internationalization process.
+
+- **models**: In the "models" directory, you'll find data models and classes that define the structure of our application's data. This is the place to work on data-related functionality.
+
+- **modules**: The "modules" directory holds core modules such as pinia, vue-router, and other essential packages that are installed when the application initializes.
+
+- **pages**: Our application's main pages reside in the "pages" directory. Each page typically corresponds to a specific route. When enhancing or creating views, this directory is where you'll make your contributions.
+
+- **public**: Static assets such as images, fonts, or other files that don't require processing by build tools are stored in the public directory.
+
+- **stores**: All pinia stores, responsible for managing application state, are located in the "stores" directory, facilitating structured state management.
 
 ### Generating documentation
 
@@ -139,11 +158,11 @@ docker run -v ${pwd}/workspaces/AudioStreamSplitting ass -it bash
 For normal development, use the following commands in 2 different terminals:
 
 ```bash
-npm run fe
+npm run dev:be
 ```
 
 ```bash
-npm run be:debug
+npm run dev:be
 ```
 
 #### Available commands
@@ -152,12 +171,9 @@ npm run be:debug
 | ------------------------ | -------------------------------- |
 | npm run `dev:fe`         | Run frontend server              |
 | npm run `dev:be`         | Run backend server               |
-| npm run `be:debug`       | Run backend server in debug mode |
 | npm run `view:app`       | Run desktop app                  |
-| npm run `view:app:debug` | Run desktop app in debug mode    |
 | npm run `build:fe`       | Build frontend (html, js, css)   |
 | npm run `build:app`      | Build desktop app                |
-| npm run `preview`        | Preview built desktop app        |
 | npm run `docs:generate`  | Generate backend documentation   |
 
 ## Contributors
