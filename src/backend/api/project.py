@@ -62,10 +62,11 @@ def create():
 
         project["files"].append(
             {
-                "fileName": file_name,
-                "filePath": file_path,
                 "name": name,
                 "fileType": file_type,
+                "fileName": file_name,
+                "filePath": file_path,
+                "presetName": "NORMAL",
             }
         )
 

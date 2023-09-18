@@ -12,6 +12,10 @@ defineProps<{
    * Array of options for select
    */
   options: Option[]
+  /**
+   * Is select disabled
+   */
+  disabled?: boolean
 }>()
 
 const modelValue = defineModel({ default: '' })
@@ -34,6 +38,7 @@ function handleChooseOption(v: string) {
       type="button"
       role="combobox"
       :aria-expanded="isExpanded"
+      :disabled="disabled"
       class="h-10 w-full flex items-center justify-between border border-input rounded-md bg-transparent px-3 py-2 text-sm ring-offset-background disabled:cursor-not-allowed placeholder:text-muted-foreground disabled:opacity-50 focus:ring-2 focus:ring-offset-2 focus:ring-ring"
       @click="isExpanded = !isExpanded"
     >
@@ -45,13 +50,6 @@ function handleChooseOption(v: string) {
       </span>
       <span class="i-carbon-caret-down" />
     </button>
-
-    <!-- <select v-model="modelValue" class="absolute h-1px w-1px overflow-hidden border-none p-0 -m-1px" aria-hidden="true" tabindex="-1" style="clip: rect(0px, 0px, 0px, 0px);">
-      <option value="" />
-      <option v-for="{ label, value } in options" :key="value" :value="value">
-        {{ label }}
-      </option>
-    </select> -->
 
     <Transition
       enter-active-class="transition-opacity"

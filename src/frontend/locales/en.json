@@ -76,7 +76,8 @@
     "duration": "Duration",
     "no_webm": ".webm cannot be processed at the moment!",
     "no_meta": "No information",
-    "list_caption": "Found songs"
+    "list_caption": "Found songs",
+    "preset": "Preset"
   },
   "toast": {
     "empty_field": "Please enter a valid value!",
