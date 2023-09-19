@@ -36,11 +36,7 @@ function handleToggleDark() {
               v-model="currentLocal"
               :options="localOpts"
               class="w-200px"
-            >
-              <template #label>
-                {{ LangMap[currentLocal] ?? '' }}
-              </template>
-            </BaseSelect>
+            />
           </div>
 
           <SettingsClear />

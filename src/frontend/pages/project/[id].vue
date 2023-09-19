@@ -53,6 +53,7 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
           @succeed-process="(v) => updateFileProperty(fileIndex, 'segments', v)"
           @update-peaks="(v) => updateFileProperty(fileIndex, 'peaks', v)"
           @change-meta="(songIndex, metaIndex) => handleChangeMeta(fileIndex, songIndex, metaIndex)"
+          @change-preset-name="(v) => updateFileProperty(fileIndex, 'presetName', v)"
         />
       </div>
     </template>

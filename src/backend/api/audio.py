@@ -5,7 +5,7 @@ import wave
 from flask import Blueprint, Response, jsonify, request, send_file
 from modules.api_service import ApiService
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
-from modules.segmentation import segment_file
+from modules.segmentation import Preset, segment_file
 from pathvalidate import sanitize_filename
 from utils.env import get_env
 from utils.file_name_formatter import format_file_name
@@ -22,9 +22,13 @@ def split():
     """
     data = request.json
     file_path = data["filePath"]
+    preset_name = data["presetName"]
+    preset = getattr(Preset, preset_name, Preset.NORMAL)
+
     if not os.path.exists(file_path):
         return "File does not exist!", 400
-    generator = segment_file(file_path)
+
+    generator = segment_file(file_path, preset)
     segments, mismatch_offsets = ApiService().identify_all_from_generator(
         generator, file_path
     )

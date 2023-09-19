@@ -44,8 +44,20 @@ export interface PostAudioSplit200 {
   mismatchOffsets?: number[]
 }
 
+export type PostAudioSplitBodyPresetName = typeof PostAudioSplitBodyPresetName[keyof typeof PostAudioSplitBodyPresetName]
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostAudioSplitBodyPresetName = {
+  EXTRA_STRICT: 'EXTRA_STRICT',
+  STRICT: 'STRICT',
+  NORMAL: 'NORMAL',
+  LENIENT: 'LENIENT',
+  EXTRA_LENIENT: 'EXTRA_LENIENT',
+} as const
+
 export interface PostAudioSplitBody {
-  filePath?: string
+  filePath: string
+  presetName?: PostAudioSplitBodyPresetName
 }
 
 export interface Metadata {

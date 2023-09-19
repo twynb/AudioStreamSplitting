@@ -1,4 +1,4 @@
-import type { PostAudioSplit200SegmentsItem } from '../models/api'
+import type { PostAudioSplit200SegmentsItem, PostAudioSplitBodyPresetName } from '../models/api'
 
 export interface Project {
   id: string
@@ -11,6 +11,7 @@ export interface Project {
     fileType: string
     fileName: string
     filePath: string
+    presetName: PostAudioSplitBodyPresetName
     peaks?: number[][]
     segments?: ProjectFileSegment[]
   }[]
