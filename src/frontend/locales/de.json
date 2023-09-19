@@ -76,7 +76,15 @@
     "duration": "Dauer",
     "no_webm": ".webm-Dateien können nicht verarbeitet werden!",
     "no_meta": "Keine Information",
-    "list_caption": "Gefundene Lieder"
+    "list_caption": "Gefundene Lieder",
+    "preset": {
+      "extra_lenient": "Besonders nachsichtig",
+      "extra_strict": "Extra streng",
+      "index": "Voreingestellt",
+      "lenient": "Nachsichtig",
+      "normal": "Normal",
+      "strict": "Strikt"
+    }
   },
   "toast": {
     "empty_field": "Bitte geben Sie einen gültigen Wert ein!",

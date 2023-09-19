@@ -3,7 +3,7 @@ import { onClickOutside } from '@vueuse/core'
 
 interface Option { label: string; value: string }
 
-defineProps<{
+const props = defineProps<{
   /**
    * Placeholder for select
    */
@@ -19,13 +19,15 @@ defineProps<{
 }>()
 
 const modelValue = defineModel({ default: '' })
+const index = ref(props.options.findIndex(o => o.value === modelValue.value) ?? 0)
 const isExpanded = ref(false)
 const isMouseOverOpts = ref(false)
 const button = ref<HTMLButtonElement>()
 onClickOutside(button, () => isExpanded.value = false)
 
-function handleChooseOption(v: string) {
+function handleChooseOption(v: string, i: number) {
   modelValue.value = v
+  index.value = i
   isExpanded.value = false
   button.value?.focus()
 }
@@ -43,9 +45,11 @@ function handleChooseOption(v: string) {
       @click="isExpanded = !isExpanded"
     >
       <span style="pointer-events: none">
-        <!-- @slot Label for option -->
-        <slot name="label">
-          {{ modelValue ?? placeholder }}
+        <!-- @slot Label for option
+          @binding {number} index current index
+        -->
+        <slot name="label" :index="index">
+          {{ options[index].label }}
         </slot>
       </span>
       <span class="i-carbon-caret-down" />
@@ -64,14 +68,14 @@ function handleChooseOption(v: string) {
         @mouseleave="isMouseOverOpts = false"
       >
         <li
-          v-for="{ label, value } in options" :key="label"
+          v-for="{ label, value }, i in options" :key="label"
           tabindex="0"
           class="flex items-center gap-x-2 rounded-md px-3 py-2 hover:(bg-secondary text-secondary-foreground)"
           :class="[!isMouseOverOpts && modelValue === value ? 'bg-secondary text-secondary-foreground' : 'bg-primary-foreground']"
           role="button"
-          @click="handleChooseOption(value)"
-          @keydown.enter.prevent="handleChooseOption(value)"
-          @keydown.space.prevent="handleChooseOption(value)"
+          @click="handleChooseOption(value, i)"
+          @keydown.enter.prevent="handleChooseOption(value, i)"
+          @keydown.space.prevent="handleChooseOption(value, i)"
           @keydown.escape.prevent="isExpanded = false"
         >
           <span

@@ -52,14 +52,14 @@ onMounted(() => {
 })
 
 const presetNameOpts = [
-  { value: 'EXTRA_STRICT', label: 'EXTRA_STRICT' },
-  { value: 'STRICT', label: 'STRICT' },
-  { value: 'NORMAL', label: 'NORMAL' },
-  { value: 'LENIENT', label: 'LENIENT' },
-  { value: 'EXTRA_LENIENT', label: 'EXTRA_LENIENT' },
+  { value: 'EXTRA_STRICT', label: t('song.preset.extra_strict') },
+  { value: 'STRICT', label: t('song.preset.strict') },
+  { value: 'NORMAL', label: t('song.preset.normal') },
+  { value: 'LENIENT', label: t('song.preset.lenient') },
+  { value: 'EXTRA_LENIENT', label: t('song.preset.extra_lenient') },
 ]
 const isProcessing = ref(false)
-const presetName = ref(props.file.presetName)
+const presetName = ref(props.file.presetName ?? 'EXTRA_STRICT')
 watch(presetName, () => emits('changePresetName', presetName.value))
 async function handleProcess() {
   isProcessing.value = true
@@ -195,17 +195,13 @@ function handleEdit(songIndex: number) {
 
     <div class="flex items-center justify-between py-2">
       <div class="space-y-1">
-        <BaseLabel>{{ t('song.preset') }}</BaseLabel>
+        <BaseLabel>{{ t('song.preset.index') }}</BaseLabel>
         <BaseSelect
           v-model="presetName"
           :disabled="isProcessing"
           :options="presetNameOpts"
           class="min-w-200px -ml-1"
-        >
-          <template #label>
-            {{ presetName }}
-          </template>
-        </BaseSelect>
+        />
       </div>
 
       <BaseButton :disabled="isProcessing" @click="handleProcess">
