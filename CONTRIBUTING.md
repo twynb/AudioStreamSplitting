@@ -8,6 +8,8 @@
   - [Code Structure](#code-structure)
     - [Back-End Structure](#back-end-structure)
     - [Front-End Structure](#front-end-structure)
+      - [Folder Structure](#folder-structure)
+      - [Frontend Workflow](#frontend-workflow)
     - [Generating documentation](#generating-documentation)
   - [Developing Environment](#developing-environment)
     - [System Requirements](#system-requirements)
@@ -86,6 +88,8 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 
 ### Front-End Structure
 
+#### Folder Structure
+
 - **components**: This directory serves as a home for reusable UI components. All components placed here are automatically imported, simplifying their usage. If you're enhancing or creating user interface elements, this is where you'll focus your efforts.
 
 - **composables**: The "composables" directory contains functions or logic that can be shared across different parts of our application. Functions within this folder are also automatically imported, promoting code reusability.
@@ -103,6 +107,19 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 - **public**: Static assets such as images, fonts, or other files that don't require processing by build tools are stored in the public directory.
 
 - **stores**: All pinia stores, responsible for managing application state, are located in the "stores" directory, facilitating structured state management.
+
+
+#### Frontend Workflow
+1.  `main.ts` serves as the entry point for the frontend. It initializes all modules located in the `modules` folder. Eventually, it mounts the `App.vue` component into the DOM. For more details, refer to the [Vue.js documentation](https://vuejs.org/).
+
+2. `App.vue` acts as the wrapper component for the entire application. It defines the layout, including the sidebar, and the content for each page.
+
+3. `pages/project/[id].vue` houses almost all of the application's features. It's the primary focus of your development efforts.
+
+4. Example for adding a new page
+     - Create a new component in the `pages` folder (e.g., `statistics.vue`).
+     - Add a new `<SideBarRow link="/statistics" />` within the `<SideBar />` component for navigation.
+     - At this point your implementation should be inside this `statistics.vue` file.
 
 ### Generating documentation
 
