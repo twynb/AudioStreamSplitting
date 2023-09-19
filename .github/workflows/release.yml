@@ -36,7 +36,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt
-          npm ci --force
+          npm ci
 
       - name: Build App
         run: npm run build:app:nocheck
