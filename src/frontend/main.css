@@ -8,7 +8,7 @@ body,
 
 @font-face {
   font-family: 'Open Sans';
-  src: local('Open Sans'), url(./assets/fonts/OpenSans.ttf) format('truetype');
+  src: local('Open Sans'), url(./public/OpenSans.ttf) format('truetype');
 }
 
 body {
