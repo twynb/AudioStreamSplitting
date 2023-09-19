@@ -11,9 +11,8 @@ import 'driver.js/dist/driver.css'
 axios.defaults.baseURL = 'http://localhost:55555/api'
 
 const app = createApp(App)
-Object.values(import.meta.glob<{ install: (app: AppType) => void }>('./modules/*.ts', { eager: true }))
-  .forEach((module) => {
-    module.install(app)
-  })
+Object.values(
+  import.meta.glob<{ install: (app: AppType) => void }>('./modules/*.ts', { eager: true }),
+).forEach(({ install }) => install(app))
 
 app.mount('#app')
