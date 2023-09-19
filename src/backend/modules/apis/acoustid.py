@@ -61,6 +61,10 @@ def lookup(fingerprint, fingerprint_duration, api_key):
         * album
         * albumartist
 
+    If a recording has at least one album without a secondary type (secondary types being
+    compilations, film soundtracks, ...), all albums with secondary types are filtered
+    out from the metadata options to avoid excessive clutter.
+
     :param fingerprint: the fingerprint generated using ``_create_fingerprint``.
     :param fingerprint_duration: duration of the fingerprinted data, in seconds.
     :returns: A ``list`` of ``dict``s containing the results.
@@ -95,6 +99,10 @@ def _parse_lookup_result(data):
     Retrieve the song metadata from the data returned by an AcoustID API call.
     Results that do not contain recordings are discarded, as they aren't useful.
 
+    If a recording has at least one album without a secondary type (secondary types being
+    compilations, film soundtracks, ...), all albums with secondary types are filtered
+    out from the metadata options to avoid excessive clutter.
+
     The following metadata can be retrieved:
         * title
         * artist
@@ -118,6 +126,10 @@ def _parse_lookup_result(data):
 def _extract_recordings(results):
     """Extract all recordings from the results returned by AcoustID.
 
+    If a recording has at least one album without a secondary type (secondary types being
+    compilations, film soundtracks, ...), all albums with secondary types are filtered
+    out from the metadata options to avoid excessive clutter.
+
     :param results: The "results" segment of the AcoustID response.
     :returns: a ``list`` of all recordings. Recordings with the same title and set of artists are
         merged and if a non-compilation releasegroup exists, all compilations are filtered out.
@@ -131,6 +143,10 @@ def _extract_recordings(results):
 def _merge_matching_recordings(recordings: list):
     """Merge recordings with the same title and artists.
     This iterates over all recordings and merges ones with the same title and artists.
+
+    If a recording has at least one album without a secondary type (secondary types being
+    compilations, film soundtracks, ...), all albums with secondary types are filtered
+    out from the metadata options to avoid excessive clutter.
 
     TODO: This should be refactored to be more pythonic and readable, if possible.
 
@@ -156,14 +172,6 @@ def _merge_matching_recordings(recordings: list):
         grouped_by_title_and_artist[title][artist_id] = (
             grouped_by_title_and_artist[title][artist_id] + recording["releasegroups"]
         )
-        print(type(grouped_by_title_and_artist[title]))
-        print(type(grouped_by_title_and_artist[title][artist_id]))
-    result = []
-    for title, entries in artists_by_title_and_artist.items():
-        print(artists_by_title_and_artist[title])
-        print(entries)
-        for artist_id, releasegroups in entries.items():
-            print(releasegroups)
     return [
         {
             "title": title,
@@ -172,13 +180,14 @@ def _merge_matching_recordings(recordings: list):
                 utils.list_helper.remove_duplicate_dicts(releasegroups)
             ),
         }
-        for title, entries in artists_by_title_and_artist.items()
+        for title, entries in grouped_by_title_and_artist.items()
         for artist_id, releasegroups in entries.items()
     ]
 
 
 def _filter_out_compilations_from_releasegroups(releasegroups):
-    """If there is at least one non-compilation album in "releasegroups",
+    """If there is at least one album without a secondary type (such as "compilation", "soundtrack",
+    etc.) in ``releasegroups``,
     exclude compilation albums.
     Otherwise, return the unfiltered list of releasegroups.
 
@@ -188,10 +197,7 @@ def _filter_out_compilations_from_releasegroups(releasegroups):
     filtered_releasegroups = [
         releasegroup
         for releasegroup in releasegroups
-        if (
-            "secondarytypes" not in releasegroup
-            or releasegroup["secondarytypes"] != "Compilation"
-        )
+        if ("secondarytypes" not in releasegroup)
     ]
     return filtered_releasegroups if len(filtered_releasegroups) != 0 else releasegroups
 
