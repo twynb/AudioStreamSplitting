@@ -78,10 +78,10 @@
     "no_meta": "Keine Information",
     "list_caption": "Gefundene Lieder",
     "preset": {
-      "extra_lenient": "Besonders nachsichtig",
-      "extra_strict": "Extra streng",
+      "extra_lenient": "Extra locker",
+      "extra_strict": "Extra strikt",
       "index": "Voreingestellt",
-      "lenient": "Nachsichtig",
+      "lenient": "Locker",
       "normal": "Normal",
       "strict": "Strikt"
     }
