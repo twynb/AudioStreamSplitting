@@ -49,7 +49,7 @@ function handleChooseOption(v: string, i: number) {
           @binding {number} index current index
         -->
         <slot name="label" :index="index">
-          {{ options[index].label }}
+          {{ options[index]?.label }}
         </slot>
       </span>
       <span class="i-carbon-caret-down" />

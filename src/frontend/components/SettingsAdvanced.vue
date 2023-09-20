@@ -23,6 +23,8 @@ async function setApiKey(key: EnvKey) {
   try {
     await axios.post('/env/set', { key, value })
     lsEnv.value[key] = value
+    // TODO Just a workaround. Figure out why useLocalStorage is not working
+    localStorage.setItem('env', JSON.stringify(lsEnv.value))
     toast({ content: t('toast.changed_successfully') })
   }
   catch (e) {
