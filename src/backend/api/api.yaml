@@ -13,9 +13,19 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - filePath
               properties:
                 filePath:
                   type: string
+                presetName:
+                  type: string
+                  enum:
+                    - EXTRA_STRICT
+                    - STRICT
+                    - NORMAL
+                    - LENIENT
+                    - EXTRA_LENIENT
       responses:
         "200":
           description: The segments of the file and potential metadata.
