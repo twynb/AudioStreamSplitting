@@ -18,6 +18,10 @@ METADATA_ALL = ["tracks", "recordings", "releasegroups"]
     * "tracks" offers the track title.
     * "recordings" offers the track artist.
     * "releasegroups" offers the albums the track was published on.
+
+  As of current, only three sets of metadata can be requested, if four or more are sent,
+  some are discarded. If this limitation is ever removed, this should also add the "recordingids"
+  metadata to make merging matching recordings easier.
 """
 
 
@@ -119,7 +123,6 @@ def _parse_lookup_result(data):
         raise acoustid.WebServiceError("results not included")
 
     recordings = _extract_recordings(data["results"])
-
     return _get_results_for_recordings(recordings)
 
 
@@ -142,7 +145,8 @@ def _extract_recordings(results):
 
 def _merge_matching_recordings(recordings: list):
     """Merge recordings with the same title and artists.
-    This iterates over all recordings and merges ones with the same title and artists.
+    This iterates over all recordings and merges the "releasegroups" sections of ones with the same
+    title and artists.
 
     If a recording has at least one album without a secondary type (secondary types being
     compilations, film soundtracks, ...), all albums with secondary types are filtered
