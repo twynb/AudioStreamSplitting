@@ -3,6 +3,11 @@ import { driver as createDriver } from 'driver.js'
 
 const driver = shallowRef(createDriver())
 
+/**
+ * Provides access to the Driver.js instance and configuration for guided tours.
+ *
+ * @returns An object containing the Driver.js instance and a function to set its configuration.
+ */
 export function useDriver() {
   const { t } = useI18n()
 

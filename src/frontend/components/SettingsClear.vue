@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ConfirmModal from './dialogs/ConfirmModal.vue'
+import ConfirmModal from './ConfirmModal.vue'
 
 const { t } = useI18n()
 const { deleteAllProjects } = useDBStore()
@@ -33,3 +33,7 @@ async function handleClearAll() {
     </BaseButton>
   </div>
 </template>
+
+<docs>
+  Clear section in settings page
+</docs>

@@ -4,14 +4,32 @@ import Regions from 'wavesurfer.js/plugins/regions'
 import type { Project, ProjectFileSegment } from '../models/types'
 import type { Metadata, PostAudioSplitBodyPresetName } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
-import ConfirmModal from './dialogs/ConfirmModal.vue'
-import EditSongModal from './dialogs/EditSongModal.vue'
+import ConfirmModal from './ConfirmModal.vue'
+import EditSongModal from './EditSongModal.vue'
 
-const props = defineProps<{ file: Project['files'][0] }>()
+const props = defineProps<{
+  /**
+   * File object passed from Project
+   */
+  file: Project['files'][0]
+}>()
 
 const emits = defineEmits<{
+  /**
+   * Emits an event when file is successfully processed.
+   * @property {ProjectFileSegment[]} value Array of found segments
+   */
   (e: 'succeedProcess', v: ProjectFileSegment[]): void
+  /**
+   * Emits an event when file's peaks are computed.
+   * @property {ProjectFileSegment[]} value Array of peak values.
+   */
   (e: 'updatePeaks', v: number[][]): void
+  /**
+   * Emits an event when meta of each segment is changed.
+   * @property {number} songIndex Segment index in file.
+   * @property {number} metaIndex Meta index in segment.
+   */
   (e: 'changeMeta', songIndex: number, metaIndex: number): void
   (e: 'changePresetName', presetName: PostAudioSplitBodyPresetName): void
 }>()

@@ -32,7 +32,7 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
 </script>
 
 <template>
-  <ContentLayout v-if="project" :header="project.name">
+  <BaseLayout v-if="project" :header="project.name">
     <template #header>
       <div class="flex items-center justify-between">
         <h1 class="text-4xl">
@@ -46,7 +46,7 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
     </template>
 
     <template #default>
-      <div class="space-y-10">
+      <div class="pb-16 space-y-10">
         <ProjectItem
           v-for="file, fileIndex in project.files" :key="file.filePath"
           :file="file"
@@ -57,5 +57,5 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
         />
       </div>
     </template>
-  </ContentLayout>
+  </BaseLayout>
 </template>

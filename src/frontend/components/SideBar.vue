@@ -69,3 +69,7 @@ const dashboardBadgeCount = computed(() => getProjects().filter(({ visited }) =>
     </ul>
   </nav>
 </template>
+
+<docs>
+  Main sidebar of application
+</docs>

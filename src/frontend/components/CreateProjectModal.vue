@@ -2,7 +2,14 @@
 import { useFileDialog } from '@vueuse/core'
 
 const emits = defineEmits<{
+  /**
+   * Emits an event 'close' when the "Close" action is triggered.
+   */
   (e: 'close'): void
+  /**
+   * Emits an event 'ok' when the "OK" action is triggered.
+   * @property {Data} data formData when form is submitted
+   */
   (e: 'ok', data: Data): void
 }>()
 

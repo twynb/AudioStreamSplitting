@@ -2,6 +2,9 @@
 import { DEFAULT_TOAST_DURATION } from '../includes/constants'
 
 const props = defineProps<{
+  /**
+   * Toast passed from `ToastContainer`
+   */
   toast: Toast
 }>()
 
@@ -23,6 +26,7 @@ const interval = setInterval(() => {
       'border-destructive bg-destructive text-destructive-foreground': toast.variant === 'destructive',
     }"
   >
+    <!-- @slot Slot for customization for toast's content -->
     <slot>
       <div class="grid gap-3">
         <div v-if="toast.title" class="font-semibold">

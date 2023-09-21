@@ -3,11 +3,22 @@ import { onClickOutside } from '@vueuse/core'
 import type { Project } from '../models/types'
 
 defineProps<{
+  /**
+   * Project passed from dashboard page
+   */
   project: Project
 }>()
 
 const emits = defineEmits<{
+  /**
+   * Emits an event 'edit' when the "Edit" action is triggered.
+   * @property {string} id id of project
+   */
   (e: 'edit', id: string): void
+  /**
+   * Emits an event 'delete' when the "Delete" action is triggered.
+   * @property {string} id id of project
+   */
   (e: 'delete', id: string): void
 }>()
 

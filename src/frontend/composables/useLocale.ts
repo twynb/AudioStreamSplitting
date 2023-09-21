@@ -4,6 +4,11 @@ import {
   setI18nLanguage,
 } from '../modules/i18n'
 
+/**
+ * Manage the application's locale and localization settings.
+ *
+ * @returns An object containing available locales and the current locale.
+ */
 export function useLocale() {
   const { locale } = useI18n()
   if (!locale.value)
