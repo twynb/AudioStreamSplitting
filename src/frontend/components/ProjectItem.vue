@@ -245,7 +245,7 @@ function handleEdit(songIndex: number) {
       </div>
     </div>
 
-    <div class="relative flex items-center justify-between py-2">
+    <div class="relative flex items-end justify-between pb-3 pt-1">
       <div class="space-y-1">
         <BaseLabel>{{ t('song.preset.index') }}</BaseLabel>
         <BaseSelect
@@ -257,7 +257,7 @@ function handleEdit(songIndex: number) {
       </div>
 
       <BaseButton
-        class="absolute-center"
+        class="absolute bottom-3 left-1/2 -translate-x-1/2"
         :disabled="isAudioLoading || isProcessing"
         @click="handleProcess"
       >
