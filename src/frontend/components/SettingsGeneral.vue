@@ -7,7 +7,7 @@ const { t } = useI18n()
 const { currentLocal } = useLocale()
 const localOpts = Object.entries(LangMap).map(([key, value]) => ({ label: value, value: key }))
 
-const preferredFileType = useLocalStorage('preferred-file-type', { fileType: 'mp3', enable: false })
+const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
 </script>
 
 <template>
@@ -20,9 +20,7 @@ const preferredFileType = useLocalStorage('preferred-file-type', { fileType: 'mp
 
     <div class="space-y-5">
       <div class="flex items-center justify-between">
-        <h3>
-          {{ t('settings.general.language') }}
-        </h3>
+        <h3>{{ t('settings.general.language') }}</h3>
 
         <BaseSelect
           v-model="currentLocal"
@@ -31,15 +29,19 @@ const preferredFileType = useLocalStorage('preferred-file-type', { fileType: 'mp
         />
       </div>
 
-      <div class="flex items-center justify-between">
-        <h3>
-          {{ t('settings.general.preferred_file_type') }}
-        </h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 :class="{ 'text-muted-foreground': saveSettings.shouldAsk }">
+            {{ t('settings.general.save_file_type') }}
+          </h3>
 
-        <div class="h-40px flex items-center gap-x-3">
-          <BaseSelect v-if="preferredFileType.enable" v-model="preferredFileType.fileType" class="min-w-100px" :options="SUPPORT_FILE_TYPES.map(t => ({ label: t, value: t }))" />
+          <BaseSelect v-model="saveSettings.fileType" class="min-w-100px" :options="SUPPORT_FILE_TYPES.map(t => ({ label: t, value: t }))" :disabled="saveSettings.shouldAsk" />
+        </div>
 
-          <BaseSwitch v-model="preferredFileType.enable" />
+        <div class="flex items-center justify-between">
+          <h3>{{ t('settings.general.ask_file_type') }}</h3>
+
+          <BaseSwitch v-model="saveSettings.shouldAsk" />
         </div>
       </div>
     </div>

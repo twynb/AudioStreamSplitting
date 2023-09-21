@@ -38,7 +38,8 @@
     "general": {
       "index": "General",
       "language": "Language",
-      "preferred_file_type": "Preferred download file type"
+      "save_file_type": "Save file type",
+      "ask_file_type": "Ask me what to do with each save"
     },
     "appearance": {
       "index": "Appearance",

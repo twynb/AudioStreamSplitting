@@ -24,7 +24,7 @@ const { toast } = useToastStore()
 const { t } = useI18n()
 const router = useRouter()
 const hash = useHash(props.file.filePath)
-const preferredFileType = useLocalStorage('preferred-file-type', { fileType: 'mp3', enable: false })
+const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
@@ -155,7 +155,7 @@ async function handleStore(
   currentStoringIndex.value = songIndex
   isStoring.value = true
 
-  const _metadata = metadata ?? { album: 'unknown', artist: 'unknown', title: 'unknown', year: '0' }
+  const _metadata = metadata ?? { album: '', artist: '', title: 'unknown', year: '0' }
 
   try {
     await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType })
@@ -169,6 +169,10 @@ async function handleStore(
       toast({ content: t((e as AxiosError).response?.data as string), variant: 'destructive' })
     else
       toast({ content: t('toast.unkown_error'), variant: 'destructive' })
+
+    currentStoringIndex.value = -1
+    isStoring.value = false
+    throw e
   }
 
   currentStoringIndex.value = -1
@@ -184,8 +188,18 @@ async function handleStoreAll(
     return
 
   isStoringAll.value = true
-  for await (const [songIndex, { offset, duration, metadataOptions, metaIndex }] of props.file.segments.entries())
-    offset && duration && await handleStore({ offset, duration, songIndex, fileType, metadata: metadataOptions?.[metaIndex] })
+  for await (const [songIndex, { offset, duration, metadataOptions, metaIndex }] of props.file.segments.entries()) {
+    if (!offset || !duration)
+      return
+
+    try {
+      await handleStore({ offset, duration, songIndex, fileType, metadata: metadataOptions?.[metaIndex] })
+    }
+    catch (e) {
+      isStoringAll.value = false
+      break
+    }
+  }
 
   isStoringAll.value = false
 }
@@ -244,7 +258,7 @@ function handleEdit(songIndex: number) {
 
       <BaseButton
         class="absolute-center"
-        :disabled="isProcessing"
+        :disabled="isAudioLoading || isProcessing"
         @click="handleProcess"
       >
         <BaseLoader
@@ -255,24 +269,8 @@ function handleEdit(songIndex: number) {
         {{ t('button.process') }}
       </BaseButton>
 
-      <BaseButton
-        v-if="preferredFileType.enable"
-        :disabled="isSaveAllBtnDisabled"
-        @click="handleStoreAll({ fileType: preferredFileType.fileType })"
-      >
-        <div class="flex items-center gap-2">
-          {{ t('button.save_all') }}
-          <BaseLoader
-            v-if=" isStoringAll"
-            class="border-primary-foreground !border-2"
-            :size="15"
-          />
-          <span v-else class="i-carbon-download" />
-        </div>
-      </BaseButton>
-
       <BaseMenuButton
-        v-else
+        v-if="saveSettings.shouldAsk"
         variant="primary"
         :icon-only="false"
         menu-class="!top-[calc(100%+0.5rem)] w-full"
@@ -301,6 +299,22 @@ function handleEdit(songIndex: number) {
           </li>
         </template>
       </BaseMenuButton>
+
+      <BaseButton
+        v-else
+        :disabled="isSaveAllBtnDisabled"
+        @click="handleStoreAll({ fileType: saveSettings.fileType })"
+      >
+        <div class="flex items-center gap-2">
+          {{ t('button.save_all') }}
+          <BaseLoader
+            v-if=" isStoringAll"
+            class="border-primary-foreground !border-2"
+            :size="15"
+          />
+          <span v-else class="i-carbon-download" />
+        </div>
+      </BaseButton>
     </div>
 
     <table class="w-full caption-bottom text-sm">
@@ -375,27 +389,8 @@ function handleEdit(songIndex: number) {
           </td>
 
           <td class="p-4 text-right align-middle">
-            <BaseButton
-              v-if="preferredFileType.enable" variant="ghost"
-              :disabled="!duration || !offset || isStoring"
-              @click="duration && offset && handleStore({
-                duration,
-                offset,
-                metadata: metadataOptions?.[metaIndex],
-                songIndex,
-                fileType: preferredFileType.fileType,
-              })"
-            >
-              <BaseLoader
-                v-if="currentStoringIndex === songIndex && isStoring"
-                class="border-primary !border-2"
-                :size="15"
-              />
-              <span v-else class="i-carbon-download" />
-            </BaseButton>
-
             <BaseMenuButton
-              v-else
+              v-if="saveSettings.shouldAsk"
               :disabled="!duration || !offset || isStoring"
               :length="SUPPORT_FILE_TYPES.length"
             >
@@ -424,6 +419,26 @@ function handleEdit(songIndex: number) {
                 </li>
               </template>
             </BaseMenuButton>
+
+            <BaseButton
+              v-else
+              variant="ghost"
+              :disabled="!duration || !offset || isStoring"
+              @click="duration && offset && handleStore({
+                duration,
+                offset,
+                metadata: metadataOptions?.[metaIndex],
+                songIndex,
+                fileType: saveSettings.fileType,
+              })"
+            >
+              <BaseLoader
+                v-if="currentStoringIndex === songIndex && isStoring"
+                class="border-primary !border-2"
+                :size="15"
+              />
+              <span v-else class="i-carbon-download" />
+            </BaseButton>
           </td>
         </tr>
       </tbody>
