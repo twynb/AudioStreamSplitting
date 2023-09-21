@@ -3,7 +3,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <ContentLayout :header="t('sidebar.settings')">
+  <BaseLayout :header="t('sidebar.settings')">
     <div class="max-w-80% space-y-10">
       <SettingsGeneral />
 
@@ -11,5 +11,5 @@ const { t } = useI18n()
 
       <SettingsAdvanced />
     </div>
-  </ContentLayout>
+  </BaseLayout>
 </template>

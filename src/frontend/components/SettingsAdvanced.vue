@@ -100,3 +100,7 @@ async function setApiKey(key: EnvKey) {
     </div>
   </div>
 </template>
+
+<docs>
+  Advanced section in settings page
+</docs>

@@ -7,6 +7,12 @@ interface PostConfig<T> {
   onSuccess?: (data: T) => void
 }
 
+/**
+ * Execute a POST request and manage the response data, loading state, and errors.
+ *
+ * @param config - The configuration for the POST request.
+ * @returns An object containing the response data, loading state, error message, and an execution function.
+ */
 export function usePost<T>(config: PostConfig<T>) {
   const data = ref<T>()
   const isFetching = ref(false)

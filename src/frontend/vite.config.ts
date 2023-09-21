@@ -74,14 +74,12 @@ export default defineConfig({
       },
     },
   },
+
   resolve: {
-    alias: {
-      '@components': 'src/frontend/components',
-      '@dialogs': 'src/frontend/components/dialogs',
-    },
+    alias: { '@components': 'src/frontend/components' },
   },
+
   envDir: '../../',
-  test: {
-    environment: 'jsdom',
-  },
+
+  test: { environment: 'jsdom' },
 })

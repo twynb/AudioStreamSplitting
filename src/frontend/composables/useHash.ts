@@ -1,4 +1,10 @@
 // https://gist.github.com/jlevy/c246006675becc446360a798e2b2d781
+/**
+ * Generate a hash value for a given string.
+ *
+ * @param str - The input string to hash.
+ * @returns A hashed representation of the input string.
+ */
 export function useHash(str: string) {
   let hash = 0
   for (let i = 0; i < str.length; i++) {

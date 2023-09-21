@@ -20,3 +20,7 @@ const router = useRouter()
     </div>
   </div>
 </template>
+
+<docs>
+  Component for not found page
+</docs>
