@@ -71,7 +71,7 @@ def lookup(fingerprint, fingerprint_duration, api_key):
 
     :param fingerprint: the fingerprint generated using ``_create_fingerprint``.
     :param fingerprint_duration: duration of the fingerprinted data, in seconds.
-    :returns: A ``list`` of ``dict``s containing the results.
+    :returns: A ``list`` of ``dict`` s containing the results.
         Example::
 
             [
@@ -114,7 +114,7 @@ def _parse_lookup_result(data):
         * albumartist
 
     :param data: The parsed JSON response from acoustid.lookup().
-    :returns: A ``list`` of ``dict``s containing metadata.
+    :returns: A ``list`` of ``dict`` s containing metadata.
     :raise acoustid.WebServiceError: if the response is incomplete or the request failed.
     """
     if data["status"] != "ok":
@@ -154,8 +154,8 @@ def _merge_matching_recordings(recordings: list):
 
     TODO: This should be refactored to be more pythonic and readable, if possible.
 
-    :param recordings: a list of ``recording`` ``dict``s as provided by the AcoustID API.
-    :returns: a list of ``recordings`` where matching entries were merged.
+    :param recordings: a ``list`` of ``recording`` ``dict`` s as provided by the AcoustID API.
+    :returns: a ``list`` of ``recordings`` where matching entries were merged.
     """
     grouped_by_title_and_artist = {}
     artists_by_title_and_artist = {}

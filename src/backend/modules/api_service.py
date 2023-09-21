@@ -73,6 +73,7 @@ class ApiService:
 
     The specific metadata that can be retrieved depends on the API that identified the song. The
     following metadata can be retrieved by at least one of the supported APIs:
+
         * artist
         * title
         * album
