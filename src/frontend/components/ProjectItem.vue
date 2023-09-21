@@ -2,7 +2,7 @@
 import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/plugins/regions'
 import type { Project, ProjectFileSegment } from '../models/types'
-import type { Metadata } from '../models/api'
+import type { Metadata, PostAudioSplitBodyPresetName } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
 import ConfirmModal from './dialogs/ConfirmModal.vue'
 import EditSongModal from './dialogs/EditSongModal.vue'
@@ -13,6 +13,7 @@ const emits = defineEmits<{
   (e: 'succeedProcess', v: ProjectFileSegment[]): void
   (e: 'updatePeaks', v: number[][]): void
   (e: 'changeMeta', songIndex: number, metaIndex: number): void
+  (e: 'changePresetName', presetName: PostAudioSplitBodyPresetName): void
 }>()
 
 const { postAudioSplit, postAudioStore } = getAudioStreamSplittingAPI()
@@ -50,34 +51,37 @@ onMounted(() => {
   })
 })
 
+const presetNameOpts = [
+  { value: 'EXTRA_STRICT', label: t('song.preset.extra_strict') },
+  { value: 'STRICT', label: t('song.preset.strict') },
+  { value: 'NORMAL', label: t('song.preset.normal') },
+  { value: 'LENIENT', label: t('song.preset.lenient') },
+  { value: 'EXTRA_LENIENT', label: t('song.preset.extra_lenient') },
+]
 const isProcessing = ref(false)
+const presetName = ref(props.file.presetName ?? 'EXTRA_STRICT')
+watch(presetName, () => emits('changePresetName', presetName.value))
 async function handleProcess() {
   isProcessing.value = true
+  regions.value?.clearRegions()
+
   try {
-    let segments: ProjectFileSegment[]
-    if (props.file.segments) {
-      segments = props.file.segments
-    }
-    else {
-      toast({ content: t('toast.long_process') })
-      const { data } = await postAudioSplit({ filePath: props.file.filePath })
+    toast({ content: t('toast.long_process') })
+    const { data } = await postAudioSplit({ filePath: props.file.filePath, presetName: presetName.value })
 
-      if (!data.segments || !data.segments?.length)
-        throw new Error('This audio cannot be split')
+    if (!data.segments || !data.segments?.length)
+      throw new Error('This audio cannot be split')
 
-      data.segments = data.segments
-        .map((s) => {
-          const notNullOpts = s.metadataOptions?.filter(o => o.album || o.artist || o.title || o.year)
-          const notDuplicatedOpts = [...new Set((notNullOpts ?? []).map(o => JSON.stringify(o)))]
-            .map(o => JSON.parse(o))
-          return { ...s, metadataOptions: notDuplicatedOpts }
-        })
+    data.segments = data.segments
+      .map((s) => {
+        const notNullOpts = s.metadataOptions?.filter(o => o.album || o.artist || o.title || o.year)
+        const notDuplicatedOpts = [...new Set((notNullOpts ?? []).map(o => JSON.stringify(o)))]
+          .map(o => JSON.parse(o))
+        return { ...s, metadataOptions: notDuplicatedOpts }
+      })
 
-      segments = data.segments.map(s => ({ ...s, metaIndex: 0 }))
-
-      emits('succeedProcess', segments)
-    }
-
+    const segments = data.segments.map(s => ({ ...s, metaIndex: 0 }))
+    emits('succeedProcess', segments)
     addRegion(segments)
   }
   catch (e) {
@@ -191,15 +195,18 @@ function handleEdit(songIndex: number) {
       </div>
     </div>
 
-    <p v-if="file.fileType === 'webm'" class="text-center text-sm text-muted-foreground">
-      {{ t('song.no_webm') }}
-    </p>
+    <div class="flex items-center justify-between py-2">
+      <div class="space-y-1">
+        <BaseLabel>{{ t('song.preset.index') }}</BaseLabel>
+        <BaseSelect
+          v-model="presetName"
+          :disabled="isProcessing"
+          :options="presetNameOpts"
+          class="min-w-200px -ml-1"
+        />
+      </div>
 
-    <div class="flex-center py-2">
-      <BaseButton
-        :disabled="file.fileType === 'webm' || isProcessing || file.segments"
-        @click="handleProcess"
-      >
+      <BaseButton :disabled="isProcessing" @click="handleProcess">
         <BaseLoader
           v-if="isProcessing"
           class="mr-2 border-primary-foreground !border-2"

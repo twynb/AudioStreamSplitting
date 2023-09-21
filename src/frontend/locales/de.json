@@ -80,7 +80,15 @@
     "unknown": "Unbekannt",
     "genre": "Genre",
     "isrc": "ISRC",
-    "albumartist": "Album-Interpret"
+    "albumartist": "Album-Interpret",
+    "preset": {
+      "extra_lenient": "Extra locker",
+      "extra_strict": "Extra strikt",
+      "index": "Voreingestellt",
+      "lenient": "Locker",
+      "normal": "Normal",
+      "strict": "Strikt"
+    }
   },
   "toast": {
     "empty_field": "Bitte geben Sie einen gültigen Wert ein!",

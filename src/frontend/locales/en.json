@@ -80,7 +80,15 @@
     "unknown": "unknown",
     "genre": "Genre",
     "isrc": "ISRC",
-    "albumartist": "Album artist"
+    "albumartist": "Album artist",
+    "preset": {
+      "index": "Preset",
+      "extra_strict": "Extra Strict",
+      "strict": "Strict",
+      "normal": "Normal",
+      "lenient": "Lenient",
+      "extra_lenient": "Extra Lenient"
+    }
   },
   "toast": {
     "empty_field": "Please enter a valid value!",
