@@ -191,12 +191,12 @@ def _merge_matching_recordings(recordings: list):
 
 def _filter_out_compilations_from_releasegroups(releasegroups):
     """If there is at least one album without a secondary type (such as "compilation", "soundtrack",
-    etc.) in ``releasegroups``,
-    exclude compilation albums.
+    etc.) in ``releasegroups``, exclude all albums with one.
     Otherwise, return the unfiltered list of releasegroups.
 
     :param releasegroups: The detected release groups.
-    :returns: The filtered list of release groups.
+    :returns: The filtered list of release groups, or the unfiltered list if the filtered list would
+        be empty.
     """
     filtered_releasegroups = [
         releasegroup
