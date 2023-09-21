@@ -26,7 +26,7 @@ def split():
     preset = getattr(Preset, preset_name, Preset.NORMAL)
 
     if not os.path.exists(file_path):
-        return "File does not exist!", 400
+        return "BE.FILE_NOT_EXIST", 400
 
     generator = segment_file(file_path, preset)
     segments, mismatch_offsets = ApiService().identify_all_from_generator(
@@ -51,13 +51,13 @@ def get_segment():
     data = request.json
     file_path = data["filePath"]
     if not os.path.exists(file_path):
-        return "File does not exist!", 400
+        return "BE.FILE_NOT_EXIST", 400
 
     offset = data["offset"]
     duration = data["duration"]
 
     if offset <= 0 or duration <= 0:
-        return "Invalid offset or duration!", 400
+        return "BE.INVALID_OFFSET_DURATION", 400
 
     audio_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=None
@@ -97,10 +97,10 @@ def store():
     data = request.json
     file_path = data["filePath"]
     if not os.path.exists(file_path):
-        return "File does not exist!", 400
+        return "BE.FILE_NOT_EXIST", 400
     target_directory = data["targetDirectory"]
     if not os.path.exists(target_directory):
-        return "Target directory does not exist!", 400
+        return "BE.TARGET_DIR_NOT_EXIST", 400
 
     metadata = data["metadata"]
 
@@ -116,14 +116,14 @@ def store():
             metadata["title"] if "title" in metadata else "",
             metadata["artist"] if "artist" in metadata else "",
             metadata["album"] if "album" in metadata else "",
-            str(metadata["year"]) if "year" in metadata else "",
+            metadata["year"] if "year" in metadata else "",
         )
     )
 
     offset = data["offset"]
     duration = data["duration"]
     if offset <= 0 or duration <= 0:
-        return "Invalid offset or duration!", 400
+        return "BE.INVALID_OFFSET_DURATION", 400
 
     audio_data, sample_rate = read_audio_file_to_numpy(
         file_path, mono=False, offset=offset, duration=duration, sample_rate=None
@@ -139,13 +139,28 @@ def store():
     return jsonify({"success": True})
 
 
+@audio_bp.route("/check_path", methods=["POST"])
+def check_path():
+    """Check if audio path exists"""
+
+    data = request.json
+    audio_path = data["audioPath"]
+
+    if os.path.exists(audio_path):
+        return "", 200
+
+    return "BE.FILE_NOT_EXIST", 400
+
+
 @audio_bp.route("/get", methods=["POST"])
 def get():
     """Load an audio file into the frontend.
-    :returns: The audio path. A 400 error if it does not exist.
+    :returns: audio file .
     """
     data = request.json
     audio_path = data["audioPath"]
-    if not os.path.exists(audio_path):
-        return "File does not exist!", 400
-    return send_file(audio_path)
+
+    if os.path.exists(audio_path):
+        return send_file(audio_path)
+
+    return "BE.FILE_NOT_EXIST", 400

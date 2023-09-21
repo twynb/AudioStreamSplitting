@@ -40,39 +40,19 @@ onClickOutside(moreBtn, () => isMoreMenuOpen.value = false)
           {{ project.name }}
         </p>
 
-        <BaseButton
-          ref="moreBtn" variant="ghost" icon-only
-          @click.stop="isMoreMenuOpen = true"
-          @keydown.enter.stop="isMoreMenuOpen = true"
-          @keydown.space.stop="isMoreMenuOpen = true"
-          @keydown.escape.stop="isMoreMenuOpen = false"
-        >
-          <span class="i-carbon-overflow-menu-vertical" />
-        </BaseButton>
-
-        <Transition
-          enter-active-class="transition-all origin-top-right"
-          leave-active-class="transition-all origin-top-right"
-          enter-from-class="opacity-0 scale-90"
-          leave-to-class="opacity-0 scale-90"
-        >
-          <div v-if="isMoreMenuOpen" tabindex="2" class="absolute right-2 top-2 border border-border rounded-sm bg-primary-foreground py-1">
-            <ul>
-              <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('edit', project.id)">
-                  <span class="i-carbon-edit" />
-                  {{ t('button.edit') }}
-                </BaseButton>
-              </li>
-              <li class="px-1">
-                <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('delete', project.id)">
-                  <span class="i-carbon-trash-can" />
-                  {{ t('button.delete') }}
-                </BaseButton>
-              </li>
-            </ul>
-          </div>
-        </Transition>
+        <BaseMenuButton :length="1">
+          <template #button>
+            <span class="i-carbon-overflow-menu-vertical" />
+          </template>
+          <template #content>
+            <li class="px-1">
+              <BaseButton variant="ghost" class="w-full gap-x-2 !justify-start" @click.prevent.stop="emits('delete', project.id)">
+                <span class="i-carbon-trash-can" />
+                {{ t('button.delete') }}
+              </BaseButton>
+            </li>
+          </template>
+        </BaseMenuButton>
       </div>
 
       <p class="text-balance text-muted-foreground -mt-2">
