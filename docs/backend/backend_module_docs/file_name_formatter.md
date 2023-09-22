@@ -13,7 +13,7 @@ Public functions:
 
 ### format_file_name
 
-Format a file name based on the given template and metadata. The template should contain at least one of the placeholders ``{{TITLE}}``, ``{{ARTIST}}``, ``{{ALBUM}}``, ``{{YEAR}}``, which will be replaced with the provided metadata.
+Format a file name based on the given template and metadata. The template should contain at least one of the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}``, ``{YEAR}``, which will be replaced with the provided metadata.
 
 #### format_file_name:Arguments
 

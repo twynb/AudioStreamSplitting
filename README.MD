@@ -42,7 +42,7 @@ After completing the steps from [Setup](#setup), to split up a file, do the foll
 6. Open your new project by clicking it, then click "Process" to process the file. This will take a while, so do not worry if it seems to be stuck here for a few minutes.
 7. After processing is finished, you will see a list of songs the app detected.
 8. If a song's data seems off to you, see if the "Edit" button (represented by the pen icon) is enabled (not greyed out). If it is, click it and choose the correct metadata.
-9. Click the save button (represented by the arrow pointing down) to save the song. If everything went well, the song has now successfully been saved to the location you specified before.
+9. Click the save button (represented by the arrow pointing down) to save the song. If everything went well, the song has now successfully been saved to the location you specified before. Alternatively use the "Save all" button to save all songs.
 
 #### Project View
 
@@ -56,9 +56,13 @@ Opening a project will show a screen like this:
 
 <p><img src="./assets/project_view.jpg" /></p>
 
-You can see the songs discovered by the app, edit their metadata (as of current, this means choosing which of the metadata the app found might fit) and save them to your device.
+Clicking "Process" will attempt to split the file up and identify the songs the app discovers. This will take a while, so do not worry if it seems to be stuck for a few minutes after starting the processing.
 
-If a bit of metadata says "unknown" (such as the "album" for "Bad Chick" in this example screenshot), that means the app couldn't identify it. Setting it manually is a planned feature for a future version.
+The "Preset" drop-down allows you to choose between different sets of parameters for the splitting. You can usually leave this setting on "Normal", but if you notice excessive splitting errors, this can help alleviate them.
+
+Once processing is done, you can see the songs discovered by the app, edit their metadata (as of current, this means choosing which of the metadata the app found might fit) and save them to your device. The "Save all" button will save every song.
+
+If a bit of metadata says "unknown" (such as the "album" for "Hold The Line" in this example screenshot), that means the app couldn't identify it. Setting it manually is a planned feature for a future version.
 
 #### Recording
 
@@ -77,6 +81,8 @@ The settings tab allows you to configure AudioStreamSplitting to your liking:
 <p><img src="./assets/settings.jpg" /></p>
 
 The language field currently supports English, German, French and Spanish. Note that only the English and German translations are actively maintained, so translation issues will arise when using the other languages.
+
+Turning off the "Ask me what to do with each save" option allows choosing a file type, which all files will be saved as by default. If this is not set, you will instead be asked to choose a file type every time you save a file.
 
 The "Advanced" section is where the most important settings are situated. Note that for changes to these settings to apply, you must click the "Set" button next to the setting you changed.
 
