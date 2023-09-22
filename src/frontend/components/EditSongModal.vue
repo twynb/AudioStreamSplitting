@@ -1,9 +1,24 @@
 <script setup lang="ts">
 import type { Metadata } from 'models/api'
 
-const props = defineProps<{ metadatas: Metadata[]; opt: string }>()
+const props = defineProps<{
+  /**
+   * Array of metadata passed from edited segment
+   */
+  metadatas: Metadata[]
+  /**
+   * Selected opt as initial value
+   */
+  opt: string
+}>()
 
-const emits = defineEmits<{ (e: 'change', v: number): void }>()
+const emits = defineEmits<{
+  /**
+   * Emits an event 'change' when the option changes.
+   * @property {number} v value of changed option
+   */
+  (e: 'change', v: number): void
+}>()
 
 const opts = props.metadatas.map((m, i) =>
   ({

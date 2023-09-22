@@ -16,7 +16,8 @@
     "save": "Save",
     "set": "Set",
     "process": "Process",
-    "clear": "Clear"
+    "clear": "Clear",
+    "save_all": "Save all"
   },
   "placeholder": {},
   "sidebar": {
@@ -36,7 +37,9 @@
   "settings": {
     "general": {
       "index": "General",
-      "language": "Language"
+      "language": "Language",
+      "save_file_type": "Save file type",
+      "ask_file_type": "Ask me what to do with each save"
     },
     "appearance": {
       "index": "Appearance",
@@ -141,5 +144,10 @@
       "name_exists_already": "{name} already exists. Please enter a different name.",
       "no_file_uploaded": "Please upload at least one file to create a project."
     }
+  },
+  "BE": {
+    "FILE_NOT_EXIST": "File does not exist!",
+    "TARGET_DIR_NOT_EXIST": "Target directory does not exist!",
+    "INVALID_OFFSET_DURATION": "Invalid offset or duration!"
   }
 }

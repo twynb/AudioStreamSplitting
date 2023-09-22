@@ -22,8 +22,9 @@
     "typecheck": "vue-tsc -p src/frontend --noEmit",
     "orval": "orval --config src/frontend/orval.config.ts",
     "up": "taze major -I",
-    "docs:generate": "python3 docs/generate_docs.py",
-    "docs:fe": "vue-docgen -c src/frontend/docgen.config.js && vitepress dev docs/frontend"
+    "docs:gen:be": "python3 docs/generate_docs.py",
+    "docs:gen:fe": "vue-docgen -c src/frontend/docgen.config.js",
+    "docs": "npm run docs:gen:be && npm run docs:gen:fe && vitepress dev docs"
   },
   "dependencies": {
     "@vueuse/core": "^10.4.1",

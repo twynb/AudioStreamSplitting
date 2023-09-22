@@ -8,7 +8,7 @@ export const useEnvStore = defineStore('env', () => {
     SAVE_DIRECTORY: import.meta.env.VITE_SAVE_DIRECTORY,
   })
 
-  const lsEnv = useLocalStorage('env', defaultEnv)
+  const lsEnv = useLocalStorage('env', defaultEnv, { deep: true })
 
   return { defaultEnv, lsEnv }
 })

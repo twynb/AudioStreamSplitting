@@ -84,7 +84,6 @@ declare global {
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useDriver: typeof import('./composables/useDriver')['useDriver']
-  const useDriverStore: typeof import('./stores/useDriverStore')['useDriverStore']
   const useEnvStore: typeof import('./stores/useEnvStore')['useEnvStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
