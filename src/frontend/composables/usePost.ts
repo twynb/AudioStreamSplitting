@@ -10,8 +10,19 @@ interface PostConfig<T> {
 /**
  * Execute a POST request and manage the response data, loading state, and errors.
  *
- * @param config - The configuration for the POST request.
+ * @param config The configuration for the POST request.
  * @returns An object containing the response data, loading state, error message, and an execution function.
+ *
+ * @example
+ * ```ts
+ * const { data, isFetching, error, execute } = useGet({
+ *    url: '/api/example',
+ *    body: { filePath: '/tmp/some.mp3' },
+ *    onSuccess(data){
+ *      //
+ *     }
+ * })
+ * ```
  */
 export function usePost<T>(config: PostConfig<T>) {
   const data = ref<T>()

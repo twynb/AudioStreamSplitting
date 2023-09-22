@@ -1,8 +1,16 @@
 /**
  * Converts a duration in seconds to a formatted string representation in minutes and seconds.
  *
- * @param secs - The duration in seconds to convert.
- * @returns A formatted string representing the duration in minutes and seconds,
+ * @param secs The duration in seconds to convert.
+ * @returns A formatted string representing the duration in minutes and seconds.
+ *
+ * @example
+ * ```ts
+ * useConvertSecToMin(135) // 2m 15s
+ *
+ * useConvertSecToMin(120) // 2m
+ *
+ * ```
  */
 export function useConvertSecToMin(secs: number) {
   const _secs = Math.floor(secs)

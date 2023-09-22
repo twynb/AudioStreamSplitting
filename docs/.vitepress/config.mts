@@ -1,13 +1,37 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { defineConfig } from 'vitepress'
+import { genTsDocs } from './scripts'
 
+/**
+ * Paths
+ */
 const projectPath = path.resolve(__filename, '..', '..', '..')
-const docsFrontendPath = path.join(projectPath, 'docs', 'frontend')
-const srcFrontendPath = path.join(projectPath, 'src', 'frontend')
 
-const docsComponents = fs.readdirSync(path.join(docsFrontendPath, 'components'))
+const srcFrontendPath = path.join(projectPath, 'src', 'frontend')
+const srcComposablesPath = path.join(srcFrontendPath, 'composables')
+
+const docsFrontendPath = path.join(projectPath, 'docs', 'frontend')
+const docsComponentsPath = path.join(docsFrontendPath, 'components')
+const docsComposablesPath = path.join(docsFrontendPath, 'composables')
+
+const docsComponents = fs.readdirSync(docsComponentsPath)
 const componentsSidebarItems = docsComponents
+  .filter((f) => {
+    const [name, ext] = f.split('.')
+    return name !== 'index' && ext === 'md'
+  }).map((f) => {
+    const name = f.split('.')[0]
+    return { text: name, link: `/${name}` }
+  })
+
+const srcComposables = fs.readdirSync(srcComposablesPath)
+genTsDocs({
+  dirPath: docsComposablesPath,
+  inputFiles: srcComposables.map(f => path.join(srcComposablesPath, f)),
+})
+const docsComposables = fs.readdirSync(docsComposablesPath)
+const composablesSidebarItems = docsComposables
   .filter((f) => {
     const [name, ext] = f.split('.')
     return name !== 'index' && ext === 'md'
@@ -61,7 +85,7 @@ export default defineConfig({
             text: 'Composables',
             base: '/frontend/composables',
             collapsed: false,
-            items: [],
+            items: composablesSidebarItems,
           },
         ],
       },

@@ -4,7 +4,7 @@ import { LangMap, SUPPORT_FILE_TYPES } from '../includes/constants'
 
 const { t } = useI18n()
 
-const { currentLocal } = useLocale()
+const { currentLocale } = useLocale()
 const localOpts = Object.entries(LangMap).map(([key, value]) => ({ label: value, value: key }))
 
 const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
@@ -23,7 +23,7 @@ const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldA
         <h3>{{ t('settings.general.language') }}</h3>
 
         <BaseSelect
-          v-model="currentLocal"
+          v-model="currentLocale"
           :options="localOpts"
           class="w-200px"
         />
