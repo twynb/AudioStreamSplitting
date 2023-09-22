@@ -36,13 +36,13 @@ After completing the steps from [Setup](#setup), to split up a file, do the foll
 
 1. On the navigation bar on the right, click the "Settings" icon to enter the settings tab.
 2. In the settings tab, enter the API Keys you generated during setup, and click the "Set" buttons next to their input fields to save them. Also enter the directory resulting files should be saved in in "Save Directory" and click the "Set" button next to that field.
-3. If you want to, alter the file name template in "Output File Name". This will be used to name the single files after splitting. You can use the placeholders ``{{TITLE}}``, ``{{ARTIST}}``, ``{{ALBUM}}`` and ``{{YEAR}}``, which will be replaced by the corresponding data for the song you are saving. Once again click the "Set" button to save this.
+3. If you want to, alter the file name template in "Output File Name". This will be used to name the single files after splitting. You can use the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced by the corresponding data for the song you are saving. Once again click the "Set" button to save this.
 4. Go back to the dashboard tab by clicking the "Dashboard" icon in the navigation bar.
 5. Click "New" to create a new project, then give it a name and choose the file you want to split up. Click "Create" to finish creating the project.
 6. Open your new project by clicking it, then click "Process" to process the file. This will take a while, so do not worry if it seems to be stuck here for a few minutes.
 7. After processing is finished, you will see a list of songs the app detected.
 8. If a song's data seems off to you, see if the "Edit" button (represented by the pen icon) is enabled (not greyed out). If it is, click it and choose the correct metadata.
-9. Click the save button (represented by the arrow pointing down) to save the song. If everything went well, the song has now successfully been saved to the location you specified before.
+9. Click the save button (represented by the arrow pointing down) to save the song. If everything went well, the song has now successfully been saved to the location you specified before. Alternatively use the "Save all" button to save all songs.
 
 #### Project View
 
@@ -56,9 +56,13 @@ Opening a project will show a screen like this:
 
 <p><img src="./assets/project_view.jpg" /></p>
 
-You can see the songs discovered by the app, edit their metadata (as of current, this means choosing which of the metadata the app found might fit) and save them to your device.
+Clicking "Process" will attempt to split the file up and identify the songs the app discovers. This will take a while, so do not worry if it seems to be stuck for a few minutes after starting the processing.
 
-If a bit of metadata says "unknown" (such as the "album" for "Bad Chick" in this example screenshot), that means the app couldn't identify it. Setting it manually is a planned feature for a future version.
+The "Preset" drop-down allows you to choose between different sets of parameters for the splitting. You can usually leave this setting on "Normal", but if you notice excessive splitting errors, this can help alleviate them.
+
+Once processing is done, you can see the songs discovered by the app, edit their metadata (as of current, this means choosing which of the metadata the app found might fit) and save them to your device. The "Save all" button will save every song.
+
+If a bit of metadata says "unknown" (such as the "album" for "Hold The Line" in this example screenshot), that means the app couldn't identify it. Setting it manually is a planned feature for a future version.
 
 #### Recording
 
@@ -78,13 +82,15 @@ The settings tab allows you to configure AudioStreamSplitting to your liking:
 
 The language field currently supports English, German, French and Spanish. Note that only the English and German translations are actively maintained, so translation issues will arise when using the other languages.
 
+Turning off the "Ask me what to do with each save" option allows choosing a file type, which all files will be saved as by default. If this is not set, you will instead be asked to choose a file type every time you save a file.
+
 The "Advanced" section is where the most important settings are situated. Note that for changes to these settings to apply, you must click the "Set" button next to the setting you changed.
 
 You need to provide at least one API Key for the song identification to work, but it is strongly recommended to provide as many as possible (as outlined in the [Setup](#setup) section).
 
 The "Save Directory" setting should be set to the directory you want to save the resulting files into. Make sure that this is an existing directory on your device, as saving files will not work otherwise.
 
-The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{{TITLE}}``, ``{{ARTIST}}``, ``{{ALBUM}}`` and ``{{YEAR}}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{{TITLE}}_{{ARTIST}}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{{TITLE}}`` placeholder in the file name to avoid overwriting files.
+The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{TITLE}_{ARTIST}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{TITLE}`` placeholder in the file name to avoid overwriting files.
 
 ## License
 

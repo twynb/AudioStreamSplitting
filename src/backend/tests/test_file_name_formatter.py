@@ -25,7 +25,7 @@ def test_replace_all_order():
 
 
 def test_format_file_name_full():
-    format = "{{ARTIST}}_{{TITLE}}_{{ALBUM}}_{{YEAR}}"
+    format = "{ARTIST}_{TITLE}_{ALBUM}_{YEAR}"
     assert (
         format_file_name(format, "MySong", "Arty", "ablum", "2003")
         == "Arty_MySong_ablum_2003"
