@@ -36,7 +36,7 @@ After completing the steps from [Setup](#setup), to split up a file, do the foll
 
 1. On the navigation bar on the right, click the "Settings" icon to enter the settings tab.
 2. In the settings tab, enter the API Keys you generated during setup, and click the "Set" buttons next to their input fields to save them. Also enter the directory resulting files should be saved in in "Save Directory" and click the "Set" button next to that field.
-3. If you want to, alter the file name template in "Output File Name". This will be used to name the single files after splitting. You can use the placeholders ``{{TITLE}}``, ``{{ARTIST}}``, ``{{ALBUM}}`` and ``{{YEAR}}``, which will be replaced by the corresponding data for the song you are saving. Once again click the "Set" button to save this.
+3. If you want to, alter the file name template in "Output File Name". This will be used to name the single files after splitting. You can use the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced by the corresponding data for the song you are saving. Once again click the "Set" button to save this.
 4. Go back to the dashboard tab by clicking the "Dashboard" icon in the navigation bar.
 5. Click "New" to create a new project, then give it a name and choose the file you want to split up. Click "Create" to finish creating the project.
 6. Open your new project by clicking it, then click "Process" to process the file. This will take a while, so do not worry if it seems to be stuck here for a few minutes.
@@ -84,7 +84,7 @@ You need to provide at least one API Key for the song identification to work, bu
 
 The "Save Directory" setting should be set to the directory you want to save the resulting files into. Make sure that this is an existing directory on your device, as saving files will not work otherwise.
 
-The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{{TITLE}}``, ``{{ARTIST}}``, ``{{ALBUM}}`` and ``{{YEAR}}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{{TITLE}}_{{ARTIST}}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{{TITLE}}`` placeholder in the file name to avoid overwriting files.
+The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{TITLE}_{ARTIST}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{TITLE}`` placeholder in the file name to avoid overwriting files.
 
 ## License
 
