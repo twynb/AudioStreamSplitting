@@ -48,7 +48,7 @@ export default defineConfig({
   cleanUrls: true,
 
   ignoreDeadLinks: true,
-  base: '/audiosplitter',
+  base: '/AudioStreamSplitting',
 
   head: [['link', { rel: 'icon', type: 'image/x-icon', href: '/logo.ico' }]],
   themeConfig: {
