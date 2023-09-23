@@ -3,7 +3,7 @@ name: Deploy Vitepress
 on:
   push:
     branches:
-      - deploy_docs
+      - deply_docs
 
 permissions:
   contents: read
