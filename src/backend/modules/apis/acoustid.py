@@ -82,6 +82,7 @@ def submit(file_name: str, metadata: dict, api_key: str, user_key: str):
     # avoid submitting titles that have been identified by acoustid - we don't want duplicates
     if titles_identified_key in titles_identified_by_acoustid:
         return False
+    titles_identified_by_acoustid.append(titles_identified_key)
 
     try:
         duration, fingerprint = acoustid.fingerprint_file(file_name, force_fpcalc=True)
