@@ -337,156 +337,158 @@ function handleEdit(songIndex: number) {
       </BaseButton>
     </div>
 
-    <table class="w-full caption-bottom text-sm">
-      <caption class="mt-4 text-sm text-muted-foreground">
-        {{ t('song.list_caption') }}
-      </caption>
-      <thead>
-        <tr class="border-b border-b-border">
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.title') }}
-          </th>
+    <div class="overflow-auto pb-5">
+      <table class="w-full caption-bottom text-sm">
+        <caption class="mt-4 text-sm text-muted-foreground">
+          {{ t('song.list_caption') }}
+        </caption>
+        <thead>
+          <tr class="border-b border-b-border">
+            <th class="sticky left-0 top-0 z-1 h-12 bg-primary-foreground px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.title') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.artist') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.artist') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.album') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.album') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.year') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.year') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.duration') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.duration') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.albumartist') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.albumartist') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.genre') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.genre') }}
+            </th>
 
-          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-            {{ t('song.isrc') }}
-          </th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              {{ t('song.isrc') }}
+            </th>
 
-          <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
-            {{ t('button.edit') }}
-          </th>
+            <th class="h-12 pl-4 pr-6 text-right align-middle font-medium text-muted-foreground">
+              {{ t('button.edit') }}
+            </th>
 
-          <th class="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
-            {{ t('button.save') }}
-          </th>
-        </tr>
-      </thead>
+            <th class="sticky right-0 top-0 z-1 h-12 bg-primary-foreground pl-4 pr-6 text-right align-middle font-medium text-muted-foreground">
+              {{ t('button.save') }}
+            </th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr
-          v-for="({ duration, offset, metaIndex, metadataOptions }, songIndex) in file.segments"
-          :key="songIndex" class="border-b border-b-border"
-        >
-          <td class="p-4 align-middle font-medium">
-            {{ metadataOptions?.[metaIndex]?.title ?? t('song.unknown') }}
-          </td>
+        <tbody>
+          <tr
+            v-for="({ duration, offset, metaIndex, metadataOptions }, songIndex) in file.segments"
+            :key="songIndex" class="border-b border-b-border"
+          >
+            <td class="sticky left-0 top-0 z-1 min-w-200px bg-primary-foreground p-4 align-middle font-medium">
+              {{ metadataOptions?.[metaIndex]?.title ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.artist ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-150px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.artist ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.album ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-350px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.album ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.year ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-100px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.year ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ useConvertSecToMin(duration ?? 0) }}
-          </td>
+            <td class="min-w-100px p-4 align-middle">
+              {{ useConvertSecToMin(duration ?? 0) }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.albumartist ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-120px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.albumartist ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.genre ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-100px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.genre ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 align-middle">
-            {{ metadataOptions?.[metaIndex]?.isrc ?? t('song.unknown') }}
-          </td>
+            <td class="min-w-120px p-4 align-middle">
+              {{ metadataOptions?.[metaIndex]?.isrc ?? t('song.unknown') }}
+            </td>
 
-          <td class="p-4 text-right align-middle">
-            <BaseButton
-              icon-only variant="ghost"
-              :disabled="file.segments && (file.segments[songIndex].metadataOptions?.length ?? 0) <= 1"
-              @click="handleEdit(songIndex)"
-            >
-              <span class="i-carbon-edit" />
-            </BaseButton>
-          </td>
+            <td class="p-4 text-right align-middle">
+              <BaseButton
+                icon-only variant="ghost"
+                :disabled="file.segments && (file.segments[songIndex].metadataOptions?.length ?? 0) <= 1"
+                @click="handleEdit(songIndex)"
+              >
+                <span class="i-carbon-edit" />
+              </BaseButton>
+            </td>
 
-          <td class="p-4 text-right align-middle">
-            <BaseMenuButton
-              v-if="saveSettings.shouldAsk"
-              :disabled="!duration || !offset || isStoring"
-              :length="SUPPORT_FILE_TYPES.length"
-            >
-              <template #button>
+            <td class="sticky right-0 top-0 z-1 bg-primary-foreground p-4 text-right align-middle">
+              <BaseMenuButton
+                v-if="saveSettings.shouldAsk"
+                :disabled="!duration || !offset || isStoring"
+                :length="SUPPORT_FILE_TYPES.length"
+              >
+                <template #button>
+                  <BaseLoader
+                    v-if="currentStoringIndex === songIndex && isStoring"
+                    class="border-primary !border-2"
+                    :size="15"
+                  />
+                  <span v-else class="i-carbon-download" />
+                </template>
+                <template #content="{ index: ftIndex }">
+                  <li class="px-1">
+                    <BaseButton
+                      variant="ghost"
+                      @click="duration && offset && handleStore({
+                        duration,
+                        offset,
+                        metadata: metadataOptions?.[metaIndex],
+                        songIndex,
+                        fileType: SUPPORT_FILE_TYPES[ftIndex],
+                      })"
+                    >
+                      {{ `.${SUPPORT_FILE_TYPES[ftIndex]}` }}
+                    </BaseButton>
+                  </li>
+                </template>
+              </BaseMenuButton>
+
+              <BaseButton
+                v-else
+                variant="ghost"
+                :disabled="!duration || !offset || isStoring"
+                @click="duration && offset && handleStore({
+                  duration,
+                  offset,
+                  metadata: metadataOptions?.[metaIndex],
+                  songIndex,
+                  fileType: saveSettings.fileType,
+                })"
+              >
                 <BaseLoader
                   v-if="currentStoringIndex === songIndex && isStoring"
                   class="border-primary !border-2"
                   :size="15"
                 />
                 <span v-else class="i-carbon-download" />
-              </template>
-              <template #content="{ index: ftIndex }">
-                <li class="px-1">
-                  <BaseButton
-                    variant="ghost"
-                    @click="duration && offset && handleStore({
-                      duration,
-                      offset,
-                      metadata: metadataOptions?.[metaIndex],
-                      songIndex,
-                      fileType: SUPPORT_FILE_TYPES[ftIndex],
-                    })"
-                  >
-                    {{ `.${SUPPORT_FILE_TYPES[ftIndex]}` }}
-                  </BaseButton>
-                </li>
-              </template>
-            </BaseMenuButton>
-
-            <BaseButton
-              v-else
-              variant="ghost"
-              :disabled="!duration || !offset || isStoring"
-              @click="duration && offset && handleStore({
-                duration,
-                offset,
-                metadata: metadataOptions?.[metaIndex],
-                songIndex,
-                fileType: saveSettings.fileType,
-              })"
-            >
-              <BaseLoader
-                v-if="currentStoringIndex === songIndex && isStoring"
-                class="border-primary !border-2"
-                :size="15"
-              />
-              <span v-else class="i-carbon-download" />
-            </BaseButton>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              </BaseButton>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
