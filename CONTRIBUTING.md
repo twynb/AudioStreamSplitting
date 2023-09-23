@@ -40,6 +40,7 @@ NOTE: Part of this will only take effect once this repository becomes public. Pl
 2. Assign the issue to yourself, or ask to have it assigned to you.
 3. Fork [this repository](https://github.com/4lex0017/AudioStreamSplitting) to your own account.
 4. Implement your contribution and commit it to your forked repository. Be sure to follow the requirements outlined in [Requirements](#requirements). Test your implementation and ensure the program builds on your system.
+    - If something about the user workflow, the code structure, available commands or other usage details documented in this document and the [README.md](./README.MD) file is changed, also update the corresponding document(s) accordingly.
 5. Create a pull request on this repository.
 6. The pull request must be approved by at least two of the main maintainers of AudioStreamSplitting (as of current, that's @chubetho, @ChrisItisdud, @4lex0017 and @JosuaE-FHWS). Reviewers must also attempt to build and run the project locally to verify everything works fine.
 7. After two approvals, the pull request gets merged.
@@ -108,9 +109,9 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 
 - **stores**: All pinia stores, responsible for managing application state, are located in the "stores" directory, facilitating structured state management.
 
-
 #### Frontend Workflow
-1.  `main.ts` serves as the entry point for the frontend. It initializes all modules located in the `modules` folder. Eventually, it mounts the `App.vue` component into the DOM. For more details, refer to the [Vue.js documentation](https://vuejs.org/).
+
+1. `main.ts` serves as the entry point for the frontend. It initializes all modules located in the `modules` folder. Eventually, it mounts the `App.vue` component into the DOM. For more details, refer to the [Vue.js documentation](https://vuejs.org/).
 
 2. `App.vue` acts as the wrapper component for the entire application. It defines the layout, including the sidebar, and the content for each page.
 
@@ -123,7 +124,7 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 
 ### Generating documentation
 
-To generate documentation, run ``npm run docs:generate``. You will then find HTML docs for the back-end in docs/_build/html. Also showing the documentation as Github pages is planned for the future, but cannot be done before this repository goes public.
+To generate and show documentation, run ``npm run docs``. This will generate back-end and front-end documentation and show it on a local server easily accessible on your browser (usually [localhost:5173](http://localhost:5173/)). Alternatively, you can find HTML docs for the back-end in docs/_build/html. Also showing the documentation as Github pages is planned for the future, but cannot be done before this repository goes public.
 
 ## Developing Environment
 
@@ -184,14 +185,16 @@ npm run dev:be
 
 #### Available commands
 
-| Command                  | Description                      |
-| ------------------------ | -------------------------------- |
-| npm run `dev:fe`         | Run frontend server              |
-| npm run `dev:be`         | Run backend server               |
-| npm run `view:app`       | Run desktop app                  |
-| npm run `build:fe`       | Build frontend (html, js, css)   |
-| npm run `build:app`      | Build desktop app                |
-| npm run `docs:generate`  | Generate backend documentation   |
+| Command                  | Description                       |
+| ------------------------ | --------------------------------- |
+| npm run `dev:fe`         | Run frontend server               |
+| npm run `dev:be`         | Run backend server                |
+| npm run `view:app`       | Run desktop app                   |
+| npm run `build:fe`       | Build frontend (html, js, css)    |
+| npm run `build:app`      | Build desktop app                 |
+| npm run `docs:gen:be`    | Generate backend documentation    |
+| npm run `docs:gen:fe`    | Generate backend documentation    |
+| npm run `docs`           | Generate and show documentation   |
 
 ## Contributors
 
