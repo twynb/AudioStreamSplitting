@@ -309,14 +309,14 @@ function handleEdit(songIndex: number) {
           </div>
         </template>
         <template #content="{ index: ftIndex }">
-          <li class="px-1">
+          <div class="px-1">
             <BaseButton
               variant="ghost" class="w-full"
               @click="handleStoreAll({ fileType: SUPPORT_FILE_TYPES[ftIndex] })"
             >
               {{ `.${SUPPORT_FILE_TYPES[ftIndex]}` }}
             </BaseButton>
-          </li>
+          </div>
         </template>
       </BaseMenuButton>
 
@@ -345,6 +345,10 @@ function handleEdit(songIndex: number) {
         <thead>
           <tr class="border-b border-b-border">
             <th class="sticky left-0 top-0 z-1 h-12 bg-primary-foreground px-4 text-left align-middle font-medium text-muted-foreground">
+              #
+            </th>
+
+            <th class="sticky left-41px top-0 z-1 h-12 bg-primary-foreground px-4 text-left align-middle font-medium text-muted-foreground">
               {{ t('song.title') }}
             </th>
 
@@ -376,7 +380,7 @@ function handleEdit(songIndex: number) {
               {{ t('song.isrc') }}
             </th>
 
-            <th class="h-12 pl-4 pr-6 text-right align-middle font-medium text-muted-foreground">
+            <th class="sticky right-72px top-0 z-1 h-12 bg-primary-foreground pl-4 pr-6 text-right align-middle font-medium text-muted-foreground">
               {{ t('button.edit') }}
             </th>
 
@@ -391,7 +395,11 @@ function handleEdit(songIndex: number) {
             v-for="({ duration, offset, metaIndex, metadataOptions }, songIndex) in file.segments"
             :key="songIndex" class="border-b border-b-border"
           >
-            <td class="sticky left-0 top-0 z-1 min-w-200px bg-primary-foreground p-4 align-middle font-medium">
+            <td class="sticky left-0 top-0 z-1 bg-primary-foreground p-4 align-middle font-medium">
+              {{ songIndex + 1 }}
+            </td>
+
+            <td class="sticky left-41px top-0 z-1 min-w-200px bg-primary-foreground p-4 align-middle font-medium">
               {{ metadataOptions?.[metaIndex]?.title ?? t('song.unknown') }}
             </td>
 
@@ -423,7 +431,7 @@ function handleEdit(songIndex: number) {
               {{ metadataOptions?.[metaIndex]?.isrc ?? t('song.unknown') }}
             </td>
 
-            <td class="p-4 text-right align-middle">
+            <td class="sticky right-72px top-0 z-1 bg-primary-foreground p-4 text-right align-middle">
               <BaseButton
                 icon-only variant="ghost"
                 :disabled="file.segments && (file.segments[songIndex].metadataOptions?.length ?? 0) <= 1"
@@ -433,11 +441,15 @@ function handleEdit(songIndex: number) {
               </BaseButton>
             </td>
 
-            <td class="sticky right-0 top-0 z-1 bg-primary-foreground p-4 text-right align-middle">
+            <td
+              class="sticky right-0 top-0 overflow-visible bg-primary-foreground p-4 text-right align-middle"
+              :class="currentStoringIndex === songIndex ? 'z-2' : 'z-1'"
+            >
               <BaseMenuButton
                 v-if="saveSettings.shouldAsk"
                 :disabled="!duration || !offset || isStoring"
                 :length="SUPPORT_FILE_TYPES.length"
+                @toggle-menu="(state) => currentStoringIndex = state ? songIndex : -1"
               >
                 <template #button>
                   <BaseLoader
@@ -448,7 +460,7 @@ function handleEdit(songIndex: number) {
                   <span v-else class="i-carbon-download" />
                 </template>
                 <template #content="{ index: ftIndex }">
-                  <li class="px-1">
+                  <div class="px-1">
                     <BaseButton
                       variant="ghost"
                       @click="duration && offset && handleStore({
@@ -461,7 +473,7 @@ function handleEdit(songIndex: number) {
                     >
                       {{ `.${SUPPORT_FILE_TYPES[ftIndex]}` }}
                     </BaseButton>
-                  </li>
+                  </div>
                 </template>
               </BaseMenuButton>
 
