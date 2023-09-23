@@ -10,6 +10,11 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,7 +44,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: Build with VitePress
+      - name: Build VitePress
         run: |
           npm run docs:build
           touch docs/.vitepress/dist/.nojekyll
