@@ -16,7 +16,9 @@
     "save": "Speichern",
     "set": "Übernehmen",
     "process": "Verarbeiten",
-    "clear": "Alle löschen"
+    "clear": "Alle löschen",
+    "save_all": "Alle speichern",
+    "change": "Ändern"
   },
   "placeholder": {},
   "sidebar": {
@@ -88,7 +90,9 @@
       "lenient": "Locker",
       "normal": "Normal",
       "strict": "Strikt"
-    }
+    },
+    "metadata_list_caption": "Gefundene Metadatan",
+    "change_metadata_for_segment": "Metadaten für Segment {index} ändern"
   },
   "toast": {
     "empty_field": "Bitte geben Sie einen gültigen Wert ein!",

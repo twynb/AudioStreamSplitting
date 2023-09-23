@@ -26,7 +26,17 @@ withDefaults(defineProps<{
    */
   menuClass?: string
 }>(), { variant: 'ghost', iconOnly: true })
+
+const emits = defineEmits<{
+  /**
+   * Triggers when menu is open
+   * @property {boolean} state current state of menu
+   */
+  (e: 'toggleMenu', state: boolean): void
+}>()
+
 const isMenuOpen = ref(false)
+watch(isMenuOpen, () => emits('toggleMenu', isMenuOpen.value))
 const button = ref<HTMLButtonElement>()
 onClickOutside(button, () => isMenuOpen.value = false)
 </script>
@@ -52,8 +62,8 @@ onClickOutside(button, () => isMenuOpen.value = false)
       <ul
         v-if="isMenuOpen"
         tabindex="0"
-        class="absolute right-0 top-0 z-1 border border-border rounded-sm bg-primary-foreground py-1"
-        :class="menuClass"
+        class="absolute right-0 top-0 border border-border rounded-sm bg-primary-foreground py-1"
+        :class="[menuClass, isMenuOpen ? 'z-2' : 'z-0']"
       >
         <li v-for="_, i in length" :key="i" class="px-1">
           <!-- @slot Slot for content
