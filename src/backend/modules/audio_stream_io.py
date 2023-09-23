@@ -99,9 +99,9 @@ def save_numpy_as_audio_file(
     :param song: np.ndarray of the song
     :param songname: name of the song
     :param file_path: path to file (without filename)
-    :param rate: samplerate of the song {Default: 100}
-    :param tags: dict of tags see: :func:`tag_audio_file` {Default: {}}
-    :param extension: string of the extension {Default: ".mp3"}
+    :param rate: samplerate of the song (Default: 100)
+    :param tags: dict of tags see: :func:`tag_audio_file` (Default: ())
+    :param extension: string of the extension (Default: ".mp3")
     :returns: none
     """
     savename = path.join(file_path, songname + extension)
@@ -110,12 +110,11 @@ def save_numpy_as_audio_file(
 
 
 def tag_audio_file(savename: str, tags: dict):
-    """
-    Tags an audiofile with different tags.
+    """Tags an audiofile with different tags.
 
     Possible tags: album, albumartist, artist, artwork, comment, compilation,
-        composer, discnumber, genre, lyrics, totaldiscs, totaltracks, tracknumber,
-        tracktitle, year, isrc
+    composer, discnumber, genre, lyrics, totaldiscs, totaltracks, tracknumber,
+    tracktitle, year, isrc
 
     :param savename: path to savefile
     :param tags: dict of tags
