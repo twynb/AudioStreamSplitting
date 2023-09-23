@@ -25,6 +25,11 @@ METADATA_ALL = ["tracks", "recordings", "releasegroups"]
   metadata to make merging matching recordings easier.
 """
 
+titles_identified_by_acoustid = []
+"""A list of all titles that were identified by AcoustID.
+This is used to prevent duplicate submissions to the AcoustID database.
+"""
+
 
 def create_fingerprint(song_data, samplerate):
     """Create a chromaprint/AcoustID fingerprint for the given audio data
@@ -58,9 +63,11 @@ def create_fingerprint(song_data, samplerate):
 def submit(file_name: str, metadata: dict, api_key: str, user_key: str):
     """Submit a fingerprint for the provided file to be added to the AcoustID database.
 
-    In the future, this functionality could possibly be upstreamed into the ``pyacoustid`` library.
+    If the song was previously identified using AcoustID, it isn't submitted. This is to avoid
+    spamming the AcoustID servers with duplicate submissions.
 
-    Errors thrown by ``requests`` are handled inside this function.
+    This uses the ``pyacoustid`` wrapper. All exceptions raised by ``pyacoustid`` are
+    handled within this function and lead to returning "False".
 
     :param file_name: The name of the file to submit.
     :param metadata: The metadata of the song to submit, formatted as a dict.
@@ -69,6 +76,12 @@ def submit(file_name: str, metadata: dict, api_key: str, user_key: str):
     :returns: boolean indicating whether the submission was successful.
     """
     global timestamp_last_acoustid_request
+
+    titles_identified_key = metadata["title"] + "_" + metadata["artist"]
+
+    # avoid submitting titles that have been identified by acoustid - we don't want duplicates
+    if titles_identified_key in titles_identified_by_acoustid:
+        return False
 
     try:
         duration, fingerprint = acoustid.fingerprint_file(file_name, force_fpcalc=True)
@@ -265,12 +278,18 @@ def _get_results_for_recordings(recordings):
     :param results: The list to append the results to.
     :returns: The list with the appended results.
     """
+    global titles_identified_by_acoustid
     results = []
     for recording in recordings:
         # Get the artist if available.
         if "artists" not in recording or "title" not in recording:
             continue
         artist_name = _join_artist_names(recording["artists"])
+
+        titles_identified_key = recording["title"] + "_" + artist_name
+        if titles_identified_key not in titles_identified_by_acoustid:
+            titles_identified_by_acoustid.append(titles_identified_key)
+
         for releasegroup in recording["releasegroups"]:
             results.append(
                 _get_result_for_releasegroup(
