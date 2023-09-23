@@ -3,7 +3,7 @@ name: Deploy Vitepress
 on:
   push:
     branches:
-      - deply_docs
+      - main
 
 permissions:
   contents: read
@@ -55,7 +55,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
