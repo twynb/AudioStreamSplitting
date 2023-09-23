@@ -8,8 +8,7 @@ import type { Project, ProjectFileSegment } from '../models/types'
 import type { Metadata, PostAudioSplitBodyPresetName } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
 import { SUPPORT_FILE_TYPES } from '../includes/constants'
-import ConfirmModal from './ConfirmModal.vue'
-import EditSongModal from './EditSongModal.vue'
+import ModalEditSegment from '../components/ModalEditSegment.vue'
 
 const props = defineProps<{
   /**
@@ -225,26 +224,18 @@ async function handleStoreAll(
 }
 
 function handleEdit(songIndex: number) {
-  let newMetaIndex = 0
   const { open, close } = useModal({
-    component: ConfirmModal,
+    component: ModalEditSegment,
     attrs: {
-      contentClass: 'max-w-50vw lg:max-w-[500px]',
+      segmentIndex: songIndex,
+      metaIndex: props.file?.segments?.[songIndex].metaIndex ?? 0,
+      metadata: props.file?.segments?.[songIndex].metadataOptions ?? [],
       onCancel() { close() },
-      onOk() {
+      onOk(newMetaIndex) {
         emits('changeMeta', songIndex, newMetaIndex)
         regions.value?.clearRegions()
         props.file.segments && addRegion(props.file.segments)
         close()
-      },
-    },
-    slots: {
-      default: {
-        component: h(EditSongModal, {
-          metadatas: props.file.segments?.[songIndex]?.metadataOptions ?? [],
-          opt: `${props.file.segments?.[songIndex]?.metaIndex ?? 0}`,
-          onChange(v) { newMetaIndex = v },
-        }),
       },
     },
   })
@@ -393,7 +384,7 @@ function handleEdit(songIndex: number) {
         <tbody>
           <tr
             v-for="({ duration, offset, metaIndex, metadataOptions }, songIndex) in file.segments"
-            :key="songIndex" class="border-b border-b-border"
+            :key="songIndex" class="border-b border-b-border bg-primary-foreground"
           >
             <td class="sticky left-0 top-0 z-1 bg-primary-foreground p-4 align-middle font-medium">
               {{ songIndex + 1 }}
