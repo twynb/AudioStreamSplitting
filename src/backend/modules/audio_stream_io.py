@@ -113,23 +113,9 @@ def tag_audio_file(savename: str, tags: dict):
     """
     Tags an audiofile with different tags.
 
-    Possible tags:
-            * album
-            * albumartist
-            * artist
-            * artwork
-            * comment
-            * compilation
-            * composer
-            * discnumber
-            * genre
-            * lyrics
-            * totaldiscs
-            * totaltracks
-            * tracknumber
-            * tracktitle
-            * year
-            * isrc
+    Possible tags: album, albumartist, artist, artwork, comment, compilation,
+        composer, discnumber, genre, lyrics, totaldiscs, totaltracks, tracknumber,
+        tracktitle, year, isrc
 
     :param savename: path to savefile
     :param tags: dict of tags
