@@ -77,6 +77,10 @@
     "no_webm": ".webm-Dateien können nicht verarbeitet werden!",
     "no_meta": "Keine Information",
     "list_caption": "Gefundene Lieder",
+    "unknown": "Unbekannt",
+    "genre": "Genre",
+    "isrc": "ISRC",
+    "albumartist": "Album-Interpret",
     "preset": {
       "extra_lenient": "Extra locker",
       "extra_strict": "Extra strikt",

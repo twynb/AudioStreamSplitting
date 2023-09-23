@@ -63,8 +63,11 @@ export interface PostAudioSplitBody {
 export interface Metadata {
   title?: string
   album?: string
+  albumartist?: string
   artist?: string
   year?: string
+  isrc?: string
+  genre?: string
 }
 
 export function getAudioStreamSplittingAPI() {

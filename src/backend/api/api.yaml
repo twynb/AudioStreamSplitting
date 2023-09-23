@@ -128,7 +128,13 @@ components:
           type: string
         album:
           type: string
+        albumartist:
+          type: string
         artist:
           type: string
         year:
+          type: string
+        isrc:
+          type: string
+        genre:
           type: string

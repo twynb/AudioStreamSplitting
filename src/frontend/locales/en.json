@@ -80,6 +80,10 @@
     "no_webm": ".webm cannot be processed at the moment!",
     "no_meta": "No information",
     "list_caption": "Found songs",
+    "unknown": "unknown",
+    "genre": "Genre",
+    "isrc": "ISRC",
+    "albumartist": "Album artist",
     "preset": {
       "index": "Preset",
       "extra_strict": "Extra Strict",

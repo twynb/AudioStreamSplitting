@@ -81,7 +81,7 @@ The back-end is mostly centered around two modules containing the logic for segm
 2. ``backend/api/app.py`` is the main entrypoint for Flask. Error handlers and other API modules are registered here.
 3. ``backend/api/audio.py`` contains the API routes for song segmentation, recognition and saving.
 4. ``backend/modules/segmentation.py`` implements the segmentation logic. Relevant concepts to understand it are [Feature Smoothing](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C4/C4S2_SSM-FeatureSmoothing.html), [Self-similarity-matrices](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C4/C4S2_SSM.html), [Novelty](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C4/C4S4_NoveltySegmentation.html) and [Peak Selection](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C6/C6S1_PeakPicking.html)
-5. ``backend/modules/api_service.py`` implements the song recognition. Each song identification API used has either a pre-made python wrapper (such as AcoustID with PyAcoustId) or its own module in ``backend/modules/apis/`` (such as Shazam), which ``api_service`` calls to gather data from that API.
+5. ``backend/modules/api_service.py`` implements the song recognition. Each song identification API used has its own module in ``backend/modules/apis/``, which ``api_service`` calls to gather data from that API.
 
 Other modules in the ``backend/modules`` and ``backend/utils`` folders are utility classes used in or for one of the above. The other routes in the ``backend/api`` folder are used for user settings.
 
