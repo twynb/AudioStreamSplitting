@@ -2,8 +2,13 @@
 /**
  * Generate a hash value for a given string.
  *
- * @param str - The input string to hash.
+ * @param str The input string to hash.
  * @returns A hashed representation of the input string.
+ *
+ * @example
+ * ```ts
+ * useHash('somerandomstring') // 19viky0
+ * ```
  */
 export function useHash(str: string) {
   let hash = 0

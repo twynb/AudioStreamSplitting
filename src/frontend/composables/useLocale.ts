@@ -8,21 +8,26 @@ import {
  * Manage the application's locale and localization settings.
  *
  * @returns An object containing available locales and the current locale.
+ *
+ * @example
+ * ```ts
+ * const { currentLocale } = useLocale()
+ *
+ * currentLocale.value            // en
+ * document.documentElement.lang  // en
+ *
+ * currentLocale.value = 'de'
+ * document.documentElement.lang  // de
+ * ```
  */
 export function useLocale() {
+  const currentLocale = useLocalStorage('locale', 'en')
   const { locale } = useI18n()
-  if (!locale.value)
-    locale.value = 'en'
 
-  const currentLocal = useLocalStorage('locale', locale.value)
+  watch(currentLocale, () => {
+    setI18nLanguage(currentLocale.value)
+    locale.value = currentLocale.value
+  }, { immediate: true })
 
-  if (currentLocal.value !== locale.value)
-    currentLocal.value = locale.value
-
-  watch(currentLocal, () => {
-    setI18nLanguage(currentLocal.value)
-    locale.value = currentLocal.value
-  })
-
-  return { availableLocales, currentLocal }
+  return { availableLocales, currentLocale }
 }
