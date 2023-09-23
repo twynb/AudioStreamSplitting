@@ -39,7 +39,12 @@
       "index": "General",
       "language": "Language",
       "save_file_type": "Save file type",
-      "ask_file_type": "Ask me what to do with each save"
+      "ask_file_type": "Ask me what to do with each save",
+      "hint": {
+        "language": "Change display language",
+        "darkmode": "Toggel between dark and light theme"
+      },
+      "darkmode": "Dark Mode"
     },
     "appearance": {
       "index": "Appearance",
@@ -54,7 +59,22 @@
     "shazam_api_key": "Shazam API Key",
     "submit_saved_files": "Submit files to APIs on save",
     "clear_all_confirm": "Are you sure you want to delete all projects? This cannot be undone.",
-    "clear_heading": "Clear all projects"
+    "clear_heading": "Clear all projects",
+    "save": {
+      "index": "Save",
+      "file_type": "Save file type",
+      "hint": {
+        "file_type": "File type when saving",
+        "ask_file_type": "Always ask me if I want to save with other file type",
+        "submit_saved_files": "Metadata is submitted to API providers to improve their database",
+        "save_directory": "Where to save identified songs",
+        "output_file_name": "Name of the template to be used for the saved file"
+      },
+      "ask_file_type": "Ask me what to do with each save",
+      "submit_saved_files": "Submit files to APIs on save",
+      "save_directory": "Save directory",
+      "output_file_name": "Output file name"
+    }
   },
   "dialog": {
     "create_project": {

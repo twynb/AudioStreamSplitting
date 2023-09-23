@@ -7,7 +7,6 @@ from modules.api_service import ApiService, submit_to_services
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from modules.segmentation import Preset, segment_file
 from pathvalidate import sanitize_filename
-from utils.env import get_env
 from utils.file_name_formatter import format_file_name
 
 audio_bp = Blueprint("audio", __name__)
@@ -107,11 +106,7 @@ def store():
     metadata = data["metadata"]
 
     file_type = "." + (data["fileType"] if "fileType" in data else "mp3")
-    file_name_template = (
-        data["nameTemplate"]
-        if "nameTemplate" in data
-        else get_env("OUTPUT_FILE_NAME_TEMPLATE")
-    )
+    file_name_template = data["nameTemplate"] if "nameTemplate" in data else "{TITLE}"
     target_file_name = sanitize_filename(
         format_file_name(
             file_name_template,

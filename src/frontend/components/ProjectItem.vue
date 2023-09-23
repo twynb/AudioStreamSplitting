@@ -3,7 +3,6 @@ import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/plugins/regions'
 import type { AxiosError } from 'axios'
 import { isAxiosError } from 'axios'
-import { useLocalStorage } from '@vueuse/core'
 import type { Project, ProjectFileSegment } from '../models/types'
 import type { Metadata, PostAudioSplitBodyPresetName } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
@@ -42,7 +41,7 @@ const { toast } = useToastStore()
 const { t } = useI18n()
 const router = useRouter()
 const hash = useHash(props.file.filePath)
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true, submitSavedFiles: false })
+const saveSettings = useSaveSetings()
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
@@ -160,13 +159,12 @@ function addRegion(segments: ProjectFileSegment[]) {
 
 const isStoring = ref(false)
 const currentStoringIndex = ref(-1)
-const store = useEnvStore()
 async function handleStore(
   { duration, offset, metadata, songIndex, fileType }: { duration: number; offset: number; metadata?: Metadata; songIndex: number; fileType: string },
 
 ) {
   const filePath = props.file.filePath
-  const targetDirectory = store.lsEnv.SAVE_DIRECTORY
+  const targetDirectory = saveSettings.value.saveDirectory
   if (!targetDirectory) {
     toast({ title: t('toast.title.no_save_directory'), content: t('toast.no_save_directory'), variant: 'destructive' })
     return
@@ -176,10 +174,9 @@ async function handleStore(
   isStoring.value = true
 
   const _metadata = metadata ?? { album: '', artist: '', title: 'unknown', year: '0' }
-  const _submitSavedFiles = saveSettings.value.submitSavedFiles
 
   try {
-    const response = await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType, submitSavedFiles: _submitSavedFiles })
+    const response = await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType, submitSavedFiles: saveSettings.value.submitSavedFiles })
     // TODO CR
     const services = response.data.services ?? []
     let _content = t('toast.save_file_success', { target: targetDirectory })
