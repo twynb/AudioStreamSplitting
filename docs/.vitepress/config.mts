@@ -47,6 +47,8 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
 
+  ignoreDeadLinks: true,
+
   head: [['link', { rel: 'icon', type: 'image/x-icon', href: '/logo.ico' }]],
   themeConfig: {
     logo: '/logo.ico',
