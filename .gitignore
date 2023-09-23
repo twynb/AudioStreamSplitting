@@ -167,4 +167,4 @@ test_output/
 !build.spec
 **/.vitepress/cache
 docs/frontend/components/**
-docs/frontend/composables/**
+# docs/frontend/composables/**
