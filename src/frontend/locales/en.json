@@ -49,8 +49,10 @@
     "download": "Download",
     "save_directory": "Save Directory",
     "output_file_name": "Output File Name",
-    "acoustid_api_key": "AcoustID API Key",
+    "acoustid_api_key": "AcoustID Application API Key",
+    "acoustid_user_key": "AcoustID User API Key",
     "shazam_api_key": "Shazam API Key",
+    "submit_saved_files": "Submit files to APIs on save",
     "clear_all_confirm": "Are you sure you want to delete all projects? This cannot be undone.",
     "clear_heading": "Clear all projects"
   },
@@ -100,6 +102,7 @@
     "long_process": "Processing will take a while...",
     "cant_split": "This audio cannot be split",
     "save_file_success": "Has been successfully saved to {target}",
+    "save_file_success_with_submit": "Has been successfully saved to {target} and submitted to {services}",
     "title": {
       "no_save_directory": "No save directory set"
     },

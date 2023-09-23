@@ -46,8 +46,10 @@
     "download": "Herunterladen",
     "save_directory": "Dateipfad für gespeicherte Dateien",
     "output_file_name": "Dateiname für gespeicherte Dateien",
-    "acoustid_api_key": "AcoustID API-Key",
+    "acoustid_api_key": "AcoustID Anwendungs-API Key",
+    "acoustid_user_key": "AcoustID Benutzer-API Key",
     "shazam_api_key": "Shazam API-Key",
+    "submit_saved_files": "Gespeicherte Dateien auch an APIs senden",
     "clear_all_confirm": "Sind Sie sicher, dass Sie alle Projekte löschen wollen? Dies kann nicht rückgängig gemacht werden.",
     "clear_heading": "Alle Projekte löschen"
   },
@@ -97,6 +99,7 @@
     "long_process": "Die Verarbeitung wird eine Weile dauern...",
     "cant_split": "Diese Tondatei konnte nicht aufgeteilt werden.",
     "save_file_success": "Erfolgreich in {target} gespeichert!",
+    "save_file_success_with_submit": "Erfolgreich in {target} gespeichert und an {services} gesendet!",
     "title": {
       "no_save_directory": "Kein Dateipfad gesetzt!"
     },

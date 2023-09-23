@@ -42,7 +42,7 @@ const { toast } = useToastStore()
 const { t } = useI18n()
 const router = useRouter()
 const hash = useHash(props.file.filePath)
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
+const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true, submitSavedFiles: false })
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
@@ -176,12 +176,19 @@ async function handleStore(
   isStoring.value = true
 
   const _metadata = metadata ?? { album: '', artist: '', title: 'unknown', year: '0' }
+  const _submitSavedFiles = saveSettings.value.submitSavedFiles
 
   try {
-    await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType })
+    const response = await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType, submitSavedFiles: _submitSavedFiles })
+    // TODO CR
+    const services = response.data.services ?? []
+    let _content = t('toast.save_file_success', { target: targetDirectory })
+    if (services)
+      _content = t('toast.save_file_success_with_submit', { target: targetDirectory, services: services.join(', ') })
+
     toast({
       title: `${_metadata.title}.${fileType}`,
-      content: t('toast.save_file_success', { target: targetDirectory }),
+      content: _content,
     })
   }
   catch (e) {

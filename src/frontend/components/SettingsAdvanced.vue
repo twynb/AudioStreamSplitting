@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useLocalStorage } from '@vueuse/core'
+
 type EnvKey = keyof typeof env.value
 
 const { t } = useI18n()
@@ -11,6 +13,7 @@ Object.entries(lsEnv.value).forEach(([key, value]) => {
 })
 
 const { toast } = useToastStore()
+const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true, submitSavedFiles: false })
 
 async function setApiKey(key: EnvKey) {
   const value = env.value[key]
@@ -57,6 +60,20 @@ async function setApiKey(key: EnvKey) {
       </div>
 
       <div class="flex items-center justify-between">
+        <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_USER_KEY">
+          {{ t('settings.acoustid_user_key') }}
+        </BaseLabel>
+
+        <div class="min-w-400px flex gap-x-3">
+          <BaseInput id="SERVICE_ACOUSTID_USER_KEY" v-model="env.SERVICE_ACOUSTID_USER_KEY" type="password" />
+
+          <BaseButton @click="setApiKey('SERVICE_ACOUSTID_USER_KEY')">
+            {{ t('button.set') }}
+          </BaseButton>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
         <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
           {{ t('settings.shazam_api_key') }}
         </BaseLabel>
@@ -96,6 +113,12 @@ async function setApiKey(key: EnvKey) {
             {{ t('button.set') }}
           </BaseButton>
         </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <h3>{{ t('settings.submit_saved_files') }}</h3>
+
+        <BaseSwitch v-model="saveSettings.submitSavedFiles" />
       </div>
     </div>
   </div>

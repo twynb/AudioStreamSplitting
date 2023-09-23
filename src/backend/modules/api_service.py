@@ -1,10 +1,9 @@
 from enum import Enum
 from typing import Generator
 
+import modules.apis.acoustid
+import modules.apis.shazam
 from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
-from modules.apis.acoustid import create_fingerprint as create_acoustid_fingerprint
-from modules.apis.acoustid import lookup as acoustid_lookup
-from modules.apis.shazam import lookup as shazam_lookup
 from modules.audio_stream_io import read_audio_file_to_numpy
 from requests import exceptions
 from utils.env import get_env
@@ -58,6 +57,35 @@ SAMPLE_RATE_STANDARD = 44100
 Constant defining the standard sample rate of 44100Hz.
 Songs must be loaded at this sample rate for the Shazam API to work.
 """
+
+
+def submit_to_services(file_name, metadata):
+    """Logic to submit a song to song recognition APIs that allow submissions in order to
+    improve their databases.
+
+    Songs with no metadata or an unknown title are not submitted.
+
+    As of current, this only does so with the AcoustID API. If other services that allow
+    submissions are supported by api_service in the future, their module should contain a
+    similar submit() function that should also be called here.
+
+    :param file_name: The name (and absolute path) of the file to submit.
+    :param metadata: The metadata to submit.
+    :returns: A ``list`` of services the song was successfully submitted to. This does not
+        necessarily mean that the submission will be accepted.
+    """
+    successful_submissions = []
+    if "title" not in metadata or metadata["title"] == "unknown":
+        return successful_submissions
+
+    ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
+    ACOUSTID_USER_KEY = get_env("SERVICE_ACOUSTID_USER_KEY")
+    if ACOUSTID_API_KEY is not None and ACOUSTID_USER_KEY is not None:
+        if modules.apis.acoustid.submit(
+            file_name, metadata, ACOUSTID_API_KEY, ACOUSTID_USER_KEY
+        ):
+            successful_submissions.append("AcoustID")
+    return successful_submissions
 
 
 class ApiService:
@@ -393,10 +421,12 @@ class ApiService:
         # first check using acoustID
         if ACOUSTID_API_KEY is not None:
             try:
-                duration, fingerprint = create_acoustid_fingerprint(
+                duration, fingerprint = modules.apis.acoustid.create_fingerprint(
                     song_data, sample_rate
                 )
-                metadata = acoustid_lookup(fingerprint, duration, ACOUSTID_API_KEY)
+                metadata = modules.apis.acoustid.lookup(
+                    fingerprint, duration, ACOUSTID_API_KEY
+                )
                 if len(metadata) != 0:
                     return self._check_song_extended_or_finished(
                         offset, duration, metadata
@@ -412,8 +442,12 @@ class ApiService:
         # If sample_rate inexplicably becomes something other than 44100Hz, shazam won't work
         if SHAZAM_API_KEY is not None and sample_rate == SAMPLE_RATE_STANDARD:
             try:
-                metadata_start = shazam_lookup(song_data, SHAZAM_API_KEY, True)
-                metadata_end = shazam_lookup(song_data, SHAZAM_API_KEY, False)
+                metadata_start = modules.apis.shazam.lookup(
+                    song_data, SHAZAM_API_KEY, True
+                )
+                metadata_end = modules.apis.shazam.lookup(
+                    song_data, SHAZAM_API_KEY, False
+                )
                 metadata_start = [metadata_start] if metadata_start is not None else []
                 metadata_end = [metadata_end] if metadata_end is not None else []
 

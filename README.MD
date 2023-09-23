@@ -18,7 +18,7 @@ For information on how to contribute to the development of AudioStreamSplitting,
 
 ### Setup
 
-1. Generate a valid API key for the [AcoustID](https://acoustid.org/) and/or [Shazam](https://rapidapi.com/apidojo/api/shazam) song recognition APIs. While this program can work if you only provide one of the two, it is strongly recommended to have both in order for the song identification to function properly. More song recognition APIs may be supported in the future. For the AcoustID API, you will need to register an application and use the application API key, rather than just the normal user API key.
+1. Generate a valid API key for the [AcoustID](https://acoustid.org/) and/or [Shazam](https://rapidapi.com/apidojo/api/shazam) song recognition APIs. While this program can work if you only provide one of the two, it is strongly recommended to have both in order for the song identification to function properly. More song recognition APIs may be supported in the future. For the AcoustID API, you will need to register an application and use the application API key, rather than just the normal user API key. If you want to submit identified songs to the AcoustID API, you will also need the user API key.
 2. Download the latest release of [`fpcalc`](https://acoustid.org/chromaprint) for your system from [the AcoustID website](https://acoustid.org/chromaprint) if you want to use the AcoustID API. Put it in a location of your choosing and add it to your system PATH.
 3. Download the latest release of [`ffmpeg`](https://ffmpeg.org/download.html) if you want to use the in-app recording feature. Put it in a location of your choosing and add it to your system PATH.
 4. If `ffmpeg` or `fpcalc` were not installed on your system prior to setup, you will probably need to restart your system first before using AudioStreamSplitting.
@@ -88,9 +88,13 @@ The "Advanced" section is where the most important settings are situated. Note t
 
 You need to provide at least one API Key for the song identification to work, but it is strongly recommended to provide as many as possible (as outlined in the [Setup](#setup) section).
 
+The AcoustID API keys are split into two keys: The "AcoustID Application API Key" is the key you receive when registering an application. This key is necessary for any functionality involving AcoustID. The "AcoustID User API Key" is only required if you also want to submit identified songs to AcoustID.
+
 The "Save Directory" setting should be set to the directory you want to save the resulting files into. Make sure that this is an existing directory on your device, as saving files will not work otherwise.
 
 The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{TITLE}_{ARTIST}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{TITLE}`` placeholder in the file name to avoid overwriting files.
+
+The "Submit files to APIs on save" setting controls whether files the app identified will also be sent to the AcoustID API (and potentially others in the future) to further improve their database. As far as we can tell, no personally identifying data is submitted, and the data that is submitted is only used to ensure you have access to the API. We kindly ask you to turn this setting on as the AcoustID database depends on user submissions to work as well as it does.
 
 ## License
 

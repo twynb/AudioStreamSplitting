@@ -12,6 +12,7 @@ import os
 import acoustid
 import utils.list_helper
 from modules.audio_stream_io import save_numpy_as_audio_file
+from utils.logger import log_error
 
 METADATA_ALL = ["tracks", "recordings", "releasegroups"]
 """The metadata to query from the AcoustID API.
@@ -52,6 +53,47 @@ def create_fingerprint(song_data, samplerate):
     )
     os.remove(filename_with_path)
     return (fingerprint_duration, fingerprint)
+
+
+def submit(file_name: str, metadata: dict, api_key: str, user_key: str):
+    """Submit a fingerprint for the provided file to be added to the AcoustID database.
+
+    In the future, this functionality could possibly be upstreamed into the ``pyacoustid`` library.
+
+    Errors thrown by ``requests`` are handled inside this function.
+
+    :param file_name: The name of the file to submit.
+    :param metadata: The metadata of the song to submit, formatted as a dict.
+    :param api_key: The application API key.
+    :param user_key: The user API key.
+    :returns: boolean indicating whether the submission was successful.
+    """
+    global timestamp_last_acoustid_request
+
+    try:
+        duration, fingerprint = acoustid.fingerprint_file(file_name, force_fpcalc=True)
+    except acoustid.FingerprintGenerationError as ex:
+        log_error(ex, "AcoustID fingerprint generation error")
+        return False
+
+    query_params = {
+        "duration": duration,
+        "fingerprint": fingerprint,
+        "track": metadata["title"] if "title" in metadata else None,
+        "artist": metadata["artist"] if "artist" in metadata else None,
+        "album": metadata["album"] if "album" in metadata else None,
+        "albumartist": metadata["albumartist"] if "albumartist" in metadata else None,
+        "year": metadata["year"] if "year" in metadata else None,
+    }
+
+    try:
+        acoustid.submit(api_key, user_key, query_params)
+        return True
+    except acoustid.FingerprintSubmissionError as ex:
+        log_error(ex, "AcoustID submission error")
+    except acoustid.WebServiceError as ex:
+        log_error(ex, "AcoustID submit error")
+    return False
 
 
 def lookup(fingerprint, fingerprint_duration, api_key):

@@ -7,7 +7,7 @@ const { t } = useI18n()
 const { currentLocale } = useLocale()
 const localOpts = Object.entries(LangMap).map(([key, value]) => ({ label: value, value: key }))
 
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
+const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true, submitSavedFiles: false })
 </script>
 
 <template>
