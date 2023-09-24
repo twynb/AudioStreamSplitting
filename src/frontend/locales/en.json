@@ -17,7 +17,8 @@
     "set": "Set",
     "process": "Process",
     "clear": "Clear",
-    "save_all": "Save all"
+    "save_all": "Save all",
+    "change": "Change"
   },
   "placeholder": {},
   "sidebar": {
@@ -113,7 +114,9 @@
       "normal": "Normal",
       "lenient": "Lenient",
       "extra_lenient": "Extra Lenient"
-    }
+    },
+    "metadata_list_caption": "Found metadata",
+    "change_metadata_for_segment": "Change Metadata for Segment {index}"
   },
   "toast": {
     "empty_field": "Please enter a valid value!",

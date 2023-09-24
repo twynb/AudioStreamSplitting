@@ -26,7 +26,7 @@ declare module 'vue' {
     ConfirmModal: typeof import('./components/ConfirmModal.vue')['default']
     CreateProjectModal: typeof import('./components/CreateProjectModal.vue')['default']
     DashboardItem: typeof import('./components/DashboardItem.vue')['default']
-    EditSongModal: typeof import('./components/EditSongModal.vue')['default']
+    ModalEditSegment: typeof import('./components/ModalEditSegment.vue')['default']
     NotFound: typeof import('./components/NotFound.vue')['default']
     ProjectItem: typeof import('./components/ProjectItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
