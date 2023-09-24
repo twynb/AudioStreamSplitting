@@ -45,7 +45,8 @@ class Preset(
 
 
 def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
-    """Extracts the chroma feature vector from the given sequence.
+    """Extracts the chroma feature vector from the given sequence, representing key
+    and chord information.
 
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
@@ -132,7 +133,7 @@ def median_downsample_feature_sequence(
 
 
 def normalize_feature_sequence(feature):
-    """Normalize a given feature sequence.
+    """Normalize a given feature sequence using L2-norm.
 
     :param feature: the feature sequence to normalize
     :returns: the normalized feature sequence.
@@ -153,7 +154,7 @@ def normalize_feature_sequence(feature):
 
 def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
     """Computes a gaussian checkerboard kernel to smooth and detect edges and
-    corners in a matrix.
+    corners in a given matrix.
     This is a combination of a basic checkerboard kernel and a gauss filter kernel.
 
     :param n: length of one quadrant in the resulting kernel
@@ -176,13 +177,15 @@ def create_gaussian_checkerboard_kernel(n: int, var=1.0, normalize=True):
 
 def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
     """Computes the self similarity matrix for a given feature sequence.
-    Stacks the feature sequence with delay, smooths, down-samples
-    and finally normalizes the sequence before calculating the ssm.
+    Before calculating the SSM, this function stacks the feature on top of itself,
+    smooths and downsamples the input feature using :func:`smooth_downsample_feature_sequence` and
+    normalizes it with :func:`normalize_feature_sequence`.
 
     :param feature: the feature sequence
     :param samplerate: the sample-rate
     :param filter_len: length for the filter kernel, needs to be odd (incremented by one if even)
-    :param downsampling: down-sampling rate for feature sequence (default: 32)
+        (default: 41)
+    :param downsampling: down-sampling rate for feature sequence (default: 8)
     :returns: the self similarity matrix, the resulting sample-rate.
     """
     # stack feature on top of itself, with a delay
@@ -207,11 +210,15 @@ def compute_self_similarity(feature, samplerate, filter_len=41, downsampling=8):
 
 def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
     """Computes the novelty function for the given self similarity matrix.
+    The resulting function will be a 1D representation of the SSM where peaks
+    indicate edges / corners. The SSM will be padded by reflecting values, therefore
+    the first and last n values will be inaccurate (these can be excluded and set to 0).
+    The result will be normalized to a range of [0 - 1.0].
 
     :param ssm: the self similarity matrix
     :param kernel: the kernel for edge / corner detection (default: gaussian checkerboard)
-    :param n: length of one quadrant of the kernel (default: 10)
-    :param var: variance for the gaussian checkerboard kernel (default: 0.5)
+    :param n: length of one quadrant of the default kernel (default: 8)
+    :param var: variance for the default gaussian checkerboard kernel (default: 0.5)
     :param exclude: whether to exclude the start and end of the resulting novelty function.
         If True this sets both the start and end to 0. (default: False)
     :returns: the resulting novelty function. Peaks indicate edges / corners (transitions).
@@ -239,17 +246,26 @@ def compute_novelty_ssm(ssm, kernel=None, n=8, var=0.5, exclude=False):
     return nov
 
 
-def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
+def select_peaks(novelty, peak_threshold=0.5, downsampling=8, offset=0.0):
     """Selects the peak of the given function based on the given threshold.
+    This utilizes :func:`librosa.util.peak_pick` and will wait for a set number of samples
+    (10 % of the novelty function) before considering the next peak.
+    The peak indices will be upsampled in order to compensate for previous downsampling.
 
     :param novelty: the function to find peaks in
-    :param peak_threshold: the threshold to filter with
-    :param downsampling: the down-sampling-rate used for the feature sequence
-    :param offset: offset of the original signal in frames
+    :param peak_threshold: the threshold to filter with (default: 0.5)
+    :param downsampling: the down-sampling-rate used for the feature sequence.
+        Peak indices will be upsampled by this to be usable with the original audio file.
+        (default: 8)
+    :param offset: offset of the original signal in frames (default: 0.0)
     :returns: all indexes where the function peaks.
     """
-    # Find peaks
+    # We wait for a length of 10 % of the given function, before selecting the next peak.
+    # This is so, that we won't get small segments that cannot possibly be full songs. We can do
+    # this, since the block sizes we stream in are relatively small.
+    # If we ever increase block size, this may have to be adjusted.
     wait = int(novelty.shape[0] / 10)
+    # Find peaks
     peaks = librosa.util.peak_pick(
         x=novelty,
         pre_max=10,
@@ -276,8 +292,10 @@ def select_peaks(novelty, peak_threshold=0.5, downsampling=32, offset=0.0):
 def filter_peaks(peaks, n=3):
     """Filters a given vector to values that appear at least n times.
 
+    e.g. [1, 2, 3, 4, 3, 5, 4, 3] with n=2 will be reduced to [3, 4].
+
     :param peaks: The given vector
-    :param n: The minimum number of times a value has to appear
+    :param n: The minimum number of times a value has to appear (default: 3)
     :return: The filtered vector.
     """
     unique, counts = np.unique(peaks, return_counts=True)
@@ -296,15 +314,18 @@ def segment_block(
 ):
     """Segments a data array into segments, where each segment represents
     a different part in the audio.
+    This will extract a feature vector, compute the Self Similarity Matrix and Novelty function
+    and finally select peaks based on given values.
 
     :param block: the current block of the audio stream
     :param samplerate: sample rate of the audio stream
     :param hop_length: hop length of the audio stream
-    :param feature: the feature type to use, see: :class:`Downsampling`
-    :param filter_len: the length of the median filter
-    :param downsampling: the downsampling factor to use
-    :param threshold: the threshold for peak selection
-    :param offset: an offset (in audio frames) to calculate indices for consecutive calls correctly
+    :param feature: the feature type to use, see: :class:`FeatureType`
+    :param filter_len: the length of the filter (default: 41)
+    :param downsampling: the downsampling factor to use (default: 8)
+    :param threshold: the threshold for peak selection (default: 0.5)
+    :param offset: an offset (in audio frames) to calculate indices for consecutive
+        calls correctly (default: 0.0)
     :returns: a list of indexes, where transitions should be.
     """
     if feature == FeatureType.CHROMA:
@@ -325,11 +346,16 @@ def segment_block(
 
 def segment_file(path, preset=Preset.NORMAL):
     """Segments a given file into a generator.
+    This function will stream the audio file in blocks of 4096 audio frames with an overlap of
+    25 % between blocks. Each block is segmented using :func:`segment_block`. Transitions will then
+    be filtered to values present more than 3 times.
+    Finally, the transitions are converted into time units and returned in pairs, resulting in
+    usable audio segments.
 
     :param path: The path to the File
-    :param preset: The down-sampling rate for the SSM see: :class:`Preset`
-    :return: A generator that iterates over the found segments, the start time and duration
-        for the original file.
+    :param preset: The values preset used for segmentation (default: NORMAL). See: :class:`Preset`
+    :return: A generator that iterates over the found segments, consisting of the start time and
+        duration for the original file.
     """
     block_len = 4096
     stream, samplerate, hop_length = read_audio_file_to_stream(
