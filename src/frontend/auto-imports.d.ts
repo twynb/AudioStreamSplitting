@@ -84,6 +84,7 @@ declare global {
   const useDateFormat: typeof import('./composables/useDateFormat')['useDateFormat']
   const useDocTitle: typeof import('./composables/useDocTitle')['useDocTitle']
   const useDriver: typeof import('./composables/useDriver')['useDriver']
+  const useEnv: typeof import('./composables/useEnv')['useEnv']
   const useEnvStore: typeof import('./stores/useEnvStore')['useEnvStore']
   const useGet: typeof import('./composables/useGet')['useGet']
   const useGlobalStyleStore: typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']
@@ -96,6 +97,7 @@ declare global {
   const useRandomColor: typeof import('./composables/useRandomColor')['useRandomColor']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
+  const useSaveSetings: typeof import('./composables/useSaveSettings')['useSaveSetings']
   const useSlots: typeof import('vue')['useSlots']
   const useToastStore: typeof import('./stores/useToastStore')['useToastStore']
   const vi: typeof import('vitest')['vi']
@@ -193,7 +195,7 @@ declare module 'vue' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
-    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
+    readonly useEnv: UnwrapRef<typeof import('./composables/useEnv')['useEnv']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
@@ -205,6 +207,7 @@ declare module 'vue' {
     readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
+    readonly useSaveSetings: UnwrapRef<typeof import('./composables/useSaveSettings')['useSaveSetings']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly vi: UnwrapRef<typeof import('vitest')['vi']>
@@ -296,7 +299,7 @@ declare module '@vue/runtime-core' {
     readonly useDateFormat: UnwrapRef<typeof import('./composables/useDateFormat')['useDateFormat']>
     readonly useDocTitle: UnwrapRef<typeof import('./composables/useDocTitle')['useDocTitle']>
     readonly useDriver: UnwrapRef<typeof import('./composables/useDriver')['useDriver']>
-    readonly useEnvStore: UnwrapRef<typeof import('./stores/useEnvStore')['useEnvStore']>
+    readonly useEnv: UnwrapRef<typeof import('./composables/useEnv')['useEnv']>
     readonly useGet: UnwrapRef<typeof import('./composables/useGet')['useGet']>
     readonly useGlobalStyleStore: UnwrapRef<typeof import('./stores/useGloalStyleStore')['useGlobalStyleStore']>
     readonly useHash: UnwrapRef<typeof import('./composables/useHash')['useHash']>
@@ -308,6 +311,7 @@ declare module '@vue/runtime-core' {
     readonly useRandomColor: UnwrapRef<typeof import('./composables/useRandomColor')['useRandomColor']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
+    readonly useSaveSetings: UnwrapRef<typeof import('./composables/useSaveSettings')['useSaveSetings']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToastStore: UnwrapRef<typeof import('./stores/useToastStore')['useToastStore']>
     readonly vi: UnwrapRef<typeof import('vitest')['vi']>

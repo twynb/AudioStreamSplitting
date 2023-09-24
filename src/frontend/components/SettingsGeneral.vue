@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
-import { LangMap, SUPPORT_FILE_TYPES } from '../includes/constants'
+import { LangMap } from '../includes/constants'
 
 const { t } = useI18n()
 
 const { currentLocale } = useLocale()
 const localOpts = Object.entries(LangMap).map(([key, value]) => ({ label: value, value: key }))
 
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
+const { isDark } = useDarkToggle()
 </script>
 
 <template>
@@ -18,9 +17,14 @@ const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldA
 
     <BaseSeparator orientation="horizontal" />
 
-    <div class="space-y-5">
+    <div class="space-y-6">
       <div class="flex items-center justify-between">
-        <h3>{{ t('settings.general.language') }}</h3>
+        <div class="space-y-1">
+          <h3>{{ t('settings.general.language') }}</h3>
+          <p class="text-sm text-muted-foreground">
+            {{ t('settings.general.hint.language') }}
+          </p>
+        </div>
 
         <BaseSelect
           v-model="currentLocale"
@@ -29,20 +33,15 @@ const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldA
         />
       </div>
 
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 :class="{ 'text-muted-foreground': saveSettings.shouldAsk }">
-            {{ t('settings.general.save_file_type') }}
-          </h3>
-
-          <BaseSelect v-model="saveSettings.fileType" class="min-w-100px" :options="SUPPORT_FILE_TYPES.map(t => ({ label: t, value: t }))" :disabled="saveSettings.shouldAsk" />
+      <div class="flex items-center justify-between">
+        <div class="space-y-1">
+          <h3>{{ t('settings.general.darkmode') }}</h3>
+          <p class="text-sm text-muted-foreground">
+            {{ t('settings.general.hint.darkmode') }}
+          </p>
         </div>
 
-        <div class="flex items-center justify-between">
-          <h3>{{ t('settings.general.ask_file_type') }}</h3>
-
-          <BaseSwitch v-model="saveSettings.shouldAsk" />
-        </div>
+        <BaseSwitch v-model="isDark" />
       </div>
     </div>
   </div>

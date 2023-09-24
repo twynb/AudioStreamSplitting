@@ -3,7 +3,6 @@ import WaveSurfer from 'wavesurfer.js'
 import Regions from 'wavesurfer.js/plugins/regions'
 import type { AxiosError } from 'axios'
 import { isAxiosError } from 'axios'
-import { useLocalStorage } from '@vueuse/core'
 import type { Project, ProjectFileSegment } from '../models/types'
 import type { Metadata, PostAudioSplitBodyPresetName } from '../models/api'
 import { getAudioStreamSplittingAPI } from '../models/api'
@@ -37,11 +36,12 @@ const emits = defineEmits<{
   (e: 'changePresetName', presetName: PostAudioSplitBodyPresetName): void
 }>()
 
+const { isDark } = useDarkToggle()
 const { toast } = useToastStore()
 const { t } = useI18n()
 const router = useRouter()
 const hash = useHash(props.file.filePath)
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true })
+const saveSettings = useSaveSetings()
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
@@ -57,8 +57,8 @@ onMounted(async () => {
 
     ws.value = WaveSurfer.create({
       container: `#waveform_${hash}`,
-      waveColor: 'rgb(173, 250, 29)',
-      progressColor: '#8EAC50',
+      waveColor: isDark.value ? 'hsl(81, 96%, 55%)' : 'hsl(81, 96%, 45%)',
+      progressColor: isDark.value ? 'hsl(79, 36%, 50%)' : 'hsl(79, 36%, 42%)',
       barRadius: 5,
       barWidth: 5,
       barGap: 2,
@@ -159,13 +159,12 @@ function addRegion(segments: ProjectFileSegment[]) {
 
 const isStoring = ref(false)
 const currentStoringIndex = ref(-1)
-const store = useEnvStore()
 async function handleStore(
   { duration, offset, metadata, songIndex, fileType }: { duration: number; offset: number; metadata?: Metadata; songIndex: number; fileType: string },
 
 ) {
   const filePath = props.file.filePath
-  const targetDirectory = store.lsEnv.SAVE_DIRECTORY
+  const targetDirectory = saveSettings.value.saveDirectory
   if (!targetDirectory) {
     toast({ title: t('toast.title.no_save_directory'), content: t('toast.no_save_directory'), variant: 'destructive' })
     return
@@ -177,10 +176,16 @@ async function handleStore(
   const _metadata = metadata ?? { album: '', artist: '', title: 'unknown', year: '0' }
 
   try {
-    await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType })
+    const response = await postAudioStore({ filePath, duration, offset, metadata: _metadata, targetDirectory, fileType, submitSavedFiles: saveSettings.value.submitSavedFiles })
+    // TODO CR
+    const services = response.data.services ?? []
+    let _content = t('toast.save_file_success', { target: targetDirectory })
+    if (services)
+      _content = t('toast.save_file_success_with_submit', { target: targetDirectory, services: services.join(', ') })
+
     toast({
       title: `${_metadata.title}.${fileType}`,
-      content: t('toast.save_file_success', { target: targetDirectory }),
+      content: _content,
     })
   }
   catch (e) {

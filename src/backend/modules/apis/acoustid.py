@@ -12,6 +12,7 @@ import os
 import acoustid
 import utils.list_helper
 from modules.audio_stream_io import save_numpy_as_audio_file
+from utils.logger import log_error
 
 METADATA_ALL = ["tracks", "recordings", "releasegroups"]
 """The metadata to query from the AcoustID API.
@@ -22,6 +23,11 @@ METADATA_ALL = ["tracks", "recordings", "releasegroups"]
   As of current, only three sets of metadata can be requested, if four or more are sent,
   some are discarded. If this limitation is ever removed, this should also add the "recordingids"
   metadata to make merging matching recordings easier.
+"""
+
+titles_identified_by_acoustid = []
+"""A list of all titles that were identified by AcoustID.
+This is used to prevent duplicate submissions to the AcoustID database.
 """
 
 
@@ -52,6 +58,56 @@ def create_fingerprint(song_data, samplerate):
     )
     os.remove(filename_with_path)
     return (fingerprint_duration, fingerprint)
+
+
+def submit(file_name: str, metadata: dict, api_key: str, user_key: str):
+    """Submit a fingerprint for the provided file to be added to the AcoustID database.
+
+    If the song was previously identified using AcoustID, it isn't submitted. This is to avoid
+    spamming the AcoustID servers with duplicate submissions.
+
+    This uses the ``pyacoustid`` wrapper. All exceptions raised by ``pyacoustid`` are
+    handled within this function and lead to returning "False".
+
+    :param file_name: The name of the file to submit.
+    :param metadata: The metadata of the song to submit, formatted as a dict.
+    :param api_key: The application API key.
+    :param user_key: The user API key.
+    :returns: boolean indicating whether the submission was successful.
+    """
+    global timestamp_last_acoustid_request
+
+    titles_identified_key = metadata["title"] + "_" + metadata["artist"]
+
+    # avoid submitting titles that have been identified by acoustid - we don't want duplicates
+    if titles_identified_key in titles_identified_by_acoustid:
+        return False
+    titles_identified_by_acoustid.append(titles_identified_key)
+
+    try:
+        duration, fingerprint = acoustid.fingerprint_file(file_name, force_fpcalc=True)
+    except acoustid.FingerprintGenerationError as ex:
+        log_error(ex, "AcoustID fingerprint generation error")
+        return False
+
+    query_params = {
+        "duration": duration,
+        "fingerprint": fingerprint,
+        "track": metadata["title"] if "title" in metadata else None,
+        "artist": metadata["artist"] if "artist" in metadata else None,
+        "album": metadata["album"] if "album" in metadata else None,
+        "albumartist": metadata["albumartist"] if "albumartist" in metadata else None,
+        "year": metadata["year"] if "year" in metadata else None,
+    }
+
+    try:
+        acoustid.submit(api_key, user_key, query_params)
+        return True
+    except acoustid.FingerprintSubmissionError as ex:
+        log_error(ex, "AcoustID submission error")
+    except acoustid.WebServiceError as ex:
+        log_error(ex, "AcoustID submit error")
+    return False
 
 
 def lookup(fingerprint, fingerprint_duration, api_key):
@@ -223,12 +279,18 @@ def _get_results_for_recordings(recordings):
     :param results: The list to append the results to.
     :returns: The list with the appended results.
     """
+    global titles_identified_by_acoustid
     results = []
     for recording in recordings:
         # Get the artist if available.
         if "artists" not in recording or "title" not in recording:
             continue
         artist_name = _join_artist_names(recording["artists"])
+
+        titles_identified_key = recording["title"] + "_" + artist_name
+        if titles_identified_key not in titles_identified_by_acoustid:
+            titles_identified_by_acoustid.append(titles_identified_key)
+
         for releasegroup in recording["releasegroups"]:
             results.append(
                 _get_result_for_releasegroup(

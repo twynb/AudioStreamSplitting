@@ -12,6 +12,8 @@ import type {
 
 export interface PostAudioStore200 {
   success?: boolean
+  /** Services the file was submitted to. */
+  services?: string[]
 }
 
 export interface PostAudioStoreBody {
@@ -24,6 +26,8 @@ export interface PostAudioStoreBody {
   fileType?: string
   /** The file name template. Defaults to the one specified in .env if not provided. */
   nameTemplate?: string
+  /** Whether to submit saved files to song recognition APIs. */
+  submitSavedFiles?: boolean
 }
 
 export interface PostAudioGetSegmentBody {

@@ -3,11 +3,10 @@ import os.path
 import wave
 
 from flask import Blueprint, Response, jsonify, request, send_file
-from modules.api_service import ApiService
+from modules.api_service import ApiService, submit_to_services
 from modules.audio_stream_io import read_audio_file_to_numpy, save_numpy_as_audio_file
 from modules.segmentation import Preset, segment_file
 from pathvalidate import sanitize_filename
-from utils.env import get_env
 from utils.file_name_formatter import format_file_name
 
 audio_bp = Blueprint("audio", __name__)
@@ -92,6 +91,8 @@ def store():
     Add the given metadata to this file.
     If the provided file or the target directory does not exist, a 400 error is returned.
 
+    If songs should be submitted to song identification APIs too, this will also be handled here.
+
     :returns: ``"{success: true}"`` if storing the file worked. A 400 error otherwise.
     """
     data = request.json
@@ -105,11 +106,7 @@ def store():
     metadata = data["metadata"]
 
     file_type = "." + (data["fileType"] if "fileType" in data else "mp3")
-    file_name_template = (
-        data["nameTemplate"]
-        if "nameTemplate" in data
-        else get_env("OUTPUT_FILE_NAME_TEMPLATE")
-    )
+    file_name_template = data["nameTemplate"] if "nameTemplate" in data else "{TITLE}"
     target_file_name = sanitize_filename(
         format_file_name(
             file_name_template,
@@ -136,7 +133,14 @@ def store():
         tags=metadata,
         extension=file_type,
     )
-    return jsonify({"success": True})
+
+    submitted_services = []
+    if "submitSavedFiles" in data and data["submitSavedFiles"]:
+        submitted_services = submit_to_services(
+            os.path.join(target_directory, target_file_name) + file_type, metadata
+        )
+
+    return jsonify({"success": True, "services": submitted_services})
 
 
 @audio_bp.route("/check_path", methods=["POST"])

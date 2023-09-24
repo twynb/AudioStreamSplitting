@@ -14,6 +14,7 @@ const { execute } = usePost<Project>({
     createProject(project)
   },
 })
+const { driver, setConfig } = useDriver()
 
 const { open, close } = useModal({
   component: CreateProjectModal,
@@ -27,11 +28,11 @@ const { open, close } = useModal({
       files.forEach(file => formData.append('file', file))
 
       execute(formData)
+      driver.value.destroy()
       close()
     },
   },
 })
-const { driver, setConfig } = useDriver()
 setConfig({
   async onNextClick() {
     if (driver.value.isFirstStep())
@@ -78,9 +79,9 @@ function handleToProject(id: string) {
             id="new_project_btn"
             tabindex="0"
             class="col-span-1 flex-center cursor-pointer border border-border rounded-sm p-3 transition-border-color lg:col-span-3 md:col-span-2 xl:col-span-4 hover:border-accent-foreground"
-            @click="open"
-            @keydown.enter.prevent="open"
-            @keydown.space.prevent="open"
+            @click="async () => await open() && driver.moveNext()"
+            @keydown.enter.prevent="async () => await open() && driver.moveNext()"
+            @keydown.space.prevent="async () => await open() && driver.moveNext()"
           >
             <div class="flex flex-col items-center gap-y-1 font-medium">
               {{ t('button.new_project') }}

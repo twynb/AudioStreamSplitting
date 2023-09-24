@@ -4,10 +4,10 @@ const { t } = useI18n()
 
 <template>
   <BaseLayout :header="t('sidebar.settings')">
-    <div class="max-w-80% space-y-10">
+    <div class="pb-30 lg:max-w-80% space-y-12">
       <SettingsGeneral />
 
-      <SettingsAppearance />
+      <SettingsSave />
 
       <SettingsAdvanced />
     </div>

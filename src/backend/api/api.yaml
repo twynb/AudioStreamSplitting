@@ -106,6 +106,9 @@ paths:
                 nameTemplate:
                   type: string
                   description: The file name template. Defaults to the one specified in .env if not provided.
+                submitSavedFiles:
+                  type: boolean
+                  description: Whether to submit saved files to song recognition APIs.
       responses:
         "200":
           description: Store the segment in the target file.
@@ -116,6 +119,11 @@ paths:
                 properties:
                   success:
                     type: boolean
+                  services:
+                    type: array
+                    description: Services the file was submitted to.
+                    items:
+                      type: string
         "400":
           description: Bad request. Usually means that filePath doesn't point to a valid file, the target directory doesn't exist, or offset/duration are invalid.
 

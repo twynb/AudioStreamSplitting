@@ -38,20 +38,41 @@
   "settings": {
     "general": {
       "index": "Allgemein",
-      "language": "Sprache"
-    },
-    "appearance": {
-      "index": "Aussehen",
+      "language": "Sprache",
+      "hint": {
+        "language": "Anzeigesprache ändern.",
+        "darkmode": "Zwischen dunkler und heller Anzeige wechseln."
+      },
       "darkmode": "Dunkler Modus"
     },
-    "advanced": "Erweitert",
+    "advanced": {
+      "index": "Erweitert",
+      "acoustid_api_key": "AcoustID Anwendungs-API-Key",
+      "acoustid_user_key": "AcoustID Benutzer-API-Key",
+      "shazam_api_key": "Shazam API-Key",
+      "hint": {
+        "acoustid_api_key": "Der AcoustID Anwendungs-API-Key. Um diesen Key zu erhalten, müssen Sie auf der AcoustID-Webseite eine Anwendung registrieren. Dieser Schlüssel ist erforderlich, um AcoustID für die Identifizierung zu verwenden, was stark empfohlen ist.",
+        "acoustid_user_key": "Der AcoustID Benutzer-API-Key. Sie erhalten diesen Key, indem Sie sich auf der AcoustID-Webseite anmelden. Dieser Key wird nur verwendet, falls Sie Metadaten beim Speichern auch an die APIs senden möchten, um diese zu verbessern.",
+        "shazam_api_key": "Der Shazam API-key. Sie benötigen ein RapidAPI-Konto, um diesen zu erhalten."
+      }
+    },
     "download": "Herunterladen",
-    "save_directory": "Dateipfad für gespeicherte Dateien",
-    "output_file_name": "Dateiname für gespeicherte Dateien",
-    "acoustid_api_key": "AcoustID API-Key",
-    "shazam_api_key": "Shazam API-Key",
-    "clear_all_confirm": "Sind Sie sicher, dass Sie alle Projekte löschen wollen? Dies kann nicht rückgängig gemacht werden.",
-    "clear_heading": "Alle Projekte löschen"
+    "save": {
+      "index": "Speichern",
+      "file_type": "Dateityp",
+      "hint": {
+        "file_type": "Dateityp für gespeicherte Dateien.",
+        "ask_file_type": "Beim Speichern immer nach dem Dateityp fragen. Falls diese Option ausgeschaltet ist, wird der in \"Dateityp für gespeicherte Dateien\" gesetzte Dateityp verwendet.",
+        "submit_saved_files": "Erkannte Metadaten auch an API-Anbieter senden, um ihre Datenbank zu verbessen. Hierbei werden persönlich identifizierte Daten nur dazu verwendet, sicherzustellen, dass Sie Zugang zu den APIs haben.",
+        "save_directory": "Der Dateipfad, an dem Dateien gespeichert werden.",
+        "output_file_name": "Die Vorlage, aus der Dateinamen erstellt werden. Verwenden Sie die Platzhalter {'{'}TITLE{'}'},  {'{'}ARTIST{'}'},  {'{'}ALBUM{'}'} and  {'{'}YEAR{'}'}, um die entsprechenden Metadaten an dieser Stelle einzufügen. Es ist empfohlen, den {'{'}TITLE{'}'}-Platzhalter zu verwenden, um gedoppelte Dateinamen zu vermeiden."
+      },
+      "ask_file_type": "Bei jedem Speichern nachfragen",
+      "submit_saved_files": "Gespeicherte Dateien auch an APIs senden",
+      "save_directory": "Dateipfad für gespeicherte Dateien",
+      "output_file_name": "Dateiname für gespeicherte Dateien"
+    }
+
   },
   "dialog": {
     "create_project": {
@@ -101,6 +122,7 @@
     "long_process": "Die Verarbeitung wird eine Weile dauern...",
     "cant_split": "Diese Tondatei konnte nicht aufgeteilt werden.",
     "save_file_success": "Erfolgreich in {target} gespeichert!",
+    "save_file_success_with_submit": "Erfolgreich in {target} gespeichert und an {services} gesendet!",
     "title": {
       "no_save_directory": "Kein Dateipfad gesetzt!"
     },
@@ -145,5 +167,10 @@
       "name_exists_already": "{name} existiert bereits. Bitte geben Sie einen anderen Namen ein.",
       "no_file_uploaded": "Bitte laden Sie mindestens eine Datei hoch, um ein Projekt zu erstellen."
     }
+  },
+  "BE": {
+    "FILE_NOT_EXIST": "Die gewählte Datei existiert nicht!",
+    "TARGET_DIR_NOT_EXIST": "Der Zielordner existiert nicht!",
+    "INVALID_OFFSET_DURATION": "Startzeitpunkt oder Dauer ist nicht valide!"
   }
 }

@@ -50,6 +50,7 @@ onChange(() => {
     file && isFileValid(file.type) && result.push(file)
   }
 
+  driver.value.isActive() && driver.value.moveNext()
   data.value.files = result
 })
 
