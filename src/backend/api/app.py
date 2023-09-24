@@ -47,3 +47,13 @@ def internal_error(error):
 def not_found(error):
     log_error(error, "404 not found error")
     return "404 not found"
+
+
+@app.route("/api/pyinstaller")
+def pyinstaller():
+    """Allow know where built app is excecuted
+    and set save directory with that location
+    """
+    import sys
+
+    return os.path.dirname(sys.executable), 200

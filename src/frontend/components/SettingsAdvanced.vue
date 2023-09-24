@@ -1,19 +1,11 @@
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core'
-
-type EnvKey = keyof typeof env.value
+type EnvKey = keyof typeof currentEnv.value
 
 const { t } = useI18n()
-const { defaultEnv, lsEnv } = storeToRefs(useEnvStore())
-
-const env = ref(defaultEnv.value)
-Object.entries(lsEnv.value).forEach(([key, value]) => {
-  if (value)
-    env.value[key as EnvKey] = value
-})
-
 const { toast } = useToastStore()
-const saveSettings = useLocalStorage('save-settings', { fileType: 'mp3', shouldAsk: true, submitSavedFiles: false })
+
+const currentEnv = useEnv()
+const env = ref({ ...currentEnv.value })
 
 async function setApiKey(key: EnvKey) {
   const value = env.value[key]
@@ -25,9 +17,7 @@ async function setApiKey(key: EnvKey) {
 
   try {
     await axios.post('/env/set', { key, value })
-    lsEnv.value[key] = value
-    // TODO Just a workaround. Figure out why useLocalStorage is not working
-    localStorage.setItem('env', JSON.stringify(lsEnv.value))
+    currentEnv.value[key] = value
     toast({ content: t('toast.changed_successfully') })
   }
   catch (e) {
@@ -39,16 +29,22 @@ async function setApiKey(key: EnvKey) {
 <template>
   <div>
     <h2 class="text-3xl">
-      {{ t('settings.advanced') }}
+      {{ t('settings.advanced.index') }}
     </h2>
 
     <BaseSeparator orientation="horizontal" />
 
-    <div class="space-y-5">
-      <div class="flex items-center justify-between">
-        <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_API_KEY">
-          {{ t('settings.acoustid_api_key') }}
-        </BaseLabel>
+    <div class="space-y-6">
+      <div class="flex items-start justify-between">
+        <div class="space-y-1">
+          <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_API_KEY">
+            {{ t('settings.advanced.acoustid_api_key') }}
+          </BaseLabel>
+
+          <p class="text-sm text-muted-foreground">
+            {{ t('settings.advanced.hint.acoustid_api_key') }}
+          </p>
+        </div>
 
         <div class="min-w-400px flex gap-x-3">
           <BaseInput id="SERVICE_ACOUSTID_API_KEY" v-model="env.SERVICE_ACOUSTID_API_KEY" type="password" />
@@ -59,10 +55,15 @@ async function setApiKey(key: EnvKey) {
         </div>
       </div>
 
-      <div class="flex items-center justify-between">
-        <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_USER_KEY">
-          {{ t('settings.acoustid_user_key') }}
-        </BaseLabel>
+      <div class="flex items-start justify-between">
+        <div class="space-y-1">
+          <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_USER_KEY">
+            {{ t('settings.advanced.acoustid_user_key') }}
+          </BaseLabel>
+          <p class="text-sm text-muted-foreground">
+            {{ t('settings.advanced.hint.acoustid_user_key') }}
+          </p>
+        </div>
 
         <div class="min-w-400px flex gap-x-3">
           <BaseInput id="SERVICE_ACOUSTID_USER_KEY" v-model="env.SERVICE_ACOUSTID_USER_KEY" type="password" />
@@ -73,10 +74,15 @@ async function setApiKey(key: EnvKey) {
         </div>
       </div>
 
-      <div class="flex items-center justify-between">
-        <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
-          {{ t('settings.shazam_api_key') }}
-        </BaseLabel>
+      <div class="flex items-start justify-between">
+        <div class="space-y-1">
+          <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
+            {{ t('settings.advanced.shazam_api_key') }}
+          </BaseLabel>
+          <p class="text-sm text-muted-foreground">
+            {{ t('settings.advanced.hint.shazam_api_key') }}
+          </p>
+        </div>
 
         <div class="min-w-400px flex gap-x-3">
           <BaseInput id="SERVICE_SHAZAM_API_KEY" v-model="env.SERVICE_SHAZAM_API_KEY" type="password" />
@@ -85,40 +91,6 @@ async function setApiKey(key: EnvKey) {
             {{ t('button.set') }}
           </BaseButton>
         </div>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
-          {{ t('settings.save_directory') }}
-        </BaseLabel>
-
-        <div class="min-w-400px flex gap-x-3">
-          <BaseInput id="SAVE_DIRECTORY" v-model="env.SAVE_DIRECTORY" />
-
-          <BaseButton @click="setApiKey('SAVE_DIRECTORY')">
-            {{ t('button.set') }}
-          </BaseButton>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
-          {{ t('settings.output_file_name') }}
-        </BaseLabel>
-
-        <div class="min-w-400px flex gap-x-3">
-          <BaseInput id="OUTPUT_FILE_NAME_TEMPLATE" v-model="env.OUTPUT_FILE_NAME_TEMPLATE" />
-
-          <BaseButton @click="setApiKey('OUTPUT_FILE_NAME_TEMPLATE')">
-            {{ t('button.set') }}
-          </BaseButton>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <h3>{{ t('settings.submit_saved_files') }}</h3>
-
-        <BaseSwitch v-model="saveSettings.submitSavedFiles" />
       </div>
     </div>
   </div>

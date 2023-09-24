@@ -3,6 +3,12 @@ export function handleAppInit() {
   loadEnvToBackend()
 
   if (import.meta.env.MODE === 'production') {
+    const settings = useSaveSetings()
+    axios.get('/pyinstaller').then(({ data }) => {
+      if (data && !settings.value.saveDirectory)
+        settings.value.saveDirectory = data
+    })
+
     disableContextMenu()
     disableDevTool()
     disableReload()
