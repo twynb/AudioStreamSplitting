@@ -57,7 +57,7 @@ exe = EXE(  # noqa F821
     a.datas,
     [],
     name=app_name,
-    icon="src/frontend/public/logo.ico",
+    icon="src/frontend/public/logo.svg",
     debug=False,
     bootloader_ignore_signals=False,
     strip=do_strip,
