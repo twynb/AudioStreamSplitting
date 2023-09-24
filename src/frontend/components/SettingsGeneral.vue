@@ -19,9 +19,9 @@ const { isDark } = useDarkToggle()
 
     <div class="space-y-6">
       <div class="flex items-center justify-between">
-        <div class="space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <h3>{{ t('settings.general.language') }}</h3>
-          <p class="text-sm text-muted-foreground">
+          <p class="text-balance text-sm text-muted-foreground">
             {{ t('settings.general.hint.language') }}
           </p>
         </div>
@@ -34,9 +34,9 @@ const { isDark } = useDarkToggle()
       </div>
 
       <div class="flex items-center justify-between">
-        <div class="space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <h3>{{ t('settings.general.darkmode') }}</h3>
-          <p class="text-sm text-muted-foreground">
+          <p class="text-balance text-sm text-muted-foreground">
             {{ t('settings.general.hint.darkmode') }}
           </p>
         </div>
