@@ -36,7 +36,7 @@ async function setApiKey(key: EnvKey) {
 
     <div class="space-y-6">
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_API_KEY">
             {{ t('settings.advanced.acoustid_api_key') }}
           </BaseLabel>
@@ -56,7 +56,7 @@ async function setApiKey(key: EnvKey) {
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_USER_KEY">
             {{ t('settings.advanced.acoustid_user_key') }}
           </BaseLabel>
@@ -75,7 +75,7 @@ async function setApiKey(key: EnvKey) {
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
             {{ t('settings.advanced.shazam_api_key') }}
           </BaseLabel>

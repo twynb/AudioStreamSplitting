@@ -15,7 +15,7 @@ const settings = useSaveSetings()
 
     <div class="space-y-6">
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <h3 :class="{ 'text-muted-foreground': settings.shouldAsk }">
             {{ t('settings.save.file_type') }}
           </h3>
@@ -32,7 +32,7 @@ const settings = useSaveSetings()
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <h3>{{ t('settings.save.ask_file_type') }}</h3>
           <p class="text-balance text-sm text-muted-foreground">
             {{ t('settings.save.hint.ask_file_type') }}
@@ -43,7 +43,7 @@ const settings = useSaveSetings()
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <h3>{{ t('settings.save.submit_saved_files') }}</h3>
           <p class="text-balance text-sm text-muted-foreground">
             {{ t('settings.save.hint.submit_saved_files') }}
@@ -54,7 +54,7 @@ const settings = useSaveSetings()
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <BaseLabel class="!text-base" for="SAVE_DIRECTORY">
             {{ t('settings.save.save_directory') }}
           </BaseLabel>
@@ -67,7 +67,7 @@ const settings = useSaveSetings()
       </div>
 
       <div class="flex items-start justify-between">
-        <div class="max-w-1/3 xl:max-w-1/2 space-y-1">
+        <div class="max-w-1/2 space-y-1">
           <BaseLabel class="!text-base" for="OUTPUT_FILE_NAME_TEMPLATE">
             {{ t('settings.save.output_file_name') }}
           </BaseLabel>
