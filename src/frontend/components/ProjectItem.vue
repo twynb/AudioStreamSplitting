@@ -36,6 +36,7 @@ const emits = defineEmits<{
   (e: 'changePresetName', presetName: PostAudioSplitBodyPresetName): void
 }>()
 
+const { isDark } = useDarkToggle()
 const { toast } = useToastStore()
 const { t } = useI18n()
 const router = useRouter()
@@ -56,8 +57,8 @@ onMounted(async () => {
 
     ws.value = WaveSurfer.create({
       container: `#waveform_${hash}`,
-      waveColor: 'rgb(173, 250, 29)',
-      progressColor: '#8EAC50',
+      waveColor: isDark.value ? 'hsl(81, 96%, 55%)' : 'hsl(81, 96%, 45%)',
+      progressColor: isDark.value ? 'hsl(79, 36%, 50%)' : 'hsl(79, 36%, 42%)',
       barRadius: 5,
       barWidth: 5,
       barGap: 2,
