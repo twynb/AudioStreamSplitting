@@ -39,40 +39,36 @@
     "general": {
       "index": "General",
       "language": "Language",
-      "save_file_type": "Save file type",
-      "ask_file_type": "Ask me what to do with each save",
       "hint": {
-        "language": "Change display language",
-        "darkmode": "Toggel between dark and light theme"
+        "language": "Change display language.",
+        "darkmode": "Toggle between dark and light theme."
       },
       "darkmode": "Dark Mode"
     },
-    "appearance": {
-      "index": "Appearance",
-      "darkmode": "Dark Mode"
+    "advanced": {
+      "index": "Advanced",
+      "acoustid_api_key": "AcoustID Application API Key",
+      "acoustid_user_key": "AcoustID User API Key",
+      "shazam_api_key": "Shazam API Key",
+      "hint": {
+        "acoustid_api_key": "The AcoustID application API key. You need to register an application on the AcoustID website for this. This key is necessary if you wish to use the AcoustID API for identification, which is strongly recommended.",
+        "acoustid_user_key": "The AcoustID user API key. You get this key simply by logging in on the AcoustID website. This key is only used if you choose to submit metadata to the APIs when saving.",
+        "shazam_api_key": "The Shazam API key. You need a RapidAPI account to create this key."
+      }
     },
-    "advanced": "Advanced",
     "download": "Download",
-    "save_directory": "Save Directory",
-    "output_file_name": "Output File Name",
-    "acoustid_api_key": "AcoustID Application API Key",
-    "acoustid_user_key": "AcoustID User API Key",
-    "shazam_api_key": "Shazam API Key",
-    "submit_saved_files": "Submit files to APIs on save",
-    "clear_all_confirm": "Are you sure you want to delete all projects? This cannot be undone.",
-    "clear_heading": "Clear all projects",
     "save": {
       "index": "Save",
       "file_type": "Save file type",
       "hint": {
-        "file_type": "File type when saving",
-        "ask_file_type": "Always ask me if I want to save with other file type",
-        "submit_saved_files": "Metadata is submitted to API providers to improve their database",
-        "save_directory": "Where to save identified songs",
-        "output_file_name": "Name of the template to be used for the saved file"
+        "file_type": "File type when saving.",
+        "ask_file_type": "Always ask me for the file type when saving. If this is toggled off, the option from the \"Save File Type\" setting will always be used.",
+        "submit_saved_files": "Submit the detected metadata to API providers to improve their database. The only personally identifying information that will be sent with this is used to confirm you have access to the API services.",
+        "save_directory": "Where to save identified songs.",
+        "output_file_name": "The template for file names. You may use the placeholders {'{'}TITLE{'}'}, {'{'}ARTIST{'}'}, {'{'}ALBUM{'}'} and {'{'}YEAR{'}'}, which will be replaced with the corresponding metadata. It is strongly recommended to include the {'{'}TITLE{'}'} placeholder to avoid duplicate file names."
       },
       "ask_file_type": "Ask me what to do with each save",
-      "submit_saved_files": "Submit files to APIs on save",
+      "submit_saved_files": "Submit files to APIs when saving",
       "save_directory": "Save directory",
       "output_file_name": "Output file name"
     }

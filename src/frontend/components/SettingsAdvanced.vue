@@ -29,7 +29,7 @@ async function setApiKey(key: EnvKey) {
 <template>
   <div>
     <h2 class="text-3xl">
-      {{ t('settings.advanced') }}
+      {{ t('settings.advanced.index') }}
     </h2>
 
     <BaseSeparator orientation="horizontal" />
@@ -38,11 +38,11 @@ async function setApiKey(key: EnvKey) {
       <div class="flex items-start justify-between">
         <div class="space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_API_KEY">
-            {{ t('settings.acoustid_api_key') }}
+            {{ t('settings.advanced.acoustid_api_key') }}
           </BaseLabel>
 
           <p class="text-sm text-muted-foreground">
-            Change me
+            {{ t('settings.advanced.hint.acoustid_api_key') }}
           </p>
         </div>
 
@@ -58,10 +58,10 @@ async function setApiKey(key: EnvKey) {
       <div class="flex items-start justify-between">
         <div class="space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_ACOUSTID_USER_KEY">
-            {{ t('settings.acoustid_user_key') }}
+            {{ t('settings.advanced.acoustid_user_key') }}
           </BaseLabel>
           <p class="text-sm text-muted-foreground">
-            Change me
+            {{ t('settings.advanced.hint.acoustid_user_key') }}
           </p>
         </div>
 
@@ -77,10 +77,10 @@ async function setApiKey(key: EnvKey) {
       <div class="flex items-start justify-between">
         <div class="space-y-1">
           <BaseLabel class="!text-base" for="SERVICE_SHAZAM_API_KEY">
-            {{ t('settings.shazam_api_key') }}
+            {{ t('settings.advanced.shazam_api_key') }}
           </BaseLabel>
           <p class="text-sm text-muted-foreground">
-            Change me
+            {{ t('settings.advanced.hint.shazam_api_key') }}
           </p>
         </div>
 
