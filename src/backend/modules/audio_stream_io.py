@@ -100,7 +100,7 @@ def save_numpy_as_audio_file(
     :param songname: name of the song
     :param file_path: path to file (without filename)
     :param rate: samplerate of the song (Default: 100)
-    :param tags: dict of tags see: :func:`tag_audio_file` (Default: ())
+    :param tags: dict of tags see: :func:`tag_audio_file` (Default: {})
     :param extension: string of the extension (Default: ".mp3")
     :returns: none
     """
