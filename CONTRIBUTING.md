@@ -40,16 +40,16 @@ NOTE: Part of this will only take effect once this repository becomes public. Pl
 2. Assign the issue to yourself, or ask to have it assigned to you.
 3. Fork [this repository](https://github.com/4lex0017/AudioStreamSplitting) to your own account.
 4. Implement your contribution and commit it to your forked repository. Be sure to follow the requirements outlined in [Requirements](#requirements). Test your implementation and ensure the program builds on your system.
-    - If something about the user workflow, the code structure, available commands or other usage details documented in this document and the [README.md](./README.MD) file is changed, also update the corresponding document(s) accordingly.
+    - If something about the user workflow, the code structure, available commands or other usage details documented in this document and the [README.md](./README.MD) file is changed, also update the corresponding document(s) accordingly. Ensure the documents don't contain spelling errors.
 5. Create a pull request on this repository.
 6. The pull request must be approved by at least two of the main maintainers of AudioStreamSplitting (as of current, that's @chubetho, @ChrisItisdud, @4lex0017 and @JosuaE-FHWS). Reviewers must also attempt to build and run the project locally to verify everything works fine.
-7. After two approvals, the pull request gets merged.
+7. After two approvals, the pull request gets merged. The merge should use squash merge in order to keep commit history reasonable on the main branch.
 
 ### Requirements
 
 The following requirements must be met by the system at any time:
 
-1. Every function has documentation comments, formatted in the reST doc format. An example comment is shown below. These documentation comments are used to [generate the back-end documentation](#generating-documentation).
+1. Every function has documentation comments, formatted in the reST doc format. An example comment is shown below. These documentation comments are used to [generate the documentation](#generating-documentation). Ensure the documentation comments build correctly and don't contain spelling errors.
 2. All python code must comply to [the black code style](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html).
 3. All back-end/python code that can have unit tests (i.e. doesn't rely on files on the file system, external APIs or other outside resources) must have them. When adding a new module, add an according test file in the backend/tests folder. When updating an existing one, add or update tests in the correlating test file. All tests must pass (obviously).
 4. All business logic must be in the back-end. The front-end should only contain the user interface.
@@ -124,7 +124,7 @@ Tests are situated in ``backend/tests``. Each module that has unit tests has its
 
 ### Generating documentation
 
-To generate and show documentation, run ``npm run docs``. This will generate back-end and front-end documentation and show it on a local server easily accessible on your browser (usually [localhost:5173](http://localhost:5173/)). Alternatively, you can find HTML docs for the back-end in docs/_build/html. Also showing the documentation as Github pages is planned for the future, but cannot be done before this repository goes public.
+To generate and show documentation, run ``npm run docs``. This will generate back-end and front-end documentation and show it on a local server easily accessible on your browser (usually [localhost:5173](http://localhost:5173/)). Alternatively, you can find HTML docs for the back-end in docs/_build/html. The documentation is also available on [Github pages](https://4lex0017.github.io/AudioStreamSplitting/).
 
 ## Developing Environment
 
@@ -180,21 +180,33 @@ npm run dev:be
 ```
 
 ```bash
-npm run dev:be
+npm run dev:fe
 ```
+
+If ``npm run dev:be`` fails, check if the python executable the command calls is correct. If not, either call the command manually or change it in ``package.json`` (but don't commit the change!)
 
 #### Available commands
 
-| Command                  | Description                       |
-| ------------------------ | --------------------------------- |
-| npm run `dev:fe`         | Run frontend server               |
-| npm run `dev:be`         | Run backend server                |
-| npm run `view:app`       | Run desktop app                   |
-| npm run `build:fe`       | Build frontend (html, js, css)    |
-| npm run `build:app`      | Build desktop app                 |
-| npm run `docs:gen:be`    | Generate backend documentation    |
-| npm run `docs:gen:fe`    | Generate backend documentation    |
-| npm run `docs`           | Generate and show documentation   |
+| Command                     | Description                       |
+| --------------------------- | --------------------------------- |
+| npm run `dev:fe`            | Run frontend server               |
+| npm run `dev:be`            | Run backend server                |
+| npm run `test:fe`           | Run frontend tests                |
+| npm run `test:be`           | Run backend tests                 |
+| npm run `view:app`          | Run desktop app                   |
+| npm run `build:fe`          | Build frontend (html, js, css)    |
+| npm run `build:app`         | Build desktop app                 |
+| npm run `build:app:nocheck` | Build desktop app without checks  |
+| npm run `lint:fe`           | Run frontend linter               |
+| npm run `lint:be`           | Run backend linter                |
+| npm run `format:be`         | Run backend formatter             |
+| npm run `typecheck`         | Run frontend typechecker          |
+| npm run `orval`             | Generate API call functions       |
+| npm run `docs:gen:be`       | Generate backend documentation    |
+| npm run `docs:gen:fe`       | Generate backend documentation    |
+| npm run `docs:gen`          | Generate full documentation       |
+| npm run `docs:build`        | Generate and build documentation  |
+| npm run `docs`              | Generate and show documentation   |
 
 ## Contributors
 

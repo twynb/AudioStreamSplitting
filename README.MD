@@ -76,11 +76,19 @@ The buttons below the waveform window allow you to download, play back or delete
 
 #### Settings
 
-The settings tab allows you to configure AudioStreamSplitting to your liking:
+The settings tab allows you to configure AudioStreamSplitting to your liking. Each field has a short description below it to explain what it does:
 
 <p><img src="./assets/settings.jpg" /></p>
 
 The language field currently supports English, German, French and Spanish. Note that only the English and German translations are actively maintained, so translation issues will arise when using the other languages.
+
+The "Save" section is where the settings related to saving files are situated.
+
+The "Save Directory" setting should be set to the directory you want to save the resulting files into. Make sure that this is an existing directory on your device, as saving files will not work otherwise.
+
+The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{TITLE}_{ARTIST}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{TITLE}`` placeholder in the file name to avoid overwriting files.
+
+The "Submit files to APIs on save" setting controls whether files the app identified will also be sent to the AcoustID API (and potentially others in the future) to further improve their database. As far as we can tell, no personally identifying data is submitted, and the data that is submitted is only used to ensure you have access to the API. We kindly ask you to turn this setting on as the AcoustID database depends on user submissions to work as well as it does.
 
 Turning off the "Ask me what to do with each save" option allows choosing a file type, which all files will be saved as by default. If this is not set, you will instead be asked to choose a file type every time you save a file.
 
@@ -89,12 +97,6 @@ The "Advanced" section is where the most important settings are situated. Note t
 You need to provide at least one API Key for the song identification to work, but it is strongly recommended to provide as many as possible (as outlined in the [Setup](#setup) section).
 
 The AcoustID API keys are split into two keys: The "AcoustID Application API Key" is the key you receive when registering an application. This key is necessary for any functionality involving AcoustID. The "AcoustID User API Key" is only required if you also want to submit identified songs to AcoustID.
-
-The "Save Directory" setting should be set to the directory you want to save the resulting files into. Make sure that this is an existing directory on your device, as saving files will not work otherwise.
-
-The "Output File Name" setting will control the file name of output files. You can include the placeholders ``{TITLE}``, ``{ARTIST}``, ``{ALBUM}`` and ``{YEAR}``, which will be replaced with the corresponding metadata when saving a song. As an example, saving the song "Thunderstruck" by "2Cellos" with the template ``"{TITLE}_{ARTIST}"`` will result in a file called ``"Thunderstruck_2Cellos.mp3"``. It is strongly recommended to include the ``{TITLE}`` placeholder in the file name to avoid overwriting files.
-
-The "Submit files to APIs on save" setting controls whether files the app identified will also be sent to the AcoustID API (and potentially others in the future) to further improve their database. As far as we can tell, no personally identifying data is submitted, and the data that is submitted is only used to ensure you have access to the API. We kindly ask you to turn this setting on as the AcoustID database depends on user submissions to work as well as it does.
 
 ## License
 

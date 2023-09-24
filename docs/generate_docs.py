@@ -8,7 +8,7 @@ def replace_dot_with_underscore(matchobj: re.Match):
     result = (
         "("
         + matchobj.group(1).replace(".", "_")
-        + ".md"
+        # + ".md"
         + (matchobj.group(2) if matchobj.group(2) is not None else "")
         + ")"
     )
