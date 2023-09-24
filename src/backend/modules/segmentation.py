@@ -45,7 +45,8 @@ class Preset(
 
 
 def extract_chroma(feature, samplerate, hop_length: int, fft_window=2048):
-    """Extracts the chroma feature vector from the given sequence, representing key and chord information.
+    """Extracts the chroma feature vector from the given sequence, representing key
+    and chord information.
 
     :param feature: The sequence to work on.
     :param samplerate: The sample-rate of the sequence
