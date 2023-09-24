@@ -50,7 +50,8 @@ export default defineConfig({
   ignoreDeadLinks: true,
   base: '/AudioStreamSplitting',
 
-  head: [['link', { rel: 'icon', type: 'image/x-icon', href: '/logo.ico' }]],
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+
   themeConfig: {
     logo: '/logo.ico',
     nav: [
