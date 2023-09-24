@@ -4,7 +4,7 @@ const { t } = useI18n()
 
 <template>
   <BaseLayout :header="t('sidebar.settings')">
-    <div class="pb-30 xl:max-w-80% space-y-12">
+    <div class="pb-30 lg:max-w-80% space-y-12">
       <SettingsGeneral />
 
       <SettingsSave />
