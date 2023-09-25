@@ -336,7 +336,7 @@ function handleEdit(songIndex: number) {
     <div class="overflow-auto pb-5">
       <table class="w-full caption-bottom text-sm">
         <caption class="mt-4 text-sm text-muted-foreground">
-          {{ t('song.list_caption') }}
+          {{ t('song.list_caption', { count: file.segments?.length }) }}
         </caption>
         <thead>
           <tr class="border-b border-b-border">
