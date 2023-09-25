@@ -62,7 +62,7 @@ function handleToProject(id: string) {
   <BaseLayout :header="t('sidebar.dashboard')">
     <template #header>
       <div class="flex items-center gap-x-3">
-        <h1 class="text-4xl">
+        <h1 class="text-4xl font-semibold">
           {{ t('sidebar.dashboard') }}
         </h1>
 
