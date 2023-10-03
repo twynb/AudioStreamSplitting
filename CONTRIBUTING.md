@@ -213,6 +213,6 @@ If ``npm run dev:be`` fails, check if the python executable the command calls is
 When adding a contribution to this, feel free to add your name to this list, formatted as either just your real name/github username or "Real Name (github username)".
 
 - chubetho
-- Christina Reichel (ChrisItisdud)
+- Christina Reichel (twynb)
 - 4lex0017
 - JosuaE-FHWS
