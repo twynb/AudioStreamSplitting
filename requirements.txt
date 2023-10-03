@@ -25,7 +25,7 @@ msgpack==1.0.7
 music-tag==0.4.3
 mutagen==1.46.0
 mypy-extensions==1.0.0
-numba==0.58.0
+numba==0.57.1
 numpy==1.24.4
 packaging==23.2
 pathspec==0.11.2
