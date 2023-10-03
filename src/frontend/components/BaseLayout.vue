@@ -13,7 +13,7 @@ useDocTitle(props.header)
   <div class="wh-full space-y-11">
     <!-- @slot Slot for header -->
     <slot name="header">
-      <h1 v-if="header" class="text-4xl">
+      <h1 v-if="header" class="text-4xl font-semibold">
         {{ header }}
       </h1>
     </slot>

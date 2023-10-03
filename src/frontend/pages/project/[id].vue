@@ -35,7 +35,7 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
   <BaseLayout v-if="project" :header="project.name">
     <template #header>
       <div class="flex items-center justify-between">
-        <h1 class="text-4xl">
+        <h1 class="text-4xl font-semibold">
           {{ project.name }}
         </h1>
 

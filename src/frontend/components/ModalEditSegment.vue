@@ -42,7 +42,7 @@ const isMouseOverRow = ref(false)
     </template>
 
     <template #body>
-      <div class="max-h-400px max-w-1000px wh-full overflow-auto pb-5">
+      <div class="max-h-400px max-w-1200px wh-full overflow-auto pb-5">
         <table class="w-full caption-bottom text-sm">
           <thead class="sticky left-0 right-0 top-0 z-2 bg-primary-foreground">
             <tr class="border-b border-b-border">
@@ -132,7 +132,7 @@ const isMouseOverRow = ref(false)
       </div>
 
       <p class="mt-6 text-center text-muted-foreground">
-        {{ t('song.metadata_list_caption') }}
+        {{ t('song.metadata_list_caption', { count: metadata.length }) }}
       </p>
     </template>
 

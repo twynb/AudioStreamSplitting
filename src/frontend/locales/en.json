@@ -98,7 +98,7 @@
     "duration": "Duration",
     "no_webm": ".webm cannot be processed at the moment!",
     "no_meta": "No information",
-    "list_caption": "Found songs",
+    "list_caption": "Found {count} songs",
     "unknown": "unknown",
     "genre": "Genre",
     "isrc": "ISRC",
@@ -111,8 +111,8 @@
       "lenient": "Lenient",
       "extra_lenient": "Extra Lenient"
     },
-    "metadata_list_caption": "Found metadata",
-    "change_metadata_for_segment": "Change Metadata for Segment {index}"
+    "metadata_list_caption": "Found {count} metadata options",
+    "change_metadata_for_segment": "Change metadata for segment {index}"
   },
   "toast": {
     "empty_field": "Please enter a valid value!",

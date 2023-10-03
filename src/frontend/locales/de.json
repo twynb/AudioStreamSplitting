@@ -99,7 +99,7 @@
     "duration": "Dauer",
     "no_webm": ".webm-Dateien können nicht verarbeitet werden!",
     "no_meta": "Keine Information",
-    "list_caption": "Gefundene Lieder",
+    "list_caption": "{count} gefundene Lieder",
     "unknown": "Unbekannt",
     "genre": "Genre",
     "isrc": "ISRC",
@@ -112,7 +112,7 @@
       "normal": "Normal",
       "strict": "Strikt"
     },
-    "metadata_list_caption": "Gefundene Metadatan",
+    "metadata_list_caption": "{count} gefundene Optionen für Metadaten",
     "change_metadata_for_segment": "Metadaten für Segment {index} ändern"
   },
   "toast": {

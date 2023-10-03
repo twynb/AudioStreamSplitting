@@ -48,7 +48,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <BaseModal :title="title" :content-class="`w-full max-w-30vw ${contentClass}`" :prevent-close="preventClose">
+  <BaseModal :title="title" :content-class="`w-full max-w-30vw  ${contentClass}`" :prevent-close="preventClose">
     <template #body>
       <!-- @slot Slot for content -->
       <slot />
