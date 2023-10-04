@@ -24,15 +24,25 @@ const emits = defineEmits<{
   (e: 'succeedProcess', v: ProjectFileSegment[]): void
   /**
    * Emits an event when file's peaks are computed.
-   * @property {ProjectFileSegment[]} value Array of peak values.
+   * @property {number[][]} value Array of peak values.
    */
-  (e: 'updatePeaks', v: number[][]): void
+  (e: 'updateFilePeaks', v: number[][]): void
+  /**
+   * Emits an event when segment's peaks are computed.
+   * @property {number} songIndex Segment index in file.
+   * @property {number[][]} value Array of peak values.
+   */
+  (e: 'updateSegmentPeaks', songIndex: number, v: number[][]): void
   /**
    * Emits an event when meta of each segment is changed.
    * @property {number} songIndex Segment index in file.
    * @property {number} metaIndex Meta index in segment.
    */
   (e: 'changeMeta', songIndex: number, metaIndex: number): void
+  /**
+   * Emits an event when file's preset is changed.
+   * @property {PostAudioSplitBodyPresetName} presetName Meta index in segment.
+   */
   (e: 'changePresetName', presetName: PostAudioSplitBodyPresetName): void
 }>()
 
@@ -45,6 +55,7 @@ const saveSettings = useSaveSetings()
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
+const blob = shallowRef<Blob>()
 const isAudioLoading = ref(true)
 const { postAudioSplit, postAudioStore } = getAudioStreamSplittingAPI()
 
@@ -52,7 +63,8 @@ onMounted(async () => {
   try {
     const audioPath = props.file.filePath
     await axios.post('/audio/check_path', { audioPath })
-    const { data } = await axios.post('/audio/get', { audioPath }, { responseType: 'blob' })
+    const { data } = await axios.post<Blob>('/audio/get', { audioPath }, { responseType: 'blob' })
+    blob.value = data
     const url = URL.createObjectURL(data)
 
     ws.value = WaveSurfer.create({
@@ -72,7 +84,7 @@ onMounted(async () => {
     ws.value.on('interaction', () => ws.value && ws.value.playPause())
     ws.value.on('ready', () => {
       isAudioLoading.value = false
-      emits('updatePeaks', ws.value ? ws.value.exportPeaks() : [])
+      emits('updateFilePeaks', ws.value ? ws.value.exportPeaks() : [])
       props.file.segments && addRegion(props.file.segments)
     })
   }
@@ -228,16 +240,30 @@ async function handleStoreAll(
   isStoringAll.value = false
 }
 
-function handleEdit(songIndex: number) {
+function handleEdit(segmentIndex: number) {
+  if (!blob.value)
+    return
+
+  const segment = props.file.segments?.[segmentIndex]
+  if (!segment || !segment.offset || !segment.duration)
+    return
+
+  const factor = blob.value.size / (ws.value?.getDuration() ?? 1)
+  const segmentBlob = blob.value.slice(segment.offset * factor, (segment.offset + segment.duration) * factor)
+  const segmentUrl = URL.createObjectURL(segmentBlob)
+
   const { open, close } = useModal({
     component: ModalEditSegment,
     attrs: {
-      segmentIndex: songIndex,
-      metaIndex: props.file?.segments?.[songIndex].metaIndex ?? 0,
-      metadata: props.file?.segments?.[songIndex].metadataOptions ?? [],
+      segmentIndex,
+      metaIndex: props.file?.segments?.[segmentIndex].metaIndex ?? 0,
+      metadata: props.file?.segments?.[segmentIndex].metadataOptions ?? [],
+      url: segmentUrl,
+      peaks: props.file.segments?.[segmentIndex].peaks,
+      onUpdatePeaks(v) { emits('updateSegmentPeaks', segmentIndex, v) },
       onCancel() { close() },
       onOk(newMetaIndex) {
-        emits('changeMeta', songIndex, newMetaIndex)
+        emits('changeMeta', segmentIndex, newMetaIndex)
         regions.value?.clearRegions()
         props.file.segments && addRegion(props.file.segments)
         close()
@@ -430,7 +456,6 @@ function handleEdit(songIndex: number) {
             <td class="sticky right-72px top-0 z-1 bg-primary-foreground p-4 text-right align-middle">
               <BaseButton
                 icon-only variant="ghost"
-                :disabled="file.segments && (file.segments[songIndex].metadataOptions?.length ?? 0) <= 1"
                 @click="handleEdit(songIndex)"
               >
                 <span class="i-carbon-edit" />
