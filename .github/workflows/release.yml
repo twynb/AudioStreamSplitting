@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  TAG_NAME: v1.0.0
+  TAG_NAME: v1.1.0
 
 jobs:
   build:
@@ -70,7 +70,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: 4lex0017/AudioStreamSplitting
+          GITHUB_REPOSITORY: twynb/AudioStreamSplitting
         with:
           files: |
             audio_splitter_linux/audio_splitter_linux
