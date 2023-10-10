@@ -2,7 +2,7 @@ interface Document {
   startViewTransition: (fn: () => void) => void
 }
 
-interface Window{
+interface Window {
   showSaveFilePicker: (config?: any) => any
 }
 

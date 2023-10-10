@@ -58,15 +58,8 @@ const isAudioLoading = ref(true)
 const isPlaying = ref(false)
 const isInteractingWithSlider = ref(false)
 
-function formatToMMSS(secs: number) {
-  const total = Math.floor(secs)
-  const seconds = total % 60
-  const minutes = (total - seconds) / 60
-  return `${minutes >= 10 ? minutes : `0${minutes}`}:${seconds >= 10 ? seconds : `0${seconds}`}`
-}
-
-const formatedCurrentTime = computed(() => formatToMMSS(currentTime.value))
-const formatedDuration = computed(() => formatToMMSS(duration.value))
+const formatedCurrentTime = computed(() => useConvertSecToMin(currentTime.value, 'mm:ss'))
+const formatedDuration = computed(() => useConvertSecToMin(duration.value, 'mm:ss'))
 
 onMounted(() => {
   ws.value = WaveSurfer.create({

@@ -55,7 +55,7 @@ const saveSettings = useSaveSetings()
 
 const ws = shallowRef<WaveSurfer>()
 const regions = shallowRef<Regions>()
-const blob = shallowRef<Blob>()
+const fileBlob = shallowRef<Blob>()
 const isAudioLoading = ref(true)
 const { postAudioSplit, postAudioStore } = getAudioStreamSplittingAPI()
 
@@ -64,7 +64,7 @@ onMounted(async () => {
     const audioPath = props.file.filePath
     await axios.post('/audio/check_path', { audioPath })
     const { data } = await axios.post<Blob>('/audio/get', { audioPath }, { responseType: 'blob' })
-    blob.value = data
+    fileBlob.value = data
     const url = URL.createObjectURL(data)
 
     ws.value = WaveSurfer.create({
@@ -241,15 +241,15 @@ async function handleStoreAll(
 }
 
 function handleEdit(segmentIndex: number) {
-  if (!blob.value)
+  if (!fileBlob.value)
     return
 
   const segment = props.file.segments?.[segmentIndex]
   if (!segment || !segment.offset || !segment.duration)
     return
 
-  const factor = blob.value.size / (ws.value?.getDuration() ?? 1)
-  const segmentBlob = blob.value.slice(segment.offset * factor, (segment.offset + segment.duration) * factor)
+  const factor = fileBlob.value.size / (ws.value?.getDuration() ?? 1)
+  const segmentBlob = fileBlob.value.slice(segment.offset * factor, (segment.offset + segment.duration) * factor)
   const segmentUrl = URL.createObjectURL(segmentBlob)
 
   const { open, close } = useModal({
@@ -438,7 +438,7 @@ function handleEdit(segmentIndex: number) {
             </td>
 
             <td class="min-w-100px p-4 align-middle">
-              {{ useConvertSecToMin(duration ?? 0) }}
+              {{ useConvertSecToMin(duration ?? 0, 'Mm:Ss') }}
             </td>
 
             <td class="min-w-120px p-4 align-middle">
