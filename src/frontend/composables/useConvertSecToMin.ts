@@ -22,9 +22,9 @@ export function useConvertSecToMin(secs: number, format: 'Mm:Ss' | 'mm:ss') {
   const ret = (function () {
     switch (format) {
       case 'mm:ss':
-        return seconds ? `${minutes}m ${seconds}s` : `${minutes}m`
-      case 'Mm:Ss':
         return `${minutes >= 10 ? minutes : `0${minutes}`}:${seconds >= 10 ? seconds : `0${seconds}`}`
+      case 'Mm:Ss':
+        return seconds ? `${minutes}m ${seconds}s` : `${minutes}m`
     }
   })()
 
