@@ -44,3 +44,6 @@ jobs:
 
       - name: Test (Frontend)
         run: npm run test:fe
+
+      - name: Build
+        run: npm run build:app
