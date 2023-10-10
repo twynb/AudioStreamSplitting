@@ -17,5 +17,5 @@ export interface Project {
   }[]
   createAt: string
 }
-
-export type ProjectFileSegment = PostAudioSplit200SegmentsItem & { metaIndex: number }
+export type ProjectSegmentItem = PostAudioSplit200SegmentsItem & { peaks?: number[][] }
+export type ProjectFileSegment = ProjectSegmentItem & { metaIndex: number }
