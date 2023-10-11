@@ -36,7 +36,8 @@ def create_fingerprint(song_data, samplerate):
     in order to identify it using AcoustID.
     As of current, this works by writing the data to a temporary file
     and using the fpcalc command line tool to generate the fingerprint.
-    The temporary file is deleted immediately afterwards.
+    The temporary file is deleted immediately afterwards. It is also deleted if
+    an error is thrown during fingerprinting.
 
     TODO: If it becomes feasible to build and distribute DLL versions of chromaprint
     for all target platforms, this should be refactored to use that instead.
@@ -53,9 +54,13 @@ def create_fingerprint(song_data, samplerate):
     save_numpy_as_audio_file(song_data, os.path.abspath(filename), "", rate=samplerate)
 
     filename_with_path = os.path.abspath(filename + ".mp3")
-    fingerprint_duration, fingerprint = acoustid.fingerprint_file(
-        filename_with_path, force_fpcalc=True
-    )
+    try:
+        fingerprint_duration, fingerprint = acoustid.fingerprint_file(
+            filename_with_path, force_fpcalc=True
+        )
+    except Exception as e:
+        os.remove(filename_with_path)
+        raise e
     os.remove(filename_with_path)
     return (fingerprint_duration, fingerprint)
 
