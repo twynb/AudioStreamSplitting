@@ -3,7 +3,12 @@ from typing import Generator
 
 import modules.apis.acoustid
 import modules.apis.shazam
-from acoustid import FingerprintGenerationError, NoBackendError, WebServiceError
+from acoustid import (
+    FingerprintGenerationError,
+    FingerprintSubmissionError,
+    NoBackendError,
+    WebServiceError,
+)
 from modules.audio_stream_io import read_audio_file_to_numpy
 from requests import exceptions
 from utils.env import get_env
@@ -81,10 +86,18 @@ def submit_to_services(file_name, metadata):
     ACOUSTID_API_KEY = get_env("SERVICE_ACOUSTID_API_KEY")
     ACOUSTID_USER_KEY = get_env("SERVICE_ACOUSTID_USER_KEY")
     if ACOUSTID_API_KEY is not None and ACOUSTID_USER_KEY is not None:
-        if modules.apis.acoustid.submit(
-            file_name, metadata, ACOUSTID_API_KEY, ACOUSTID_USER_KEY
-        ):
-            successful_submissions.append("AcoustID")
+        try:
+            if modules.apis.acoustid.submit(
+                file_name, metadata, ACOUSTID_API_KEY, ACOUSTID_USER_KEY
+            ):
+                successful_submissions.append("AcoustID")
+        except NoBackendError as ex:
+            log_error(ex, "No fpcalc/chromaprint found")
+        except FingerprintGenerationError as ex:
+            log_error(ex, "AcoustID fingerprinting")
+        except FingerprintSubmissionError as ex:
+            log_error(ex, "AcoustID submission")
+
     return successful_submissions
 
 

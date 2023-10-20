@@ -54,7 +54,9 @@ export default defineConfig({
           --destructive: 0,100%,50%;
           --destructive-foreground: 210,40%,98%;
           --ring: 215,20.2%,65.1%;
-          --radius: 0.5rem
+          --radius: 0.5rem;
+          --neon: 79, 36%, 50%;
+          --neon-dark: 79, 36%, 42%;
         }
 
         .dark {
@@ -77,7 +79,9 @@ export default defineConfig({
           --destructive: 0,63%,31%;
           --destructive-foreground: 210,40%,98%;
           --ring: 216,34%,17%;
-          --radius: 0.5rem
+          --radius: 0.5rem;
+          --neon: 81, 96%, 55%;
+          --neon-dark: 81, 96%, 45%;
         }
       `,
     },
@@ -109,13 +113,9 @@ export default defineConfig({
         DEFAULT: 'hsl(var(--accent))',
         foreground: 'hsl(var(--accent-foreground))',
       },
-      popover: {
-        DEFAULT: 'hsl(var(--popover))',
-        foreground: 'hsl(var(--popover-foreground))',
-      },
-      card: {
-        DEFAULT: 'hsl(var(--card))',
-        foreground: 'hsl(var(--card-foreground))',
+      neon: {
+        DEFAULT: 'hsl(var(--neon))',
+        dark: 'hsl(var(--neon-dark))',
       },
     },
     borderRadius: {

@@ -22,12 +22,21 @@ function updateFileProperty<TKey extends keyof Project['files'][0]>(fileIndex: n
 function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: number) {
   if (!project)
     return
-  const segments = project.files[fileIndex].segments
-  if (!segments)
+  const segment = project.files[fileIndex].segments?.[songIndex]
+  if (!segment)
     return
-  const newMeta = segments[songIndex].metadataOptions?.[metaIndex]
+  const newMeta = segment.metadataOptions?.[metaIndex]
   if (newMeta)
-    segments[songIndex].metaIndex = metaIndex
+    segment.metaIndex = metaIndex
+}
+
+function handleUpdateFileSegmentPeaks(fileIndex: number, songIndex: number, peaks: number[][]) {
+  if (!project)
+    return
+  const segment = project.files[fileIndex].segments?.[songIndex]
+  if (!segment)
+    return
+  segment.peaks = peaks
 }
 </script>
 
@@ -51,7 +60,8 @@ function handleChangeMeta(fileIndex: number, songIndex: number, metaIndex: numbe
           v-for="file, fileIndex in project.files" :key="file.filePath"
           :file="file"
           @succeed-process="(v) => updateFileProperty(fileIndex, 'segments', v)"
-          @update-peaks="(v) => updateFileProperty(fileIndex, 'peaks', v)"
+          @update-file-peaks="(v) => updateFileProperty(fileIndex, 'peaks', v)"
+          @update-segment-peaks="(songIndex, peaks) => handleUpdateFileSegmentPeaks(fileIndex, songIndex, peaks)"
           @change-meta="(songIndex, metaIndex) => handleChangeMeta(fileIndex, songIndex, metaIndex)"
           @change-preset-name="(v) => updateFileProperty(fileIndex, 'presetName', v)"
         />

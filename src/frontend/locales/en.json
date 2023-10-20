@@ -18,7 +18,8 @@
     "process": "Process",
     "clear": "Clear",
     "save_all": "Save all",
-    "change": "Change"
+    "change": "Change",
+    "close": "Close"
   },
   "placeholder": {},
   "sidebar": {
